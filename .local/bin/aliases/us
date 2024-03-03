@@ -1,6 +1,0 @@
-#!/bin/sh
-
-cd ~
-git add --all
-[ -n "$1" ] && git commit -C "$1" || git commit
-git push -u origin master

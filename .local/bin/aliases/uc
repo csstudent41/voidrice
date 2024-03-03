@@ -1,8 +1,3 @@
 #!/bin/sh
 
-cd ~
-sshadd ~/.ssh/github.com_id_ed25519
-git pull
-git add --all
-git commit --allow-empty-message
-git push -u origin master
+cd ~ && gitpush

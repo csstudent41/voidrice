@@ -2,9 +2,7 @@
 
 # upload site
 
-# cd "${SITE_BASE_DIR:-$HOME/Dev/csstudent41.github.io}/public" || exit
-cd ~/Dev/bits24
+cd "${SITE_BASE_DIR:-$HOME/Dev/csstudent41.github.io}/public" || exit
+# cd ~/Dev/bits24
 
-git add --all
-git commit
-git push -u origin main
+gitpush
