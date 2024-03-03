@@ -19,6 +19,7 @@ hash -d gd=~/GDrive/vartak/CS
 hash -d clg=~/GDrive/vartak/CS/practical-files/sem4
 hash -d rs=~/GDrive/vartak/results
 hash -d ph=~/Phone
+hash -d stv=~/Phone/.stversions
 hash -d pw=~/Phone/Android/media/com.whatsapp/WhatsApp/Media/WhatsApp\ Documents
 hash -d mn=/mnt
 hash -d stg=/mnt/Storage

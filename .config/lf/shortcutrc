@@ -19,6 +19,7 @@ map cgd :cd ~/GDrive/vartak/CS
 map cclg :cd ~/GDrive/vartak/CS/practical-files/sem4
 map crs :cd ~/GDrive/vartak/results
 map cph :cd ~/Phone
+map cstv :cd ~/Phone/.stversions
 map cpw :cd ~/Phone/Android/media/com.whatsapp/WhatsApp/Media/WhatsApp\ Documents
 map cmn :cd /mnt
 map cstg :cd /mnt/Storage

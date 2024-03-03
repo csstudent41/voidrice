@@ -19,6 +19,7 @@ cmap ;gd ~/GDrive/vartak/CS
 cmap ;clg ~/GDrive/vartak/CS/practical-files/sem4
 cmap ;rs ~/GDrive/vartak/results
 cmap ;ph ~/Phone
+cmap ;stv ~/Phone/.stversions
 cmap ;pw ~/Phone/Android/media/com.whatsapp/WhatsApp/Media/WhatsApp\ Documents
 cmap ;mn /mnt
 cmap ;stg /mnt/Storage

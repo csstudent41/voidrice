@@ -8,7 +8,7 @@ cd "$FILESDIR" || exit
 zip "$ZIPDIR/sem4" sem4
 
 cd "$FILESDIR/sem4" || exit
-zip "$ZIPDIR/sem4/AAD" AAD -x AAD/P04_Flutter/firebase/\*
+zip "$ZIPDIR/sem4/AAD" AAD -x AAD/P04_Flutter/firebase/\* AAD/P04_Flutter/Flutter/\*
 zip "$ZIPDIR/sem4/Android" Android
 zip "$ZIPDIR/sem4/CN" CN
 zip "$ZIPDIR/sem4/IOT" IOT
