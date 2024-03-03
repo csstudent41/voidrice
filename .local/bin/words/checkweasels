@@ -1,35 +1,14 @@
 #!/bin/sh
 
-help() {
-	echo "checkweasels - check for weasel words
-
-USAGE:
-	checkweasels [OPTION] <FILE>...
-
-OPTIONS:
-	-f LISTFILE   file containing list of all weasel words
-	-h            show this help message"
-}
-
-err() { printf 'checkweasels: %s\n' "$@" >&2; exit 1; }
-
-while getopts 'vh' o; do case "$o" in
-	h) help >&2; exit ;;
-	*) err "invalid option -- '$OPTARG'" ;;
-esac done
-shift $((OPTIND - 1))
-
-[ "$#" -lt 1 ] && help >&2 && exit 1
-
 weasels="many|various|very|fairly|several|extremely\
 |exceedingly|quite|remarkably|few|surprisingly\
 |mostly|largely|huge|tiny|((are|is) a number)\
 |excellent|interestingly|significantly\
 |substantially|clearly|vast|relatively|completely"
 
-if [ -n "$wordfile" ]; then
+if [ -n "$WORDFILE" ]; then
     weasels="xyzabc123";
-    for w in `cat $wordfile`; do
+    for w in `cat $WORDFILE`; do
         weasels="$weasels|$w"
     done
 fi

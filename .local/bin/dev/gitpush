@@ -1,0 +1,11 @@
+#!/bin/sh
+
+case "$(git config --get remote.origin.url)" in
+	*csstudent41*) sshadd ~/.ssh/github.com_id_ed25519 ;;
+	*labstudent41*) sshadd ~/.ssh/labstudent41_id_ed25519 ;;
+esac
+
+git pull
+git add --all
+git commit --allow-empty-message
+git push -u origin master

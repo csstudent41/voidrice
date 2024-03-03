@@ -1,26 +1,5 @@
 #!/bin/sh
 
-help() {
-	echo "checkpassive - check for abuse of passive voice
-
-USAGE:
-	checkpassive [OPTION] <FILE>...
-
-OPTIONS:
-	-f LISTFILE   file containing list of all passive words
-	-h            show this help message"
-}
-
-err() { printf 'checkpassive: %s\n' "$@" >&2; exit 1; }
-
-while getopts 'vh' o; do case "$o" in
-	h) help >&2; exit ;;
-	*) err "invalid option -- '$OPTARG'" ;;
-esac done
-shift $((OPTIND - 1))
-
-[ "$#" -lt 1 ] && help >&2 && exit 1
-
 irregulars="awoken|\
 been|born|beat|\
 become|begun|bent|\
