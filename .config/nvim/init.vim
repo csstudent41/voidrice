@@ -147,7 +147,7 @@ nnoremap <leader>.   :Files %:p:h<CR>
 " --> Lf
 " let g:lf_command_override = 'lf -command ...'
 let g:NERDTreeHijackNetrw = 0
-let g:lf_replace_netrw = 1
+" let g:lf_replace_netrw = 1
 let g:lf_width = 1.0
 let g:lf_height = 1.0
 let g:lf_map_keys = 0
