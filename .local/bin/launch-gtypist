@@ -1,0 +1,99 @@
+#!/bin/sh
+
+
+help() {
+	echo "launch-gtypist - launch gtypist in fullscreen
+
+USAGE:
+	launch-gtypist [OPTION]...
+
+OPTIONS:
+	-l LESSON start gtypist lesson
+	-f FILE   load lesson from a file
+	-e %      max error percentage
+	-v        verbose output
+	-h        show this help message
+
+LESSON can optionally be followed by the exercise number seprated by a colon.
+Example - Q2:3, which means 3rd execercise of lesson Q2.
+If LESSON is provided through the command line along with a file with -f
+option then the file will ignored"
+}
+
+
+while getopts 'l:f:e:vh' o; do case "$o" in
+	l) use_file=1; current="$OPTARG" ;;
+	f) use_file=0; file="$OPTARG" ;;
+	e) export GTYPIST_OPTS="$GTYPIST_OPTS --max-error=$OPTARG" ;;
+	v) vflag=0 ;;
+	h) help; exit ;;
+	*) echo "launch-gtypist: invalid option -- '${OPTARG}'"
+		echo 'Try `launch-gtypist -h` for more information.' >&2; exit 1 ;;
+esac done
+shift $((OPTIND - 1))
+
+msg() { [ "$vflag" = 0 ] && printf ':: %s\n' "$@" >&2; true; }
+notify() {
+	[ -n "$DISPLAY" ] && notify-send 'launch-gtypist' "$@"
+	printf '%s\n' "$@"
+}
+
+if [ "$use_file" = 0 ]; then
+	msg "Getting lesson from file: $file"
+	current="$(sed -En 's/^gtypist lesson\s*-\s*(.*)$/\1/p' "$file")" ||
+		exit 1
+	[ -z "$current" ] &&
+		printf 'launch-gtypist: current gtypist lesson not found in:\n\t%s\n' \
+		"$file" && exit 1
+fi
+
+[ -n "$1" ] && current="$1" && shift
+[ "${current#*:}" != "$current" ] && lesson="${current%:*}" &&
+	exercise="${current##*:}" || lesson="$current"
+[ -n "$lesson" ] && msg "Gtypist lesson name: $lesson" &&
+	export GTYPIST_OPTS="$GTYPIST_OPTS --start-label=$lesson"
+
+tmuxx() { [ -z "$TMUX" ] && return 1; tmux "$@"; }
+
+
+shift_exercise() {
+	msg "Shifting to exercise $exercise"
+	sleep 0.5
+
+	keys() {
+		if [ -n "$TMUX" ]; then
+			for key in "$@"; do
+				tmux send-keys -t gtypist "$key";
+			done
+		else
+			xdotool key --clearmodifiers --delay 50 "$@"
+		fi
+	}
+
+	for i in $(seq "$((exercise-1))"); do
+		if [ "$i" -gt 1 ]; then
+			keys Escape n
+		else
+			keys space space space space space Escape Escape n
+		fi
+	done
+}
+
+
+msg "Switcing to default keymap"
+# kmonad-manage stop
+remap -x
+
+msg "Waiting for terminal columns to get more than 100..."
+while [ "$(tput cols)" -lt 100 ]; do sleep 0.5; done
+tmuxx rename-window gtypist
+[ -n "$exercise" ] && shift_exercise &
+msg "	>>> Gtypist started."
+msg "     gtypist $GTYPIST_OPTS $*"
+gtypist $GTYPIST_OPTS $@
+msg "	<<< Gtypist exited."
+tmuxx set-window-option automatic-rename on
+
+msg "Switcing to user keymap"
+# kmonad-manage start
+remap

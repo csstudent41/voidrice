@@ -1,0 +1,13 @@
+#!/usr/bin/ipython
+
+# print()
+# from math import *
+# print("Imported all functions from math")
+# import numpy as np
+# print("Imported numpy as np")
+# import sympy as sym
+# sym.var('a, b, c, x, y, z')
+
+# print("\n\t Don't waste time")
+# print("\t FOCUS ON THE ESSENTIAL \n")
+# alias q pkill ipython

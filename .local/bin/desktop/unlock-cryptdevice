@@ -1,0 +1,34 @@
+#!/bin/sh
+
+help() {
+	echo "unlock-cryptdevice - unclock luks encrypted device"
+	echo "USAGE: unlock-cryptdevice <device> [mapper]"
+}
+
+[ "$(id -u)" != 0 ] &&
+	echo "unlock-cryptdevice: root privileges required" && exit 1
+[ "$#" -lt 1 ] && help >&2 && exit 1
+
+device="$(basename "$1")"
+mapper="$(basename "$2")"
+[ -z "$mapper" ] && mapper="luks-$(cryptsetup luksUUID "/dev/$device")"
+
+[ -b "/dev/mapper/$mapper" ] &&
+	echo "unlock-cryptsetup: '/dev/$mapper' already exists " >&2 &&
+	exit 1
+
+keyfile="/root/luks/${device}.key"
+if [ ! -f "$keyfile" ]; then
+	echo "unlock-cryptdevice: '$keyfile' not found" >&2
+	printf "Please enter key file path: "
+	read -r keyfile
+	echo
+fi
+
+unlock_with_keyfile() {
+	[ -z "$keyfile" ] && echo "skipping keyfile..." >&2 && return 1
+	[ ! -f "$keyfile" ] && echo "No such file: $keyfile" >&2 && return 1
+	cryptsetup --key-file "$keyfile" open "/dev/$device" "$mapper"
+}
+
+unlock_with_keyfile || cryptsetup open "/dev/$device" "$mapper"

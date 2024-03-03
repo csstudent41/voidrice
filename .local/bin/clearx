@@ -1,0 +1,51 @@
+#!/bin/sh
+
+help() { echo "clearx - execute command in clear screen
+
+USAGE:
+	clearx [OPTION]... <command>
+
+OPTIONS:
+	-n  no prompt when exiting
+	-h  show this help message"; }
+
+err() { printf 'clearx: %s\n' "$@" >&2; exit 1; }
+while getopts 'nh' o; do case "$o" in
+	n) nflag=0 ;;
+	h) help >&2; exit ;;
+	*) err "invalid option -- '$OPTARG'" ;;
+esac done
+shift $((OPTIND - 1))
+
+[ "$#" -lt 1 ] && help >&2 && exit 1
+cmds="$*"
+[ "$nflag" = 0 ] ||
+	cmds="$cmds; printf '\n%s' 'Press <Enter> to continue: '; read -r arg"
+
+tmuxcmds="tmux set status off; $cmds; tmux set status on;"
+set_screen() {
+	[ -z "$TMUX" ] &&
+		err '$TMUX not set, only tmux is supported for screen program'
+	tmux new-window -n clearx "$tmuxcmds"
+}
+new_screen() { tmux new-session -s clearx "$tmuxcmds"; }
+
+terminal_emulator() {
+	[ -z "$DISPLAY" ] && return 1
+		#err 'clearx: terminal_emulator: $DISPLAY not set'
+	case "$TERMINAL" in
+		'') echo 'clearx: $TERMINAL not set' && exit 1 ;;
+		alacritty) export TERMINAL="alacritty" ;;
+	esac
+	wmctrl -r :ACTIVE: -b remove,fullscreen
+	$TERMINAL -e sh -c "sleep 0.2; $cmds" &
+	sleep 0.2 && wmctrl -r :ACTIVE: -b add,fullscreen
+}
+
+case "$TERM" in
+	'') err '$TERM not set' ;;
+	*screen*) set_screen ;;
+	*linux*) setfont ter-132n && new_screen ;;
+	*256*) terminal_emulator || new_screen ;;
+	*) err "no action for \$TERM: $TERM"
+esac

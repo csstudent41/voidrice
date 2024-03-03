@@ -1,0 +1,11 @@
+#!/bin/sh
+
+if [ -n "$TERM" ]; then
+	grep '^bindsym' ~/.config/i3/config | sort |
+		sed 's/^bindsym \(\S*\)\s\+\(.*\)$/\1|\2/; s/\$super+/  /; s/Shift+/וּ /; s/$alt+/Alt /; s/Ctrl+/Ctrl /' |
+		column --table --separator='|' | less -r
+else
+	grep '^bindsym' ~/.config/i3/config | sort |
+		sed 's/^bindsym \(\S*\)\s\+\(.*\)$/\1|\2/; s/\$super+/  /; s/Shift+/Shift /; s/$alt+/Alt /; s/Ctrl+/Ctrl /' |
+		column --table --separator='|' | yad --text-info
+fi

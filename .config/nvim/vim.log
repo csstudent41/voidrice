@@ -1,0 +1,170 @@
+
+
+times in msec
+ clock   self+sourced   self:  sourced script
+ clock   elapsed:              other lines
+
+000.009  000.009: --- NVIM STARTING ---
+000.119  000.110: event init
+000.186  000.067: early init
+000.230  000.043: locale set
+000.260  000.030: init first window
+000.469  000.209: inits 1
+000.483  000.014: window checked
+000.484  000.001: parsing arguments
+000.872  000.051  000.051: require('vim.shared')
+000.971  000.034  000.034: require('vim._meta')
+000.973  000.095  000.061: require('vim._editor')
+000.974  000.190  000.044: require('vim._init_packages')
+000.975  000.301: init lua interpreter
+001.027  000.053: expanding arguments
+001.058  000.031: inits 2
+001.316  000.258: init highlight
+001.317  000.001: waiting for UI
+001.475  000.157: done waiting for UI
+001.481  000.007: clear screen
+001.588  000.107: init default mappings & autocommands
+001.883  000.041  000.041: sourcing /usr/share/nvim/runtime/ftplugin.vim
+001.936  000.022  000.022: sourcing /usr/share/nvim/runtime/indent.vim
+001.982  000.009  000.009: sourcing /usr/share/nvim/archlinux.vim
+001.985  000.030  000.021: sourcing /etc/xdg/nvim/sysinit.vim
+006.183  000.919  000.919: sourcing /home/master/.config/nvim/autoload/plug.vim
+012.319  000.007  000.007: sourcing /home/master/.local/share/nvim/plugged/vim-polyglot/filetype.vim
+012.437  000.007  000.007: sourcing /home/master/.local/share/nvim/plugged/vim-polyglot/ftdetect/polyglot.vim
+012.556  000.010  000.010: sourcing /usr/share/vim/vimfiles/ftdetect/PKGBUILD.vim
+012.580  000.008  000.008: sourcing /usr/share/vim/vimfiles/ftdetect/SRCINFO.vim
+012.604  000.007  000.007: sourcing /usr/share/vim/vimfiles/ftdetect/augeas.vim
+012.634  000.014  000.014: sourcing /usr/share/vim/vimfiles/ftdetect/conkyrc.vim
+012.672  000.022  000.022: sourcing /usr/share/vim/vimfiles/ftdetect/espeakfiletype.vim
+012.703  000.015  000.015: sourcing /usr/share/vim/vimfiles/ftdetect/lf.vim
+012.755  000.024  000.024: sourcing /usr/share/vim/vimfiles/ftdetect/nginx.vim
+023.697  011.642  011.528: sourcing /home/master/.local/share/nvim/plugged/vim-polyglot/autoload/polyglot/init.vim
+023.708  011.710  000.068: sourcing /home/master/.local/share/nvim/plugged/vim-polyglot/filetype.vim
+023.840  000.085  000.085: sourcing /usr/share/nvim/runtime/filetype.lua
+024.243  000.011  000.011: sourcing /usr/share/nvim/runtime/ftplugin.vim
+024.319  000.007  000.007: sourcing /usr/share/nvim/runtime/indent.vim
+024.499  000.063  000.063: sourcing /usr/share/nvim/runtime/syntax/synload.vim
+024.563  000.201  000.137: sourcing /usr/share/nvim/runtime/syntax/syntax.vim
+024.947  000.306  000.306: sourcing /usr/share/nvim/runtime/syntax/nosyntax.vim
+025.066  000.054  000.054: sourcing /usr/share/nvim/runtime/syntax/synload.vim
+025.118  000.505  000.145: sourcing /usr/share/nvim/runtime/syntax/syntax.vim
+025.229  000.008  000.008: sourcing /home/master/.local/share/nvim/plugged/vim-polyglot/filetype.vim
+025.302  000.053  000.053: sourcing /usr/share/nvim/runtime/filetype.lua
+025.391  000.008  000.008: sourcing /usr/share/nvim/runtime/ftplugin.vim
+025.499  000.007  000.007: sourcing /home/master/.local/share/nvim/plugged/vim-polyglot/filetype.vim
+025.566  000.048  000.048: sourcing /usr/share/nvim/runtime/filetype.lua
+025.652  000.008  000.008: sourcing /usr/share/nvim/runtime/ftplugin.vim
+025.723  000.006  000.006: sourcing /usr/share/nvim/runtime/indent.vim
+025.809  023.804  010.228: sourcing /home/master/.config/nvim/init.vim
+025.815  000.331: sourcing vimrc file(s)
+026.068  000.043  000.043: sourcing /home/master/.config/nvim/plugin/coc.vim
+026.166  000.080  000.080: sourcing /home/master/.config/nvim/plugin/debug.vim
+026.202  000.018  000.018: sourcing /home/master/.config/nvim/plugin/docs.vim
+026.303  000.082  000.082: sourcing /home/master/.config/nvim/plugin/fzf.vim
+026.366  000.041  000.041: sourcing /home/master/.config/nvim/plugin/scratch.vim
+026.863  000.071  000.071: sourcing /home/master/.config/nvim/autoload/onedark.vim
+039.423  012.982  012.912: sourcing /home/master/.config/nvim/colors/onedark.vim
+039.454  013.068  000.086: sourcing /home/master/.config/nvim/plugin/ui.vim
+039.812  000.227  000.227: sourcing /home/master/.local/share/nvim/plugged/vim-surround/plugin/surround.vim
+039.967  000.084  000.084: sourcing /home/master/.local/share/nvim/plugged/vim-commentary/plugin/commentary.vim
+040.116  000.063  000.063: sourcing /home/master/.local/share/nvim/plugged/lf.vim/plugin/lf.vim
+040.371  000.185  000.185: sourcing /home/master/.local/share/nvim/plugged/vim-floaterm/plugin/floaterm.vim
+040.855  000.418  000.418: sourcing /home/master/.local/share/nvim/plugged/fzf/plugin/fzf.vim
+041.550  000.617  000.617: sourcing /home/master/.local/share/nvim/plugged/fzf.vim/plugin/fzf.vim
+041.693  000.073  000.073: sourcing /home/master/.local/share/nvim/plugged/zeavim.vim/plugin/zeavim.vim
+042.133  000.339  000.339: sourcing /home/master/.local/share/nvim/plugged/vim-polyglot/plugin/polyglot.vim
+042.506  000.152  000.152: sourcing /usr/share/nvim/runtime/plugin/gzip.vim
+042.533  000.007  000.007: sourcing /usr/share/nvim/runtime/plugin/health.vim
+042.939  000.118  000.118: sourcing /usr/share/nvim/runtime/pack/dist/opt/matchit/plugin/matchit.vim
+043.016  000.466  000.348: sourcing /usr/share/nvim/runtime/plugin/matchit.vim
+043.131  000.099  000.099: sourcing /usr/share/nvim/runtime/plugin/matchparen.vim
+043.494  000.345  000.345: sourcing /usr/share/nvim/runtime/plugin/netrwPlugin.vim
+044.073  000.113  000.113: sourcing /usr/share/nvim/runtime/autoload/remote/host.vim
+044.305  000.089  000.089: sourcing /usr/share/nvim/runtime/autoload/remote/define.vim
+044.761  001.141  000.938: sourcing /home/master/.local/share/nvim/rplugin.vim
+044.768  001.244  000.103: sourcing /usr/share/nvim/runtime/plugin/rplugin.vim
+044.886  000.091  000.091: sourcing /usr/share/nvim/runtime/plugin/shada.vim
+044.928  000.017  000.017: sourcing /usr/share/nvim/runtime/plugin/spellfile.vim
+045.070  000.121  000.121: sourcing /usr/share/nvim/runtime/plugin/tarPlugin.vim
+045.154  000.058  000.058: sourcing /usr/share/nvim/runtime/plugin/tohtml.vim
+045.193  000.013  000.013: sourcing /usr/share/nvim/runtime/plugin/tutor.vim
+045.365  000.151  000.151: sourcing /usr/share/nvim/runtime/plugin/zipPlugin.vim
+045.471  000.012  000.012: sourcing /usr/share/vim/vimfiles/plugin/fzf.vim
+045.579  000.089  000.089: sourcing /usr/share/vim/vimfiles/plugin/redact_pass.vim
+046.186  000.100  000.100: sourcing /usr/share/nvim/runtime/plugin/editorconfig.lua
+046.313  000.104  000.104: sourcing /usr/share/nvim/runtime/plugin/man.lua
+046.371  000.037  000.037: sourcing /usr/share/nvim/runtime/plugin/nvim.lua
+046.425  002.166: loading rtp plugins
+046.501  000.075: loading packages
+046.527  000.027: loading after plugins
+046.535  000.007: inits 3
+049.346  002.812: reading ShaDa
+049.563  000.216: opening buffers
+049.592  000.029: BufEnter autocommands
+049.594  000.002: editing files in windows
+051.092  000.064  000.064: sourcing /home/master/.local/share/nvim/plugged/vim-airline/autoload/airline/init.vim
+051.660  000.278  000.278: sourcing /home/master/.local/share/nvim/plugged/vim-airline/autoload/airline/parts.vim
+051.828  000.011  000.011: sourcing /home/master/.local/share/nvim/plugged/vim-airline/autoload/airline/formatter/short_path.vim
+052.601  000.102  000.102: sourcing /home/master/.local/share/nvim/plugged/vim-airline/autoload/airline/util.vim
+052.898  000.159  000.159: sourcing /home/master/.local/share/nvim/plugged/vim-airline/autoload/airline/extensions.vim
+053.025  000.030  000.030: sourcing /home/master/.local/share/nvim/plugged/vim-airline/autoload/airline/extensions/quickfix.vim
+053.204  000.108  000.108: sourcing /home/master/.local/share/nvim/plugged/vim-airline/autoload/airline.vim
+053.349  000.020  000.020: sourcing /home/master/.local/share/nvim/plugged/vim-airline/autoload/airline/extensions/netrw.vim
+053.463  000.021  000.021: sourcing /home/master/.local/share/nvim/plugged/vim-airline/autoload/airline/extensions/fzf.vim
+053.692  000.064  000.064: sourcing /home/master/.local/share/nvim/plugged/vim-airline/autoload/airline/extensions/term.vim
+055.576  000.118  000.118: require('vim.lsp.log')
+056.062  000.483  000.483: require('vim.lsp.protocol')
+057.439  000.324  000.324: require('vim.lsp._snippet')
+057.532  000.090  000.090: require('vim.highlight')
+057.538  000.004  000.004: require('vim.F')
+057.556  001.459  001.041: require('vim.lsp.util')
+057.570  002.492  000.432: require('vim.lsp.handlers')
+057.977  000.405  000.405: require('vim.lsp.rpc')
+058.150  000.171  000.171: require('vim.lsp.sync')
+058.648  000.496  000.496: require('vim.lsp.semantic_tokens')
+059.000  000.349  000.349: require('vim.lsp.buf')
+059.135  000.133  000.133: require('vim.lsp.diagnostic')
+059.350  000.213  000.213: require('vim.lsp.codelens')
+059.382  005.520  001.261: require('vim.lsp')
+059.504  000.044  000.044: sourcing /home/master/.local/share/nvim/plugged/vim-airline/autoload/airline/extensions/nvimlsp.vim
+059.696  000.071  000.071: sourcing /home/master/.local/share/nvim/plugged/vim-airline/autoload/airline/extensions/whitespace.vim
+059.933  000.037  000.037: sourcing /home/master/.local/share/nvim/plugged/vim-airline/autoload/airline/extensions/po.vim
+060.085  000.056  000.056: sourcing /home/master/.local/share/nvim/plugged/vim-airline/autoload/airline/extensions/wordcount.vim
+060.283  000.019  000.019: sourcing /home/master/.local/share/nvim/plugged/vim-airline/autoload/airline/extensions/keymap.vim
+060.481  000.028  000.028: sourcing /home/master/.local/share/nvim/plugged/vim-airline/autoload/airline/extensions/searchcount.vim
+064.384  000.073  000.073: sourcing /home/master/.local/share/nvim/plugged/vim-airline/autoload/airline/section.vim
+064.878  000.238  000.238: sourcing /home/master/.local/share/nvim/plugged/vim-airline/autoload/airline/highlighter.vim
+068.911  000.072  000.072: sourcing /home/master/.local/share/nvim/plugged/vim-airline/autoload/airline/themes.vim
+069.476  000.931  000.859: sourcing /home/master/.config/nvim/autoload/airline/themes/onedark.vim
+072.884  000.370  000.370: sourcing /home/master/.config/nvim/autoload/airline/themes/onedark.vim
+085.154  000.083  000.083: sourcing /home/master/.local/share/nvim/plugged/vim-airline/autoload/airline/builder.vim
+085.516  000.050  000.050: sourcing /home/master/.local/share/nvim/plugged/vim-airline/autoload/airline/extensions/default.vim
+102.172  051.614  043.237: sourcing /home/master/.local/share/nvim/plugged/vim-airline/plugin/airline.vim
+102.485  000.031  000.031: sourcing /home/master/.local/share/nvim/plugged/vim-airline-themes/plugin/airline-themes.vim
+103.232  001.993: VimEnter autocommands
+103.235  000.003: UIEnter autocommands
+103.236  000.001: before starting main loop
+103.996  000.760: first screen update
+103.998  000.002: --- NVIM STARTED ---
+
+
+times in msec
+ clock   self+sourced   self:  sourced script
+ clock   elapsed:              other lines
+
+000.009  000.009: --- NVIM STARTING ---
+000.188  000.179: event init
+000.251  000.063: early init
+000.292  000.041: locale set
+000.329  000.036: init first window
+000.545  000.217: inits 1
+000.551  000.006: window checked
+000.553  000.002: parsing arguments
+000.937  000.026  000.026: require('vim.shared')
+001.012  000.032  000.032: require('vim._meta')
+001.014  000.073  000.041: require('vim._editor')
+001.015  000.160  000.061: require('vim._init_packages')
+001.016  000.302: init lua interpreter
+001.515  000.500: expanding arguments
+001.559  000.044: inits 2
+001.793  000.233: init highlight

@@ -1,0 +1,33 @@
+#!/bin/sh
+
+case "$BLOCK_BUTTON" in
+	1) $TERMINAL -e gotop ;;
+	2) $TERMINAL -e nvim "$(which i3cpu)" ;;
+	3) echo "top,$TERMINAL -e top
+		htop,$TERMINAL -e htop
+		gotop,$TERMINAL -e gotop
+		nvtop,$TERMINAL -e nvtop" | jgmenu --vsimple --at-pointer ;;
+esac;
+
+memory="$(memory_percent)"
+printf "%s" "$(memory_usage)"
+# printf "  "
+# sb-cpubars
+
+echo
+echo
+# Print color, if needed
+if [ "$memory" -ge 90 ]; then
+    echo "$BLOCK_COLOR_LEVEL5";
+    exit 33;
+elif [ "$memory" -ge 70 ]; then
+  echo "$BLOCK_COLOR_LEVEL4"
+elif [ "$memory" -ge 50 ]; then
+  echo "$BLOCK_COLOR_LEVEL3"
+elif [ "$memory" -ge 20 ]; then
+  echo "$BLOCK_COLOR_LEVEL2"
+else
+  echo "$BLOCK_COLOR_LEVEL1"
+fi
+
+

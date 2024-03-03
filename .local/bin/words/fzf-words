@@ -1,0 +1,23 @@
+#!/bin/sh
+
+mkdir -pv ~/.local/share/fzf
+export SDCV_PAGER="less -R"
+
+if [ "$OPENFLAG" = 0 ]; then
+	sdcv --color \
+		-u 'WordNet® 3.0 (En-En)' \
+		-u 'American Heritage Dictionary 4th Ed. (En-En)' \
+		-u 'Urban Dictionary P1 (En-En)' \
+		-u 'Urban Dictionary P2 (En-En)' \
+		"$@"
+	sdcv -u 'Wikipedia English - Free Encyclopedia' "$@" | w3m -T text/html
+	exit
+fi
+
+grep -v \' "${PREFIX:-/usr}/share/dict/words" | fzf \
+	--history "$HOME/.local/share/fzf/word_history" \
+	--header "Startdict Dictionary" --header-first \
+	--preview='OPENFLAG=0 fzf-words {} | fold -sw "$FZF_PREVIEW_COLUMNS"' \
+	--preview-window='nohidden,75%' --tiebreak=begin --print-query \
+	--bind 'alt-enter:execute(OPENFLAG=0 fzf-words {q})' \
+	--bind 'enter:execute(OPENFLAG=0 fzf-words {})'

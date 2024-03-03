@@ -1,0 +1,37 @@
+#!/bin/sh
+
+help() {
+	echo "ttyl - tty lock
+
+USAGE:
+	ttyl [OPTION]... [COMMAND]
+
+OPTIONS:
+	-a  lock all TTYs
+	    (default when no command is passed and terminal is a tty)
+	-c  lock current TTY
+	-h  show this help message"
+}
+
+err() { printf 'ttyl: %s\n' "$@" >&2; exit 1; }
+
+while getopts 'ach' o; do case "$o" in
+	a) lockall=0 ;;
+	c) lockall=1 ;;
+	h) help >&2; exit ;;
+	*) err "invalid option -- '$OPTARG'" ;;
+esac done
+shift $((OPTIND - 1))
+
+case "$lockall" in
+	1) lock="vlock" ;;
+	0) lock="vlock -a" ;;
+	*)
+		case "$(tty)" in
+			/dev/tty[1-7]) lock="vlock -a" ;;
+			*) lock="vlock" ;;
+		esac
+		;;
+esac
+
+sleep 1 && $@ & $lock

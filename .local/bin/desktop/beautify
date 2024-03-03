@@ -1,0 +1,102 @@
+#!/bin/sh
+
+## properties of script
+
+## set home screen and lock screen wallpaper
+HOMEWALL="/usr/share/wallpapers/garuda-wallpapers/Harpy Eagle.png"
+LOCKWALL="/usr/share/wallpapers/garuda-wallpapers/Mühle_SGS.png"
+
+## choose random wallpaper from a directory
+# WALLPAPERS="$HOME/.local/share/wallpapers"
+## requires 'setbg' script found in lukesmithxyz github repo
+setbg_link="https://github.com/LukeSmithxyz/voidrice/blob/master/.local/bin/setbg"
+## path to download script files like setbg
+BIN="$HOME/.local/bin"
+
+# Location to put lock screen wallpaper for lock program
+LOCKWALL_LOC="/tmp/lockWall"
+
+## list of programs to be installed/uninstalled
+PROGRAMS="eza dust conky picom xwallpaper cxxmatrix"
+## some additional programs that I think are essential are installed below
+## these will be not removed during uninstall
+
+
+help() { echo "beautify - beautify you desktop environment
+
+USAGE:
+	beautify [OPTION]...
+
+OPTIONS:
+	-h  show this help message
+
+	-i  install programs for beautification
+	-u  uninstall beautification programs
+	-x  clear beautifications
+
+	The above group of options are conflicting.
+	Passing any one of them will disable the others.
+
+This is very much a personal script and is meant to be configured directly.
+I have only made it work with arch linux and the pacman package manager."; }
+
+err() { printf 'beautify: %s\n' "$@" >&2; exit 1; }
+while getopts 'iuxh' o; do case "$o" in
+	i) opflag=0 ;;
+	u) opflag=1 ;;
+	x) opflag=2 ;;
+	h) help >&2; exit ;;
+	*) err "invalid option -- '$OPTARG'" ;;
+esac done
+shift $((OPTIND - 1))
+
+case "$opflag" in
+	0)
+		PROGRAMS="$PROGRAMS neovim tmux dunst highlight starship"
+		sudo pacman -Syu --noconfirm
+		for pkg in $PROGRAMS; do
+			if ! pacman -Q "$pkg" >/dev/null; then
+				paru -S --noconfirm "$pkg"
+			fi
+		done
+
+		mkdir -pv ~/.local/bin
+		wget -c "$setbg_link" -o "${BIN}/setbg" && chmod +x "${BIN}/setbg"
+		;;
+
+	1)
+		for pkg in $PROGRAMS; do
+			if pacman -Q "$pkgs" >/dev/null; then
+				sudo pacman -Rns --noconfirm "$pkg"
+			fi
+		done
+		rm -f "$setbg"
+		;;
+
+	2)
+		i3-msg 'gaps inner all set 0'
+		xwallpaper --clear
+		rm -f "$LOCKWALL_LOC"
+		killall -q -o 1s conky picom beautify
+		;;
+esac
+
+[ -n "$opflag" ] && exit
+
+if [ "${LOCKWALL%.png}" = "$LOCKWALL" ]; then
+	temp="/tmp/$(basename "${LOCKWALL%.*}.png")"
+	convert "$LOCKWALL" "$temp"
+	cp -f "$temp" "$LOCKWALL_LOC"
+	rm -f "$temp"
+else
+	cp -f "$LOCKWALL" "$LOCKWALL_LOC"
+fi
+
+i3-msg 'gaps inner all set 10'
+xwallpaper --zoom "$HOMEWALL"
+pidof -q conky || conky
+pidof -q picom || picom -b
+
+if [ -e "$WALLPAPERS" ]; then
+	while sleep 1m; do setbg "$WALLPAPERS"; done
+fi

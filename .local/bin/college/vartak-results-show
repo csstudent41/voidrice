@@ -1,0 +1,60 @@
+#!/bin/sh
+
+help() { echo "vartak-results-show - display results with names of students
+
+USAGE:
+	vartak-results-show [OPTION]... <FILE>
+
+OPTIONS:
+	-s FIELD  sort by FIELD name
+	-S FIELD  sort by FIELD name (reversed)
+	-N NAMES  path to file that has student names data
+	-h        show this help message
+
+FILE is the CSV file that contains scores of each student.
+FIELD name is one of the field from CSV header.
+
+NAMES data is the file containing the names of student. By default, it's
+assumed that this file is named as 'names.csv' and is present in the current
+directory. This file should have seat no in first column and names in the
+second."; }
+
+err() { printf 'vartak-results-show: %s\n' "$@" >&2; exit 1; }
+while getopts 'ns:S:N:h' o; do case "$o" in
+	s) SORTFIELD="$OPTARG" ;;
+	S) SORTFIELD="$OPTARG" SORTOPTS="$SORTOPTS -r" ;;
+	N) NAMEFILE="$OPTARG" ;;
+	h) help; exit ;;
+	*) err "invalid option -- '$OPTARG'" ;;
+esac done
+shift $((OPTIND - 1))
+
+[ ! -f "${NAMEFILE:=names.csv}" ] && err "file not found: $NAMEFILE"
+
+[ "$(awk -F, '{print NF; exit}' "$NAMEFILE")" != 2 ] &&
+	err "NAMES data doesn't have exactly 2 columns"
+
+[ "$#" -lt 1 ] && help >&2 && exit 1
+
+data="$(awk -F, '
+	FNR == NR { a[$1] = $2; next; }
+	{
+		printf("%s%s%s", $1, FS, a[$1])
+		for (i = 2; i <= NF; i++) {
+			printf("%s%s", FS, $i)
+		}
+		print ""
+	}
+	' "$NAMEFILE" "$1")"
+
+header="$(echo "$data" | head -1)"
+data="$(echo "$data" | tail +2)"
+
+if [ -n "$SORTFIELD" ]; then
+	FIELDINDEX="$(echo "$header" | sed -n 's/,/\n/gp' |
+		grep -nx "$SORTFIELD" | cut -d: -f1)"
+	data="$(echo "$data" | sort -n "$SORTOPTS" -t, -k "$FIELDINDEX")" || exit
+fi
+
+(printf "Sr. No,%s\n" "$header"; echo "$data" | nl -s, -w1) |
+	column --table --separator ',' --table-right 1,2,4-20

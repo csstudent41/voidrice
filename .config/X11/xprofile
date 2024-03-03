@@ -1,0 +1,17 @@
+#!/bin/sh
+
+gui -e
+
+# pidof -q syncthing || syncthing --no-restart --no-browser \
+# 	--logfile=~/.cache/syncthing/logs --log-max-size=0 \
+# 	--log-max-old-files=0 >/dev/null &
+
+if ! pidof -q copyq; then
+	xclickroot sh -c "rm -f ~/.jgmenu-lockfile && jgmenu --at-pointer" &
+	numlockx on &
+	dunst &
+	copyq &
+	{ remap -x; remap; } &
+fi
+
+setdp

@@ -1,0 +1,22 @@
+#!/bin/sh
+
+command -v xtrlock || exit
+
+[ "$(xrandr --current | grep -c "\S* connected \S\+.* (")" -gt 1 ] && {
+	xtrlock -b -f
+	xset dpms force off
+	exit
+}
+
+TERMINAL="alacritty -t matrixlock"
+if command -v cxxmatrix; then
+	$TERMINAL -e cxxmatrix &
+elif command -v cmatrix; then
+	$TERMINAL -e sh -c 'sleep 0.5 && cmatrix' &
+else
+	xtrlock -b -f; exit
+fi
+
+xtrlock -f
+sleep 0.2
+wmctrl -r matrixlock -b add,fullscreen

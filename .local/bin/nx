@@ -1,0 +1,150 @@
+#!/bin/sh
+
+help() {
+	echo "nx - create new script"
+	echo "USAGE: nx <script_name>"
+}
+
+err() { printf 'nx: %s\n' "$@" >&2; exit 1; }
+warn() {
+	printf 'nx: %s [Y/n] ' "$@" >&2; read -r arg
+	case "$arg" in ''|y|Y) ;; *) exit ;; esac
+}
+
+while getopts 'h' o; do case "$o" in
+	h) help >&2; exit ;;
+	*) err "invalid option -- '$OPTARG'" ;;
+esac done
+shift $((OPTIND - 1))
+
+[ "$#" -lt 1 ] && help && exit 1
+[ "$#" -gt 1 ] &&
+	echo "nx: too many arguments. Only one expected" &&
+	exit 1
+
+
+new_script() {
+	cat << EOF > "$1"
+#!/bin/sh
+
+help() { echo "$1 -
+
+USAGE:
+	$1 [OPTION]...
+
+OPTIONS:
+	-h  show this help message"; }
+
+err() { printf '$1: %s\n' "\$@" >&2; exit 1; }
+while getopts 'h' o; do case "\$o" in
+	h) help; exit ;;
+	*) err "invalid option -- '\$OPTARG'" ;;
+esac done
+shift \$((OPTIND - 1))
+
+[ "\$#" -lt 1 ] && help >&2 && exit 1
+
+EOF
+
+	chmod u+x -- "$1" || exit
+}
+
+
+new_c_file() {
+	cat << EOF > "$1"
+#include <stdio.h>
+
+int main()
+{
+	printf("Hello\n");
+
+	return 0;
+}
+EOF
+}
+
+
+new_cpp_file() {
+	cat << EOF > "$1"
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+	cout << "Hello" << endl;
+
+	cin.get();
+	return 0;
+}
+EOF
+}
+
+
+new_py_file() {
+	cat << EOF > "$1"
+import timeit
+
+print("Finished in %fs" % timeit.timeit())
+EOF
+}
+
+
+new_java_file() {
+	PATTERN="Scanner"
+	VIMCMDS="normal!2n\n noh"
+	cat << EOF > "$1"
+import java.util.Scanner;
+
+class ${1%.java} {
+	public static void main(String args[]) {
+		Scanner sc = new Scanner(System.in);
+
+		System.out.println("Finished!");
+		sc.close
+	}
+}
+EOF
+}
+
+
+file="$1"
+
+new_file() {
+	case "$file" in
+		*.c) new_c_file "$file" ;;
+		*.cpp) new_cpp_file "$file" ;;
+		*.py) new_py_file "$file" ;;
+		*.java) new_java_file "$file" ;;
+		*) new_script "$file" ;;
+	esac
+}
+
+if [ -f "$file" ]; then
+	[ ! -w "$file" ] && chmod u+rw "$file"
+	if [ -s "$file" ]; then
+		warn "'$file' already exists, edit existing file?" || exit
+	else
+		warn "an empty file '$file' already exists, fill and edit?" &&
+		new_file "$file"
+	fi
+elif [ -e "$file" ]; then
+	err "'$file' already exists and is a non-regular file"
+else
+	new_file "$file"
+fi
+
+ls -lF --color -- "$file"
+
+case "$EDITOR" in
+	'') echo "ge: \$EDITOR variable not set" >&2 && exit 1 ;;
+	vi|*vim*)
+		VIMCONF="$(mktemp)"; export VIMCONF
+		[ -n "$VIOPTS" ] && echo "set $VIOPTS" >> "$VIMCONF"
+		[ -n "$PATTERN" ] && echo "/$PATTERN" >> "$VIMCONF"
+		[ -n "$VIMCMDS" ] && echo "$VIMCMDS" >> "$VIMCONF"
+		$EDITOR -S "$VIMCONF" "$file"
+		rm -f "$VIMCONF"
+		;;
+	*) $EDITOR "$file" ;;
+esac; exit

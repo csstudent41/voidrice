@@ -1,0 +1,13 @@
+#!/usr/bin/ipython
+
+# def exp(x):
+#     return sum([
+#         x**n / m.factorial(n)
+#         for n in range(0, 100)
+#     ])
+# 
+# def tables(from_, to_, rows=10):
+#     for table in range(from_, to_+1):
+#         for row in range(1, rows+1):
+#             print(table, 'x', row, '=', table*row)
+#         print()

@@ -1,0 +1,25 @@
+#!/bin/sh
+
+[ -z "$PREVIEW" ] && export PREVIEW='cat "$(dirname {})/.description/${$(basename {})%.*}.txt" 2>/dev/null || preview {}'
+
+find "$@" -type f \
+		! -path '*/.*' \
+		! -name '*.srt' \
+		! -name '*.vtt' \
+		! -name '*.description' \
+		! -wholename '.description/*' \
+		! -name '*.info.json' \
+		! -name '*.live_chat.json' \
+		! -name '*.yt*' |
+	sort |
+	fzf --multi --reverse \
+		--history="${FZF_HIST:-$HOME/.local/share/fzf/media_history}" \
+		--header="${FZF_HEADER:-Browse Media Files}" --header-first \
+		--preview="$PREVIEW" --preview-window=hidden \
+		--bind 'alt-C:execute( ffbrowser open "$(mediainfo {} |
+			grep "^Comment\s*: " | cut -d: -f2- |
+			sed -E "s|\S*youtube\S*/(.*)|https://yewtu.be/\1\&nojs=1|")" )' \
+		--bind 'ctrl-o:execute(echo {q} >> "$FZF_HIST"
+			${OPENER:-xdg-open} {})' \
+		--bind 'alt-3:change-preview($PREVIEW)' \
+		--bind 'alt-#:execute($PREVIEW | less)'

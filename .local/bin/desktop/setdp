@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# case "$1" in
+# 	mirror) ;;
+# esac
+
+set --
+for display in $(xrandr | grep "^\S* connected" | cut -d\  -f1); do
+	case "$display" in
+		eDP*) export PRIMARY="$display"; set -- "$@" --output "$display" --mode 1920x1080 --primary ;;
+		HDMI*) set -- "$@" --output "$display" --right-of \$PRIMARY --mode 1366x768 --scale 1.25x1.25 ;;
+	esac
+done
+
+eval "xrandr --auto $*"

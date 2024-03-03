@@ -1,0 +1,20 @@
+#!/bin/sh
+
+if [ "$OPENFLAG" = 0 ]; then
+	input="$*"; page="${input%%)*}";
+	name="${page%%[ (]*}"; section="${page#*(}"
+	if [ "$name" = "$section" ]; then
+		man "$name"
+	else
+		man "$section" "$name"
+	fi; exit
+fi
+
+mkdir -pv "${XDG_DATA_HOME:=$HOME/.local/share}/fzf"
+export FZF_HIST="${XDG_DATA_HOME:=$HOME/.local/share}/fzf/manual_history"
+
+apropos -l "${@:-.}" | fzf --history="$FZF_HIST" --prompt="man: " \
+	--preview='MANWIDTH=$FZF_PREVIEW_COLUMNS OPENFLAG=0 fm {}' \
+	--preview-window="hidden" --tiebreak="begin" \
+	--bind 'ctrl-v:toggle-preview,ctrl-space:toggle-preview' \
+	--bind 'enter:execute(echo {1} >> "$FZF_HIST"; OPENFLAG=0 fm {})'

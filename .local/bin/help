@@ -1,0 +1,111 @@
+#!/bin/sh
+
+help() { echo "help - get help for shell commands or programs
+
+USAGE:
+	help [OPTION...] <QUERY>
+
+OPTIONS:
+	-a  show all available help
+	-h  show this help message
+	"; }
+
+while getopts 'avh' o; do case "$o" in
+	a) aflag=0;;
+	h) help; return ;;
+	*) printf "help: invalid option -- '%s'" "$OPTARG" ;;
+esac done
+shift $((OPTIND - 1))
+
+[ "$#" -lt 1 ] && help >&2 && return 2
+
+show_file() {
+  file="$1"
+  filetype="$(file -L --mime-type --brief "$file")"
+  [ "${filetype#text}" != "$filetype" ] &&
+    highlight --out-format=ansi --force "$file" |
+		less -R --prompt=" $file "
+}
+
+
+##############################################################
+###    H E L P    F U N C T I O N S    I N    O R D E R    ###
+##############################################################
+
+man_query() {
+  man -w "$query" >/dev/null 2>&1 || return 2
+  man -a "$query"
+}
+
+info_query() {
+	# if command -v info
+  [ -n "$(info --where "$query")" ] || return 2
+  info --vi-keys --all "$query"
+}
+
+show_script() {
+  file="$(which "$query" 2>/dev/null)" || return 2
+  show_file "$file"
+}
+
+cmd_help() {
+	if content="$($query -h 2>/dev/null)"; then
+		printf "$ %s -h" "$query"
+  elif content="$($query --help 2>/dev/null)"; then
+		printf "$ %s --help" "$query"
+	else
+		return 2
+	fi
+	printf '\n%s\n' "$content" | less -X
+	echo
+}
+
+tldr_query() {
+  content="$(tldr --color=always "$query" 2>/dev/null)" || return 2
+  printf "\n$ tldr '%s'\n%s\n\n" "$query" "$content" | less -X
+}
+
+pkg_info() {
+	if command -v pacman >/dev/null; then
+		cmd="$ pacman -Si $query"
+		info="$(pacman -Si "$query" 2>/dev/null)" || return 2
+	elif command -v apt >/dev/null; then
+		cmd="$ apt show $query"
+		info="$(apt show "$query" 2>/dev/null)" || return 2
+	elif command -v pkg >/dev/null; then
+		cmd="$ pkg info $query"
+		info="$(pkg info "$query" 2>/dev/null)" || return 2
+	else
+		return
+	fi
+	[ -z "$info" ] && return 2
+  printf "\n%s\n%s\n\n" "$cmd" "$info" | less -X
+}
+
+##########################################################
+###    E N D    O F    H E L P    F U N C T I O N S    ###
+##########################################################
+
+
+list_help() {
+	sed -ne "/^###    H E L P/,/^###    E N D/ s/^\([a-zA-Z0-9_]\+\)\(\).*/\1/p" "$0"
+}
+main() {
+	if [ "$aflag" = 0 ]; then
+		eval "$(list_help)"
+	else
+		eval "$(list_help | sed -z 's/\n/||/g' | sed 's/||$//')"
+	fi
+}
+
+query="$*"
+[ -f "$query" ] && show_file "$query" && return
+[ -d "$query" ] &&
+  ls -AlFh --color --group-directories-first -- "$query" && return
+
+cmd_info="$(command -V "$query")" && printf "%s\n\n" "$cmd_info" &&
+	FOUND=1
+
+if ! main && [ "$FOUND" != 1 ]; then
+  echo "No help found for '$query'" >&2 && return 2
+fi

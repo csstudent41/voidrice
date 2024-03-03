@@ -1,0 +1,62 @@
+#!/bin/sh
+
+help() { echo "search - search tool for unix users
+
+USAGE:
+	search [OPTION]... <QUERY>
+
+OPTIONS:
+	-h  show this help message"; }
+
+err() { printf 'search: %s\n' "$@" >&2; exit 1; }
+while getopts 'h' o; do case "$o" in
+	h) help >&2; exit ;;
+	*) err "invalid option -- '$OPTARG'" ;;
+esac done
+shift $((OPTIND - 1))
+
+if [ "$PREVIEWFLAG" = 0 ]; then
+	[ -z "$INDEX" ] && export INDEX="$(echo "$*" | cut -d: -f1)"
+	[ -z "$LINE" ] && export LINE="$(echo "$*" | cut -d: -f2-)"
+
+	case "$INDEX" in
+		wiki) "${FILE_HANDLER:-preview}" "/usr/share/doc/$LINE" ;;
+		docs) "${FILE_HANDLER:-preview}" "$HOME/.local/share/Zeal/Zeal/docsets/$LINE" ;;
+		media) "${FILE_HANDLER:-preview}" "/run/media/$USER/Storage/Media/$LINE" ;;
+		library) "${FILE_HANDLER:-preview}" "/run/media/$USER/Storage/Library/$LINE" ;;
+		tldr) tldr --color=always "$LINE" ;;
+		word) sdcv-dict "$LINE" ;;
+		man)
+			page="${LINE%%)*}"; name="${page%%[ (]*}"; section="${page#*(}"
+			if [ "$name" != "$section" ]; then
+				man "$section" "$name"
+			else
+				man "$name"
+			fi
+		;;
+		pacman) pacman --color=always -Si "${LINE%% *}" ;;
+	esac
+	exit
+fi
+
+if [ "$OPENFLAG" = 0 ]; then
+	export INDEX="$(echo "$*" | cut -d: -f1)"
+	export LINE="$(echo "$*" | cut -d: -f2-)"
+	export FILE_HANDLER="open"
+
+	case "$INDEX" in
+		wiki|docs|web-docs|media|library|man) PREVIEWFLAG=0 search ;;
+		*) PREVIEWFLAG=0 search | less -r ;;
+	esac
+	exit
+fi
+
+[ "$#" -lt 1 ] && help >&2 && exit 1
+FZF_HIST="$HOME/.local/share/fzf/search_history"
+
+cd "${SEARCHDB:-$HOME/.cache/search}" || exit
+mkdir -pv ~/.local/share/fzf
+grep -Rsi --color=always "$@" | fzf --ansi \
+	--history="$FZF_HIST" \
+	--preview="PREVIEWFLAG=0 search {}" \
+	--bind 'enter:execute(echo {} >> $FZF_HIST; OPENFLAG=0 search {})'

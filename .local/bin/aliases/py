@@ -1,0 +1,3 @@
+#!/bin/sh
+
+~/Applications/virtualenvs/main/bin/python "$@"

@@ -1,0 +1,66 @@
+#!/bin/sh
+
+case "$BLOCK_BUTTON" in
+	1) notify-send Temprature "$(sensors --no-adapter coretemp-isa-0000 |
+		tail +2 | sed "s|(.*)||")" ;;
+	2) $TERMINAL -e "$EDITOR" "$0" ;;
+	3) $TERMINAL -e battop ;;
+	4) brightness up ;;
+	5) brightness down ;;
+esac;
+
+# Loop through all attached batteries and format the info
+for battery in /sys/class/power_supply/BAT?*; do
+	capacity="$(cat "$battery/capacity" 2>&1)"
+	# If non-first battery, print a space separator.
+	# [ -n "${capacity+x}" ] && printf " "
+	# Sets up the status and capacity
+	status="$(cat "$battery/status" 2>&1)"
+	case "$status" in
+		"Full") icon="󰂄" ;;
+		"Discharging") case "$capacity" in
+				9[0-9]) icon="󰂂" ;;
+				8[0-9]) icon="󰂁" ;;
+				7[0-9]) icon="󰂀" ;;
+				6[0-9]) icon="󰁿" ;;
+				5[0-9]) icon="󰁾" ;;
+				4[0-9]) icon="󰁽" ;;
+				3[0-9]) icon="󰁼" ;;
+				2[0-9]) icon="󰁻" ;;
+				1[0-9]) icon="󰁺" ;;
+				100) icon="󰁹" ;;
+			esac ;;
+		"Charging") case "$capacity" in
+				9[0-9]) icon="󰂋" ;;
+				8[0-9]) icon="󰢞" ;;
+				7[0-9]) icon="󰢞" ;;
+				6[0-9]) icon="󰂉" ;;
+				5[0-9]) icon="󰢝" ;;
+				4[0-9]) icon="󰂈" ;;
+				3[0-9]) icon="󰂇" ;;
+				2[0-9]) icon="󰂆" ;;
+				1[0-9]) icon="󰢜" ;;
+				100) icon="󰂅" ;;
+			esac ;;
+		"Not charging") icon="󱉝" ;;
+		"Unknown") icon="󰂑" ;;
+		*) exit 1 ;;
+	esac
+	# Will make a warn variable if discharging and low
+	[ "$status" = "Discharging" ] && [ "$capacity" -le 25 ] && warn="❗"
+	# Prints the info
+	printf "%s%s %d%%" "$warn" "$icon" "$capacity"; unset warn
+done && printf "\\n"
+
+echo
+if [ $capacity -ge 80 ]; then
+	echo "$BLOCK_COLOR_LEVEL1"
+elif [ $capacity -ge 40 ]; then
+	echo "$BLOCK_COLOR_LEVEL2"
+elif [ $capacity -ge 20 ]; then
+	echo "$BLOCK_COLOR_LEVEL3"
+elif [ $capacity -ge 10 ]; then
+	echo "$BLOCK_COLOR_LEVEL4"
+else
+	echo "$BLOCK_COLOR_LEVEL5"
+fi

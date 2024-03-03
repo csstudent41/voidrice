@@ -1,0 +1,35 @@
+#!/bin/sh
+
+config="${XDG_CONFIG_HOME:-$HOME/.config}"
+bmdirs="$config/shell/bm-dirs"
+bmfiles="$config/shell/bm-files"
+
+shell_shortcuts="$config/shell/shortcutrc"
+zsh_named_dirs="$config/zsh/zshnameddirrc"
+lf_shortcuts="$config/lf/shortcutrc"
+vim_shortcuts="$config/nvim/shortcuts.vim"
+
+rm -f "$zsh_named_dirs" "$lf_shortcuts" "$vim_shortcuts"
+printf "# vim: filetype=sh\n" > "$shell_shortcuts"
+
+eval "echo \"$(cat "$bmdirs")\"" |
+awk -F'\t' "
+	!/^\s*#/ && !/^\s*$/ {
+		gsub(\"\\\s*#.*$\", \"\");
+		printf(\"alias %s='cd %s && ls -A'\n\", \$1, \$2) >> \"$shell_shortcuts\"
+		printf(\"hash -d %s=%s\n\", \$1, \$2) >> \"$zsh_named_dirs\"
+		printf(\"map c%s :cd %s\n\", \$1, \$2) >> \"$lf_shortcuts\"
+		printf(\"cmap ;%s %s\n\", \$1, \$2) >> \"$vim_shortcuts\"
+	}
+	"
+
+eval "echo \"$(cat "$bmfiles")\"" |
+awk -F'\t' "
+	!/^\s*#/ && !/^\s*$/ {
+		gsub(\"\\\s*#.*$\", \"\");
+		printf(\"alias %s='\$EDITOR %s'\n\", \$1, \$2) >> \"$shell_shortcuts\"
+		printf(\"hash -d %s=%s\n\", \$1, \$2) >> \"$zsh_named_dirs\"
+		printf(\"map E%s $\$EDITOR %s\n\", \$1, \$2) >> \"$lf_shortcuts\"
+		printf(\"cmap ;%s %s\n\", \$1, \$2) >> \"$vim_shortcuts\"
+	}
+	"

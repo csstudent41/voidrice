@@ -1,0 +1,38 @@
+set editing-mode vi
+set keymap vi-insert
+RETURN: "\e\n"
+# set vi-ins-mode-string "+"
+# set vi-cmd-mode-string ":"
+# Add colorful command mode string
+# set vi-cmd-mode-string "\1\e[1;31m\2:\1\e[0m\2"
+# Change cursor   bar -> insert mode    block -> command mode
+set vi-ins-mode-string \1\e[6 q\2
+set vi-cmd-mode-string \1\e[2 q\2
+
+
+set show-mode-in-prompt on
+set show-all-if-ambiguous on
+set completion-ignore-case on
+set menu-complete-display-prefix on
+
+"\C-a": beginning-of-line
+"\C-b": backward-char
+"\C-d": delete-char
+"\C-e": end-of-line
+"\C-f": forward-char
+"\C-h": backward-delete-char
+"\C-k": kill-line
+"\C-l": clear-screen
+"\C-n": history-search-forward
+"\C-p": history-search-backward
+
+# "\e-b": backward-word
+# "\e-f": forward-word
+
+# "(": "\C-v()\C-b"
+# "[": "\C-v[]\C-b"
+# "{": "\C-v{}\C-b"
+# "\"": "\C-v\"\C-v\"\C-b"
+# Single quote (')
+# "\047": "\C-v\047\C-v\047\C-b"
+"jk": vi-movement-mode

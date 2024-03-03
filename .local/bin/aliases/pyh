@@ -1,0 +1,7 @@
+#!/bin/sh
+
+if [ "$#" -gt 0 ]; then
+	~/Applications/virtualenvs/main/bin/python -c "help('$*')"
+else
+	~/Applications/virtualenvs/main/bin/python -c "help()"
+fi

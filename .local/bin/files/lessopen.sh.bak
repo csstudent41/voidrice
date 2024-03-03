@@ -1,0 +1,20 @@
+#!/bin/sh
+
+mkdir -pv /tmp/previews
+TEMPFILE="/tmp/previews/$1"
+
+{
+	if [ -d "$1" ]; then
+		ls -alhF --group-directories-first --color=always "$1"
+
+	else
+		if command -V highlight; then
+			highlight --force --out-format=ansi -- "$1"
+		else
+			cat "$1"
+		fi
+
+	fi
+} > "$TEMPFILE"
+
+[ -s "$TEMPFILE" ] && echo "$TEMPFILE" || rm -f "$TEMPFILE"

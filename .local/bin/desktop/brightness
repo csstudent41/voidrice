@@ -1,0 +1,32 @@
+#!/bin/sh
+
+help() { echo "brightness - change screen brightness
+USAGE: brightness <up|down>"; }
+
+[ "$#" -lt 1 ] && help >&2 && exit 1
+
+brightness="$(brightnessctl --machine-readable | cut -d, -f4 | tr -d %)"
+step="$(( brightness / 10 + 1))"
+
+case "$1" in
+	up) brightnessctl --quiet set +${step}% ;;
+	down) brightnessctl --quiet set ${step}%- ;;
+	*) help >&2; exit 1 ;;
+esac
+
+brightness="$(brightnessctl --machine-readable | cut -d, -f4)"
+
+if [ -n "$TMUX" ]; then
+	tmux display "Brightness: $brightness"
+	exit
+fi
+
+notify() { [ -n "$DISPLAY" ] && notify-send -r 45234 "$1" "$2"; }
+case "${brightness%\%}" in
+	[0-9]) notify "💡 Brightness: $brightness" ;;
+	[1-7][0-9]) notify "🔅 Brightness: $brightness" ;;
+	[89][0-9]) notify "🔆 Brightness: $brightness" ;;
+	100) notify "🔆 MAX Brightness: $brightness" ;;
+	*) notify "brightness" "can't determine brightness"
+esac
+exit 0

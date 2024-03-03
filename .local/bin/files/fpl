@@ -1,0 +1,34 @@
+#!/bin/sh
+
+if [ "$#" -lt 1 ]; then
+	echo "USAGE: fpl <PLAYLIST_FILE>" >&2
+	exit 1
+fi
+
+if [ "$OPENFLAG" = 1 ]; then
+
+	if [ -z "$OPENWITH" ]; then
+		files="$(find "${PWD%/*}")"
+	else
+		files="$(find "${PWD%/*}" -name '*.webm' -or -name '*.mkv' -or -name '*.mp4')"
+	fi
+
+	if [ -z "$OPENWITH" ]; then
+		for title in "$@"; do echo "$files" |
+			fzf --filter "$(printf '%s\n' "$title" | sed 's/[^A-Za-z0-9]*//g')"
+			echo; done
+	else
+		for title in "$@"; do $OPENWITH "$(echo "$files" |
+			fzf --filter "$(printf '%s\n' "$title" | sed 's/[^A-Za-z0-9]*//g')" |
+			head -1)"; echo; done
+	fi
+
+	exit
+fi
+
+file="$(readlink -f "$1")"
+cd "${file%/*}" || exit
+fzf --multi --reverse \
+	--header="Playlist: ${file##*/}" --header-first \
+	--bind 'enter:become(OPENFLAG=1 fpl {+})' \
+	--bind 'ctrl-o:execute(OPENFLAG=1 OPENWITH=mpv fpl {})' < "$file"

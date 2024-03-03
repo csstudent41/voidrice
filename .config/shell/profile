@@ -1,0 +1,254 @@
+export OPENER="open"
+export EDITOR="nvim"
+export BROWSER="w3m"
+export FILES="lf"
+export TERMINAL="alacritty"
+export PREVIEWER="preview"
+
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_CACHE_HOME="$HOME/.cache"
+
+export IPYTHONDIR="$XDG_CONFIG_HOME/ipython"
+export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
+export INPUTRC="$XDG_CONFIG_HOME/shell/inputrc"
+export WGETRC="$XDG_CONFIG_HOME/wget/wgetrc"
+export PYTHONSTARTUP="$XDG_CONFIG_HOME/python/pythonrc"
+
+export LESSHISTFILE="$XDG_DATA_HOME/less/history"
+export SDCV_HISTFILE="$XDG_DATA_HOME/sdcv"
+export R_ENVIRON_USER="$XDG_CONFIG_HOME/R/.Renviron"
+export SSH_AUTH_SOCK="$HOME/.ssh/ssh_auth_sock"
+export GOPATH="$XDG_DATA_HOME/go"
+export FZF_HIST="$XDG_DATA_HOME/fzf/history"
+export SQLITE_HISTORY="$XDG_DATA_HOME/sqlite_history"
+
+# program configuration
+export LESS='-Rf --mouse --use-color -Dd+r$Du+b$'
+export LESSOPEN='lessopen.sh %s'
+export LESSCLOSE='lessclose.sh %s'
+export SDCV_PAGER='less -R --quit-if-one-screen'
+export HTTP_HOME='www.duckduckgo.com'
+export CHROME_EXECUTABLE='chromium'
+export FZF_ALT_C_COMMAND='find -L . -type d ! -wholename "*.git*" -printf "%p/\n"'
+export FZF_DEFAULT_COMMAND="find -L . ! -wholename '*.git*' \( -type d -printf '%p/\n' , ! -type d -print \)"
+export FZF_DEFAULT_OPTS="
+	--history='${XDG_DATA_HOME:-$XDG_DATA_HOME}/fzf/history'
+	--preview='$PREVIEWER {}' --preview-window=hidden
+	--bind 'ctrl-y:execute-silent(printf \"%s\\\n\" {+} | xsel --clipboard)'
+	--bind 'ctrl-v:toggle-preview,ctrl-space:toggle-preview'
+	--bind 'alt-space:toggle-preview,alt-w:toggle-preview-wrap'
+	--bind 'alt-enter:print-query'
+	--bind 'ctrl-/:change-preview-window(up|left|down|right)'
+	--bind 'ctrl-alt-c:change-preview-window(up|left:50%|down|right:50%)'
+	--bind 'ctrl-alt-a:select-all,ctrl-alt-d:deselect-all'
+	--bind 'alt-n:half-page-down,alt-p:half-page-up'
+	--bind 'alt-N:page-down,alt-P:page-up'
+	--bind 'alt-<:first,alt->:last'
+	--bind 'alt-J:preview-down,alt-K:preview-up'
+	--bind 'alt-j:preview-half-page-down,alt-k:preview-half-page-up'
+	--bind 'alt-l:preview-page-down,alt-h:preview-page-up'
+	--bind 'alt-H:preview-top,alt-L:preview-bottom'
+	--bind 'alt-g:preview-top,alt-G:preview-bottom'
+	--bind 'alt-s:change-preview(printf \"%s\\\n\" {+})'
+	--bind 'alt-0:change-preview(echo {})'
+	--bind 'alt-1:change-preview(highlight --out-format=ansi -- {} 2>/dev/null ||
+		ls -Als --group-directories-first --color=always --classify=always -- {})'
+	--bind 'alt-2:change-preview($PREVIEWER {})'
+	--bind 'alt-!:execute(less {})'
+	--bind 'alt-@:execute($PREVIEWER {} | less)'
+	--bind 'alt-v:execute(echo {q} >> \"$FZF_HIST\"; LESSOPEN=\"lesspreview.sh %s\" less {})'
+	--bind 'alt-e:execute(echo {q} >> \"$FZF_HIST\"; eval \"\${EDITOR:-vi} {}\")'
+	--bind 'ctrl-o:execute(echo {q} >> \"$FZF_HIST\"; eval \"\${OPENER:-xdg-open} {}\")'
+	--bind 'alt-O:execute(echo {q} >> \"$FZF_HIST\"; mimeopen --ask {})'
+	--bind 'alt-o:execute(echo {q} >> \"$FZF_HIST\"; eval \"\${FILES:-lf} {}\")'
+	--bind 'alt-D:become(echo {q} >> \"$FZF_HIST\"; dirname {} )'
+	"
+export FZF_CTRL_T_OPTS="
+	--preview 'preview {}' --preview-window=hidden
+	"
+export FZF_CTRL_R_OPTS="
+	--preview 'echo {}' --preview-window up:50%:hidden:wrap
+	--bind 'ctrl-y:execute-silent(echo -n {2..} | xsel --clipboard)'
+	"
+export FZF_ALT_C_OPTS="
+	--preview 'tree -aCL 3 --icons --color=always {}' --preview-window=hidden
+	"
+
+## Custom themes for GTypist
+# export GTYPIST_OPTS="--color 3,0 --banner-color 0,1,2,3"  # red-yellow
+# export GTYPIST_OPTS="--color 3,0 --banner-colors 0,2,4,1"  # green-yellow
+export GTYPIST_OPTS="--color 6,0 --banner-color 0,4,5,1"  # blue-cyan
+
+
+# # path
+# find -L ~/.local/share/gem/ruby/3.0.0/bin ~/.local/bin ~/bin \
+# 		-type d ! -wholename '*/.st*' |
+# 	while read -r dir; do
+# 		[ "$PATH" = "${PATH#*"$dir"}" ] && export PATH="$dir:$PATH"
+# 	done
+
+if [ "$PATH" = "${PATH#*"$HOME/.local/bin"}" ]; then
+  export PATH="$(find -L ~/.local/bin -type d ! -wholename '*/.st*' -printf '%p:')$PATH"
+  [ -d ~/bin ] && export PATH="$(find -L ~/bin -type d ! -wholename '*/.st*' -printf '%p:')$PATH"
+  export PATH="$PATH:$XDG_DATA_HOME/gem/ruby/3.0.0/bin"
+  export PATH="$PATH:$HOME/Applications/flutter/bin"
+fi
+
+export USER_MOUNT_DIR="/run/media/$USER"
+
+export BLOCK_COLOR_LEVEL1="#66FF99"
+export BLOCK_COLOR_LEVEL2="#AAEE66"
+export BLOCK_COLOR_LEVEL3="#CCCC33"
+export BLOCK_COLOR_LEVEL4="#FF7733"
+export BLOCK_COLOR_LEVEL5="#FF3333"
+
+LS_COLORS='rs=0:\
+di=01;34:\
+ln=01;36:\
+mh=00:\
+pi=40;33:\
+so=01;35:\
+do=01;35:\
+bd=40;33;01:\
+cd=40;33;01:\
+or=40;31;01:\
+mi=00:\
+su=37;41:\
+sg=30;43:\
+ca=00:\
+tw=30;42:\
+ow=34;42:\
+st=37;44:\
+ex=01;32:\
+*.tar=01;31:\
+*.tgz=01;31:\
+*.arc=01;31:\
+*.arj=01;31:\
+*.taz=01;31:\
+*.lha=01;31:\
+*.lz4=01;31:\
+*.lzh=01;31:\
+*.lzma=01;31:\
+*.tlz=01;31:\
+*.txz=01;31:\
+*.tzo=01;31:\
+*.t7z=01;31:\
+*.zip=01;31:\
+*.z=01;31:\
+*.dz=01;31:\
+*.gz=01;31:\
+*.lrz=01;31:\
+*.lz=01;31:\
+*.lzo=01;31:\
+*.xz=01;31:\
+*.zst=01;31:\
+*.tzst=01;31:\
+*.bz2=01;31:\
+*.bz=01;31:\
+*.tbz=01;31:\
+*.tbz2=01;31:\
+*.tz=01;31:\
+*.deb=01;31:\
+*.rpm=01;31:\
+*.jar=01;31:\
+*.war=01;31:\
+*.ear=01;31:\
+*.sar=01;31:\
+*.rar=01;31:\
+*.alz=01;31:\
+*.ace=01;31:\
+*.zoo=01;31:\
+*.cpio=01;31:\
+*.7z=01;31:\
+*.rz=01;31:\
+*.cab=01;31:\
+*.wim=01;31:\
+*.swm=01;31:\
+*.dwm=01;31:\
+*.esd=01;31:\
+*.avif=01;35:\
+*.jpg=01;35:\
+*.jpeg=01;35:\
+*.mjpg=01;35:\
+*.mjpeg=01;35:\
+*.gif=01;35:\
+*.bmp=01;35:\
+*.pbm=01;35:\
+*.pgm=01;35:\
+*.ppm=01;35:\
+*.tga=01;35:\
+*.xbm=01;35:\
+*.xpm=01;35:\
+*.tif=01;35:\
+*.tiff=01;35:\
+*.png=01;35:\
+*.svg=01;35:\
+*.svgz=01;35:\
+*.mng=01;35:\
+*.pcx=01;35:\
+*.mov=01;35:\
+*.mpg=01;35:\
+*.mpeg=01;35:\
+*.m2v=01;35:\
+*.mkv=01;35:\
+*.webm=01;35:\
+*.webp=01;35:\
+*.ogm=01;35:\
+*.mp4=01;35:\
+*.m4v=01;35:\
+*.mp4v=01;35:\
+*.vob=01;35:\
+*.qt=01;35:\
+*.nuv=01;35:\
+*.wmv=01;35:\
+*.asf=01;35:\
+*.rm=01;35:\
+*.rmvb=01;35:\
+*.flc=01;35:\
+*.avi=01;35:\
+*.fli=01;35:\
+*.flv=01;35:\
+*.gl=01;35:\
+*.dl=01;35:\
+*.xcf=01;35:\
+*.xwd=01;35:\
+*.yuv=01;35:\
+*.cgm=01;35:\
+*.emf=01;35:\
+*.ogv=01;35:\
+*.ogx=01;35:\
+*.aac=00;36:\
+*.au=00;36:\
+*.flac=00;36:\
+*.m4a=00;36:\
+*.mid=00;36:\
+*.midi=00;36:\
+*.mka=00;36:\
+*.mp3=00;36:\
+*.mpc=00;36:\
+*.ogg=00;36:\
+*.ra=00;36:\
+*.wav=00;36:\
+*.oga=00;36:\
+*.opus=00;36:\
+*.spx=00;36:\
+*.xspf=00;36:\
+*~=00;90:\
+*#=00;90:\
+*.bak=00;90:\
+*.old=00;90:\
+*.orig=00;90:\
+*.part=00;90:\
+*.rej=00;90:\
+*.swp=00;90:\
+*.tmp=00;90:\
+*.dpkg-dist=00;90:\
+*.dpkg-old=00;90:\
+*.ucf-dist=00;90:\
+*.ucf-new=00;90:\
+*.ucf-old=00;90:\
+*.rpmnew=00;90:\
+*.rpmorig=00;90:\
+*.rpmsave=00;90:\
+';

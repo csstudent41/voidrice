@@ -1,0 +1,32 @@
+Host master
+	Hostname shadow
+	User master
+	IdentityFile ~/.ssh/master_id_rsa
+
+Host blue
+	Hostname blue
+	Port 8022
+	User u0_a268
+	IdentityFile ~/.ssh/blue_id_rsa
+
+Host github.com
+	Hostname github.com
+	User git
+	IdentityFile ~/.ssh/github.com_id_ed25519
+	# IdentityFile ~/.ssh/labstudent41_id_ed25519
+	# IdentityFile ~/.ssh/vartaktechclub_id_ed25519
+
+# Host labstudent41
+# 	Hostname github.com
+# 	User git
+# 	IdentityFile ~/.ssh/labstudent41_id_ed25519
+
+Host rpi
+	Hostname rpi
+	User master
+	IdentityFile ~/.ssh/rpi_id_ed25519
+
+Host rrpi
+	Hostname rpi
+	User root
+	IdentityFile ~/.ssh/rpi_id_ed25519

@@ -1,0 +1,49 @@
+#!/bin/sh
+
+help() { echo "changevol - change system volume
+USAGE: changevol <toggle|up|down>"; }
+
+[ "$#" -lt 1 ] && help >&2 && exit 1
+
+case "$1" in
+	toggle) wpctl set-mute @DEFAULT_SINK@ toggle ;;
+	up) wpctl set-volume @DEFAULT_SINK@ 5%+ ;;
+	down) wpctl set-volume @DEFAULT_SINK@ 5%- ;;
+	*) help >&2; exit 1 ;;
+esac
+
+vol="$(wpctl get-volume @DEFAULT_SINK@ | tr -d .)"
+vol="${vol#Volume: }"
+
+notify() {
+	if [ -n "$DISPLAY" ]; then
+		notify-send -t 3000 -r 93475 "$1"
+	else
+		printf 'volume      : '; wpctl get-volume @DEFAULT_SINK@
+	fi
+}
+
+if [ "$vol" != "${vol% \[MUTED\]}" ]; then
+	vol="${vol% \[MUTED\]}"
+	muted=1
+else
+	muted=0
+fi
+
+vol="$(printf '%.0f' "$vol")"
+
+msg=""
+if [ "$vol" -gt "100" ]; then icon="📢"; msg=" Boosted"
+elif [ "$vol" = "100" ]; then icon="🔊"; msg=" Maxed"
+elif [ "$vol" -gt "70" ]; then icon="🔊"
+elif [ "$vol" -gt "30" ]; then icon="🔉"
+elif [ "$vol" -gt "0" ]; then icon="🔈"
+# else icon="🔇"; msg=" Muted"
+fi
+
+if [ "$muted" -eq 1 ]; then
+	notify "🔇 Volume Muted ($vol%)"
+else
+	notify "$icon Volume$msg: $vol%"
+fi
+

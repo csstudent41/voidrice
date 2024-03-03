@@ -1,0 +1,4 @@
+#!/bin/sh
+
+mediainfo "$@" | sed -n 's|^Comment\s*: ||p' | sed 's| / |\n|g'
+

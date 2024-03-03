@@ -1,0 +1,25 @@
+#!/bin/sh
+# i3block for displaying the current temperature, humidity and precipitation, if wttr.in i unavailable then WEATHER UNAVAILABLE will be displayed
+
+case "$BLOCK_BUTTON" in
+	'') ;;
+	1)
+		$TERMINAL -e less ~/.cache/wttr.txt & sleep 0.3
+		i3-msg 'move to workspace "12: 摒 "; workspace "12: 摒 "' >/dev/null 2>&1
+		;;
+	2) $TERMINAL -e nvim "$0" ;;
+	*) notify-send "⛅ Refreshing weather info..." ;;
+esac
+
+# weather="$(curl -s wttr.in?format="%c%C++❄️+%t++☀️+%f++🌬️+%w")"
+weather="$(curl -Ss 'https://wttr.in?0&T&Q' | cut -c 16- | head -2 |
+	xargs -r echo "$(curl -s wttr.in?format="%c")")"
+
+if [ "$(echo "$weather" | grep -Ec "(Unknown|curl|HTML)")" -gt 0 ]; then
+    echo "WEATHER UNAVAILABLE"
+else
+    echo "${weather:-⛅ -- }"
+fi
+
+curl -s https://wttr.in > ~/.cache/wttr.txt
+

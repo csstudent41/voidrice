@@ -1,0 +1,21 @@
+#!/bin/sh
+
+[ -z "$1" ] &&
+	echo "open-xsel: open selection or clipboard content using COMMAND" &&
+	echo "USAGE: open-xsel COMMAND" &&
+	exit 1
+
+open="$*"
+
+# cursor_selection=$(xclip -out -selection primary)
+# clipboard_selection=$(xclip -out -selection secondry)
+
+if content=$(xclip -out -selection primary); then
+	$open "$content"
+elif content=$(xclip -out -selection secondry); then
+	$open "$content"
+elif content=$(xclip -out -selection clipboard); then
+	$open "$content"
+else
+	notify-send "Selection and clipboard is empty"
+fi

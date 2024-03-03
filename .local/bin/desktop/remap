@@ -1,0 +1,132 @@
+#!/bin/sh
+
+# This script cannot run without the X server (GUI)
+# So exit if DISPLAY is not set
+[ -z "$DISPLAY" ] && {
+	notify-send remap "ERROR: DISPLAY not set"
+	exit
+}
+
+timeout="${KEY_RELEASE_TIMEOUT:-500}"
+
+help() { echo "remap - remap modifier keys for easy access
+
+USAGE:
+	remap [OPTION]...
+
+OPTIONS:
+	-x  reset keys
+	-t  toggle (remap/reset)
+	-s  show remap status
+	-i  show info of all key remaps
+	-h  show this help message"; }
+
+key_info() { echo "
+	+-----------------+-----------------------------------+
+	| Before          | After                             |
+	+-----------------+-----------------+-----------------+
+	| Key             | On Hold         | On Tap          |
+	+-----------------+-----------------+-----------------+
+	| Tab             | Super           | Tab             |
+	| Caps Lock       | Ctrl            | Esc             |
+	| Space           | Shift           | Space           |
+	| Left Ctrl       | Ctrl            | Caps Lock       |
+	+-----------------+-----------------+-----------------+
+
+Note:
+  By default, 'On Tap' will timeout at 500 miliseconds. In other words,
+  if you release a key after timeout, the key will not be generated.
+  You can increase it's value by setting the \$KEY_RELEASE_TIMEOUT environment
+  variable. This is useful in case you don't have a fast typing speed.
+
+If you want to change more keys or want a different configuration, you
+can edit the remap_keys() function inside this script.
+	"; }
+
+while getopts 'rxtsih' o; do case "$o" in
+  x) action=x ;;
+  t) action=t ;;
+  s) action=s ;;
+  i) key_info >&2; exit ;;
+  h) help >&2; exit ;;
+	*) printf "remap: invalid argument -- '%s'\n" "$OPTARG" ;;
+esac; done
+
+status_file="/tmp/.remap.lock"
+keymap_file="/tmp/.xmodmap.defaults"
+[ -f "$keymap_file" ] || xmodmap -pke > "$keymap_file"
+
+remap_keys() {
+	# Fast key repeats
+	xset r rate 300 50
+
+	# New key behaviour on Hold
+	# lines after ! are comments
+	xmodmap - <<-EOF
+	!          Hold Caps_Lock -> Control_R
+	remove lock = Caps_Lock
+	remove Control = Control_R
+	! keysym Control_R = Caps_Lock
+	keysym Caps_Lock = Control_R
+	! add lock = Caps_Lock
+	add Control = Control_R
+	keycode any = Caps_Lock
+
+	!          Hold space -> Shift_R
+	remove shift = Shift_R
+	keycode 65 = Shift_R
+	add shift = Shift_R
+	keycode any = space
+
+	!          Hold Tab -> Super_L
+	remove mod4 = Super_L
+	keycode 23 = Super_L
+	! keycode 133 = Tab ISO_Left_Tab Tab ISO_Left_Tab
+	add mod4 = Super_L
+	keycode any = Tab ISO_Left_Tab Tab ISO_Left_Tab
+	EOF
+
+	# New key behaviour on Tap
+	killall xcape 2>/dev/null
+	xcape -t "$timeout" -e "Super_L=Tab"
+	xcape -t "$timeout" -e "Control_R=Escape"
+	xcape -t "$timeout" -e "Control_L=Caps_Lock"
+	xcape -t "$timeout" -e "Shift_R=space"
+	date > "$status_file"
+	xset led 3
+}
+
+
+reset_keys() {
+  xset r rate
+  killall xcape 2>/dev/null
+  setxkbmap -layout us
+  xmodmap "$keymap_file"
+
+  [ -f "$status_file" ] && rm "$status_file"
+  xset -led 3
+}
+
+toggle_remap() {
+	if [ -f "$status_file" ]; then
+		reset_keys
+	else
+		remap_keys
+	fi
+}
+
+remap_status() {
+  if [ -f "$status_file" ]; then
+    echo " Keys are remapped since:"
+		cat "$status_file"
+  else
+    echo " Keys are NOT remapped"
+  fi
+}
+
+case "$action" in
+	s) remap_status ;;
+  x) reset_keys ;;
+  t) toggle_remap ;;
+	*) remap_keys ;;
+esac

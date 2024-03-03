@@ -1,0 +1,13 @@
+--output %(title)s.%(ext)s
+--restrict-filenames
+
+--format bestvideo*[height<=1080][fps<=30]+bestaudio
+--prefer-free-format
+
+--write-subs
+--write-auto-subs
+--convert-subs srt
+--embed-subs
+
+--write-description
+--embed-metadata

@@ -1,0 +1,35 @@
+#!/bin/sh
+
+help() {
+	echo "searchdb - update local search database
+
+USAGE:
+	searchdb [OPTION]...
+
+OPTIONS:
+	-x  clear all databases
+	-h  show this help message"
+}
+
+err() { printf 'searchdb: %s\n' "$@" >&2; exit 1; }
+while getopts 'xh' o; do case "$o" in
+	x) rm -rf ~/.cache/search; exit ;;
+	h) help >&2; exit ;;
+	*) err "invalid option -- '$OPTARG'" ;;
+esac done
+shift $((OPTIND - 1))
+
+rm -rf ~/.cache/search
+export SEARCHDB="$HOME/.cache/search"
+mkdir -p "$SEARCHDB" || exit
+ln -sf /usr/share/dict/words "$SEARCHDB/word"
+
+tldr --list > "$SEARCHDB/tldr"
+apropos . > "$SEARCHDB/man"
+pacman -Ss | sed -e "N;s/\n\s*/ => /" > "$SEARCHDB/pacman"
+
+list() { find -L "$@" ! -wholename '*/.git*' -printf "%P\n"; }
+list /usr/share/doc > "$SEARCHDB/wiki"
+list ~/.local/share/Zeal/Zeal/docsets > "$SEARCHDB/docs"
+list -L "/run/media/$USER/Storage/Media" > "$SEARCHDB/media"
+list "/run/media/$USER/Storage/Library" > "$SEARCHDB/library"

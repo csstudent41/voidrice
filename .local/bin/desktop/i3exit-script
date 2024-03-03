@@ -1,0 +1,18 @@
+#!/bin/bash
+# TODO: copy and configure the i3 script to take parametres
+# possibly make it as syst-power 
+
+# snippet for blur effect on lock screen
+
+
+# DEPEDNDENCIES: i3lock imagemagic scrot
+
+PICTURE=/tmp/i3lock.png
+SCREENSHOT="scrot $PICTURE"
+
+BLUR="5x4"
+
+$SCREENSHOT
+convert $PICTURE -blur $BLUR $PICTURE
+i3lock -i $PICTURE
+rm $PICTURE

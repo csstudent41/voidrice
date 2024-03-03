@@ -1,0 +1,3 @@
+#!/bin/sh
+
+find . ! -wholename '*.git*' \( -type d -printf '%p/\n' , ! -type d -print \)

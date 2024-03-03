@@ -1,0 +1,89 @@
+#!/bin/sh
+
+[ "$#" -lt 1 ] &&
+	echo "USAGE: tst <PROGRAM> [ARGS]..." > /dev/stderr &&
+	exit 1
+
+file="$1"; shift
+[ ! -e "$file" ] && echo "$file: No such file or directory" && exit 1
+
+html_file() { tidy -q "$file" >/dev/null && w3m "$file"; }
+php_file() { php "$file"; }
+node_file() { node "$file"; }
+markdown_file() { glow -s dark "$file"; }
+
+java_file() {
+	if [ -f build.xml ]; then
+		ant
+		build="$(find . -name 'classes' -or -name 'build' | tail -1)"
+		class="$({ cd "$build" &&
+			find . -name "$(basename "$file" .java).class"; } |
+			tail -1 | cut -c 3- | sed 's|.class||g' | tr '/' '.')"
+	else
+		mkdir -pv build
+		build="$(dirname "$file")/build"
+		class="$(basename "$file" .java)"
+		javac -d "$build" "$file"
+	fi
+	java -cp "$build:lib/*" "$class"
+}
+
+shell_script() {
+	shell="$(sed -n '1s|^#!/.*/\(.*\)|\1|p' "$file")"
+	shellcheck -x "$file" && "$shell" "$file" "$@"
+}
+
+python_file() {
+	if [ -t 1 ]; then
+		printf '\033[33m'
+		pycodestyle "$file" >&2
+		printf '\033[0;39m'
+	fi
+	~/Applications/virtualenvs/main/bin/python "$file" "$@"
+}
+
+c_file() {
+	out="${file%.c}"
+	# ARGS="$(sed -nE -e 's|.*#include\s*<(.*)>|-l\1|gp' "$file" |
+	# 	paste -d' ' -s)"
+	# echo "$ clang -o $out $file $ARGS"
+	# clang -o "$out" "$file" $ARGS && "$out" "$@"
+	make "$out" && echo && "$(realpath "$out")" "$@"
+}
+
+cpp_file() {
+	out="$(realpath "${file%.cpp}")"
+	if [ -f GNUmakefile ] || [ -f makefile ] || [ -f Makefile ]; then
+		make && "${out%/*}/main" "$@"
+	else
+		g++ -o "$out" "$file" && "$out" "$@"
+	fi
+}
+
+case "$file" in
+	*.c)    c_file "$@" ;;
+	*.cpp)  cpp_file "$@" ;;
+	*.java) java_file "$@" ;;
+	*.py)   python_file "$@" ;;
+	*.html) html_file "$@" ;;
+	*.js)   node_file "$@" ;;
+	*.php)  php_file "$@" ;;
+	*.md)   markdown_file "$@" ;;
+
+	*)
+		filetype=$(file --brief --mime-type "$file")
+		case $filetype in
+			text/x-c)               c_file "$@" ;;
+			text/x-script.python)   python_file "$@" ;;
+			text/x-shellscript)     shell_script "$@" ;;
+			text/html)              html_file "$@" ;;
+			application/javascript) node_file "$@" ;;
+			text/x-php)             php_file "$@" ;;
+			*) printf "%s\n\t%s\n" \
+					"Add test command for file type:" \
+					"$filetype" >&2
+				exit 1 ;;
+		esac
+		;;
+
+esac

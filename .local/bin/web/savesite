@@ -1,0 +1,31 @@
+#!/bin/sh
+
+[ "$#" -lt 1 ] && { echo "savesite - save local copy of a website
+USAGE: savesite <URL>"; exit 1; }
+
+url="$*"
+site="$(echo "$url" | sed 's|\(https\?://\)\?\([A-Za-z0-9.-]*\)/.*|\2|')"
+log=".logs/$site.log"
+
+printf ":: Downloading site: %s\n" "$site"
+printf ":: Logging to: %s\n" "$log"
+
+{
+	setsid wget \
+		--continue \
+		--recursive \
+		--no-clobber \
+		--page-requisites \
+		--html-extension \
+		--convert-links \
+		--restrict-file-names=windows \
+		--domains "$site" \
+		--no-parent \
+		--output-file "$log" \
+		"$url"
+
+	[ -n "$DISPLAY" ] && notify-send "savesite: finished downloading" "$site"
+	printf ":: Finished downloading site: %s\n" "$site"
+	printf ":: Finished at: "
+	date
+} &

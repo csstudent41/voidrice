@@ -1,0 +1,31 @@
+{
+ "configurations": {
+    "Python: Launch": {
+      "adapter": "debugpy",
+      "filetypes": [ "python" ],
+      "configuration": {
+        "name": "python: Launch",
+        "type": "python",
+        "request": "launch",
+				"python": "$HOME/Others/virtualenvs/main/bin/python",
+        "program": "$file",
+        "stopOnEntry": true,
+        "debugOptions": []
+      }
+    },
+    "Python: Launch interactive": {
+      "adapter": "debugpy",
+      "filetypes": [ "python" ],
+      "configuration": {
+        "name": "python: Launch",
+        "type": "python",
+        "request": "launch",
+				"python": "$HOME/Others/virtualenvs/main/bin/python",
+        "program": "$file",
+        "console": "externalTerminal",
+        "stopOnEntry": true,
+        "debugOptions": []
+      }
+    }
+	}
+}

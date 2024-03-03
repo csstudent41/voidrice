@@ -1,0 +1,27 @@
+#!/bin/sh
+
+cd ~/.local/share/Zeal/Zeal || exit
+
+selection="$(echo "Shell
+C/C++
+Java
+Python
+$(find . -maxdepth 1 -type d ! -name 'docsets' |
+	tail +2 | cut -c3- | sed 's/^/ds:/')
+" | dmenu -i -p "Select docset group")"
+
+case "$selection" in
+	Shell) key="bash,zsh,linux" ;;
+	C/C++) key="c,cpp,linux" ;;
+	Java) key="java,javaspec" ;;
+	Python) key="python,numpy,matplotlib" ;;
+	ds:*)
+		ln -sfT "${selection#ds:}" docsets
+		killall -q zeal; zeal
+		exit
+		;;
+	*) exit 2 ;;
+esac
+
+query="$(dmenu -p "Enter query")"
+zeal "$key:$query"

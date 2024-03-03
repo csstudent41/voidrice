@@ -1,0 +1,11 @@
+#!/bin/sh
+
+drivedir="${USER_MOUNT_DIR:-/run/media/$USER}/DRIVE8/sycs19"
+localdir="$HOME/GDrive/Vartak BSc. CS/pracs/sem4"
+
+[ -d "$drivedir" ] || {
+	echo "drive directory not found"; exit 1
+}
+
+rsync -Pru "$localdir/" "$drivedir/"
+rsync -Pru "$drivedir/" "$localdir/"

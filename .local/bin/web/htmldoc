@@ -1,0 +1,76 @@
+#!/bin/sh
+
+help() { echo "htmldoc - create an html document
+
+USAGE:
+	htmldoc [OPTION]... <FILE>
+
+OPTIONS:
+	-h  show this help message
+
+	-H HEADER    display a heading
+
+If FILE is a directory, create a directory listing of that directory;
+else copy the content of the file to standard output."; }
+
+err() { printf 'htmldoc: %s\n' "$@" >&2; exit 1; }
+while getopts 'H:h' o; do case "$o" in
+	H) DOC_HEADER="$OPTARG" ;;
+	h) help; exit ;;
+	*) err "invalid option -- '$OPTARG'" ;;
+esac done
+shift $((OPTIND - 1))
+
+[ -z "$1" ] && help >&2 && exit 1
+
+case "$(file --mime-type --brief "$1")" in
+	inode/directory)
+		cd "$1" || exit
+		body="<main>
+		<h2>$(echo "${PWD##*/}" | sed 's/./\u&/')</h2>
+		<ul>
+$(find . -mindepth 1 -maxdepth 1 -type d \
+	! -name '.*' \
+	-printf '\t\t\t<li><a href="%f">%f</li>\n') \
+$(find . -mindepth 1 -maxdepth 1 -type f \
+	-name '*.html' ! -name '*index.html*' \
+	-printf '\t\t\t<li><a href="%f">%f</li>\n')
+		</ul>
+	</main>"
+		;;
+
+	*)
+		body="<main>
+$(sed 's/^/\t\t/' "$1")
+	</main>"
+		;;
+esac
+
+if [ -n "$DOC_HEADER" ]; then
+	body="<header>
+		<h1>$DOC_HEADER</h1>
+	</header>
+	$body"
+fi
+
+if [ -n "$SITE_BASE_DIR" ] ; then
+	if [ -z "$DOC_STYLES" ]; then
+		DOC_STYLES="$(realpath --relative-to "$PWD" \
+			"$(find "$SITE_BASE_DIR" -name 'style.css' | head -1)")"
+	fi
+fi
+
+echo "<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Index</title>
+	<link href=\"${DOC_STYLES:-/styles.css}\" rel=\"stylesheet\">
+</head>
+
+<body>
+	$body
+</body>
+
+</html>
+"

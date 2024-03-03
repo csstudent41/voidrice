@@ -1,0 +1,29 @@
+#!/bin/sh
+
+clear
+# cols=$(tput cols) 
+# rows=$(( $(tput lines) - 2 ))
+# logo=$(figlet livecheck) 
+# printf "%s\n" "$logo" "Waiting for programs..." |
+# 	boxes -d stone -s "${cols}x${rows}" -a c
+printf "tst_run: monitering..."
+
+execute() {
+	clear
+	printf "\n\t%s\n" "$(date)"
+	printf "\t%s\n" "$file"
+	printf "%*s\n\n" "$(tput cols)" '' | tr ' ' _
+
+	starttime=$(date +%s.%6N)
+	eval $@
+	endtime=$(date +%s.%6N)
+	runtime=$( echo "$endtime - $starttime" | bc )
+
+	printf "\n%*s\n\n" "$(tput cols)" '' | tr ' ' _
+	printf "\t%s\n\n" "Finished in ${runtime}s"
+}
+
+inotifywait -qrme modify --format '%w%f' "$PWD" |
+	while read -r file; do
+		execute tst "$file" "$@"
+	done

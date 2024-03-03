@@ -1,0 +1,45 @@
+#!/bin/sh
+
+help() {
+	echo "loop - execute command in loop
+
+USAGE:
+	loop [OPTION]... <COMMAND>
+
+OPTIONS:
+	-n INTERVAL   sleep for given INTERVAL time between loops
+	                all arguments of \`sleep\` command are valid
+	-c COUNT      maximum count of loops (default: 1000)
+	-s            clear screen for every execution
+	-q            quiet, redirect output to /dev/null
+	-h            show this help message
+
+ENVIRONMENT VARIABLES:
+	LOOP_INTERVAL   set INTERVAL time
+	MAX_LOOP_COUNT	set loop COUNT"
+}
+
+err() { printf 'loop: %s\n' "$@" >&2; exit 1; }
+
+while getopts 'sc:n:qh' o; do case "$o" in
+	s) cflag=1 ;;
+	n) export LOOP_INTERVAL="$OPTARG" ;;
+	c) export MAX_LOOP_COUNT="$OPTARG" ;;
+	q) qflag=1 ;;
+	h) help; exit ;;
+	*) err "invalid option -- $OPTARG" ;;
+esac done
+shift $((OPTIND - 1))
+
+[ "$#" -lt 1 ] && err "no COMMAND given"
+cmds="$*"
+max_count="${MAX_LOOP_COUNT:-1000}"
+[ -n "$LOOP_INTERVAL" ] && cmds="$cmds; sleep '$LOOP_INTERVAL'"
+[ "$cflag" = 1 ] && cmds="clear; $cmds"
+[ "$qflag" = 1 ] && cmds="$cmds >/dev/null"
+
+for count in $(seq "$max_count"); do
+	eval "$cmds" || break
+done
+
+[ "$count" -ge "$max_count" ] && err "reached max loop COUNT: $max_count"

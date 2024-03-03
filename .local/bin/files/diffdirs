@@ -1,0 +1,6 @@
+#!/bin/sh
+
+tree --dirsfirst -aL 3 "$1" > "$PREFIX/tmp/dir1.tree.txt"
+tree --dirsfirst -aL 3 "$2" > "$PREFIX/tmp/dir2.tree.txt"
+nvim -d "$PREFIX/tmp/dir1.tree.txt" "$PREFIX/tmp/dir2.tree.txt"
+

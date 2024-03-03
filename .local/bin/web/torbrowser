@@ -1,0 +1,30 @@
+#!/bin/sh
+
+help() { echo "torbrowser - open or search in tor browser
+USAGE: torbrowser <open|search> [query]"; }
+
+cmd="$1"
+case "$cmd" in
+	open) extra_cmds='' ;;
+	search) extra_cmds='press ctrl+k' ;;
+	*) help >&2; exit 1 ;;
+esac
+
+query="$2"
+window="Tor Browser"
+windows=$(wmctrl -l)
+if [ "${windows##*"$window"}" = "$windows" ]; then
+	# query="$(dmenu -p "search in tor browser")" || exit
+	torbrowser-launcher && sleep 3
+fi
+
+press() {
+	xdotool keyup ctrl shift alt super meta BackSpace Tab Escape Return
+	xdotool key "$1"
+}
+
+wmctrl -a "$window"
+press ctrl+t
+$extra_cmds
+xdotool type "$query"
+press Return

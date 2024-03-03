@@ -1,0 +1,25 @@
+#!/bin/sh
+
+pidof -q syncthing || {
+	echo "ERROR: Syncthing is not running" >&2
+	exit 2
+}
+
+get_devices() {
+	for device_id in $(syncthing cli config devices list); do
+		printf '%-10s %s\n' \
+			"$(syncthing cli config devices "$device_id" name get)" \
+			"$device_id"
+	done | nl -w1 -s'. '
+}
+
+device="$(get_devices | dmenu -l 10 -p "Syncthing devices")"
+device_id="${device##* }"
+[ -z "$device_id" ] && exit 1
+
+if [ -n "$1" ]; then
+	xdotool type "$device_id"
+else
+	printf '%s\n' "$device_id" | xclip -selection clipboard
+	notify-send "📋 Copied to clipboard" "$device_id"
+fi

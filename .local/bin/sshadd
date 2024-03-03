@@ -1,0 +1,17 @@
+#!/bin/sh
+
+[ -z "$SSH_AUTH_SOCK" ] && export SSH_AUTH_SOCK="$HOME/.ssh/ssh_auth_sock"
+msg=$(ssh-add -L 2>&1)
+if [ "$msg" = 'Could not open a connection to authentication agent.' ] ||
+	 [ "$msg" = 'Error connecting to agent: No such file or directory' ] ||
+	 [ "$msg" = 'Error connecting to agent: Connection refused' ]; then
+	rm -f "${SSH_AUTH_SOCK}"
+	ssh-agent -a "${SSH_AUTH_SOCK}" > /dev/null
+fi
+
+private_key="$1"
+content="$(cat "$1.pub")"
+if [ "$msg" = "The agent has no identities." ] ||
+   [ "${msg#*$content}" = "$msg" ]; then
+	ssh-add "$private_key"
+fi

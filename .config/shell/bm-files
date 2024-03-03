@@ -1,0 +1,20 @@
+# These files automatically update when edited/saved in vim:
+
+# keys	filename				description
+bf	~/.config/shell/bm-files
+bd	~/.config/shell/bm-dirs
+
+pf	~/.profile
+xp	~/.xprofile
+zp	~/.zprofile
+gi	~/.gitignore
+zc	~/.config/zsh/.zshrc
+zh	~/.config/history
+za	~/.config/shell/aliasrc
+lr	~/.config/lf/lfrc
+lS	~/.config/lf/scope
+sx	~/.config/sxiv/exec/key-handler
+in	~/.config/nvim/init.vim
+ac	~/.config/alacritty/alacritty.yml
+ssc	~/.ssh/config
+qn	~/Documents/Notes/QuickNote.md
