@@ -65,7 +65,9 @@ python_file() {
 		pycodestyle "$file" >&2
 		printf '\033[0;39m'
 	}
-	~/Applications/virtualenvs/main/bin/python "$file" "$@"
+	[ -x "$HOME/Applications/virtualenvs/main/bin/python" ] &&
+		alias python="$HOME/Applications/virtualenvs/main/bin/python"
+	python "$file" "$@"
 }
 
 c_file() {
