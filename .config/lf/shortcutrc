@@ -25,8 +25,8 @@ map cmn :cd /mnt
 map cstg :cd /mnt/Storage
 map clbr :cd /mnt/Storage/Library
 map cmed :cd /mnt/Storage/Media
-map cmp :cd /run/media/master/
-map crclg :cd /run/media/master/DRIVE8/sycs19
+map cmp :cd /run/media/u0_a268/
+map crclg :cd /run/media/u0_a268/DRIVE8/sycs19
 map cmtp :cd /run/user/1000/gvfs
 map cusr :cd /usr
 map cush :cd /usr/share

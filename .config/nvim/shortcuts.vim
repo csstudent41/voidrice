@@ -25,8 +25,8 @@ cmap ;mn /mnt
 cmap ;stg /mnt/Storage
 cmap ;lbr /mnt/Storage/Library
 cmap ;med /mnt/Storage/Media
-cmap ;mp /run/media/master/
-cmap ;rclg /run/media/master/DRIVE8/sycs19
+cmap ;mp /run/media/u0_a268/
+cmap ;rclg /run/media/u0_a268/DRIVE8/sycs19
 cmap ;mtp /run/user/1000/gvfs
 cmap ;usr /usr
 cmap ;ush /usr/share

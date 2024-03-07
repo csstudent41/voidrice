@@ -16,7 +16,7 @@ case "$1" in
 	*.html) w3m -dump "$1" ;;
 	*.md) glow -s dark -w "$(tput cols)" "$1" ;;
 	# *.vim) highlight --syntax=vim --replace-tabs=2 -- "$1" ;;
-	*.vim|*.lua) highlight -- "$1" ;;
+	*.js|*.vim|*.lua) highlight -- "$1" ;;
 	*.txt|*.description|*.srt) cat -- "$1" ;;
 	*.png|*.jpg|*.jpeg|*.webp|*.mp3|*.mp4|*.mkv|*.webm) mediainfo -- "$1" ;;
 	*.json|*.ipynb) highlight --syntax=json -- "$1" ;;
