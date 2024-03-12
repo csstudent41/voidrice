@@ -70,6 +70,18 @@ bindsym $super+Shift+b exec --no-startup-id open-xsel ffbrowser
 bindsym $super+comma exec --no-startup-id torbrowser open
 bindsym $super+Shift+comma --no-startup-id exec open-xsel torbrowser open
 
+bindsym $super+$alt+F1 exec --no-startup-id _macro_F1
+bindsym $super+$alt+F2 exec --no-startup-id _macro_F2
+bindsym $super+$alt+F3 exec --no-startup-id _macro_F3
+bindsym $super+$alt+F4 exec --no-startup-id _macro_F4
+bindsym $super+$alt+F5 exec --no-startup-id _macro_F5
+bindsym $super+$alt+F6 exec --no-startup-id _macro_F6
+bindsym $super+$alt+F7 exec --no-startup-id _macro_F7
+bindsym $super+$alt+F8 exec --no-startup-id _macro_F8
+bindsym $super+$alt+F9 exec --no-startup-id _macro_F9
+bindsym $super+$alt+F10 exec --no-startup-id _macro_F10
+bindsym $super+$alt+F11 exec --no-startup-id _macro_F11
+bindsym $super+$alt+F12 exec --no-startup-id _macro_F12
 
 ### Screen Capturing & Print Screen: ###
 

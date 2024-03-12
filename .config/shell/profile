@@ -25,8 +25,8 @@ export SQLITE_HISTORY="$XDG_DATA_HOME/sqlite_history"
 
 # program configuration
 export LESS='-Rf --mouse --use-color -Dd+r$Du+b$'
-export LESSOPEN='lessopen.sh %s'
-export LESSCLOSE='lessclose.sh %s'
+export LESSOPEN='|lessopen.sh %s'
+# export LESSCLOSE='lessclose.sh %s'
 export SDCV_PAGER='less -R --quit-if-one-screen'
 export HTTP_HOME='www.duckduckgo.com'
 export CHROME_EXECUTABLE='chromium'

@@ -18,7 +18,9 @@ ad	~/Arduino
 dv	~/Dev
 td	~/Dev/test
 gd	~/GDrive/vartak/CS
-clg	~/GDrive/vartak/CS/practical-files/sem4
+gf	~/GDrive/vartak/CS/practical-files/sem4
+gp	~/GDrive/vartak/CS/practical-notes/sem4
+gn	~/GDrive/vartak/CS/notes/sem4
 rs	~/GDrive/vartak/results
 ph	~/Phone
 stv	~/Phone/.stversions
@@ -29,7 +31,6 @@ stg	/mnt/Storage
 lbr	/mnt/Storage/Library
 med	/mnt/Storage/Media
 mp	/run/media/$USER/
-rclg	/run/media/$USER/DRIVE8/sycs19
 mtp	/run/user/1000/gvfs
 usr	/usr
 ush	/usr/share
