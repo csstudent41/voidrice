@@ -6,7 +6,7 @@ for file in "$@"; do
 	case "$file" in
 
 		*.pdf|*.djvu|*.epub) setsid -f zathura "$file" ;;
-		*.png|*.jpg|*.jpeg|*.webp) setsid -f sxiv "$file" ;;
+		*.png|*.jpg|*.jpeg|*.webp) setsid -f nsxiv "$file" ;;
 		*.gif|*.mkv|*.mp3|*.mp4|*.webm|*.ogg) ${PLAYER:-mpv --sub-auto=fuzzy} "$file" ;;
 		*.html) ${BROWSER:-w3m} "$file" ;;
 		*.pl.txt) fpl "$file" ;;
@@ -24,7 +24,7 @@ for file in "$@"; do
 				text/*|application/json|application/zip) LESSOPEN="lesspreview.sh %s" less -r "$file" ;;
 				application/sc) sc-im "$file" ;;
 				*pdf|*djvu|*epub+zip|*oxps|*fictionbook) setsid -f zathura "$file" ;;
-				image/*) setsid -f sxiv "$file" ;;
+				image/*) setsid -f nsxiv "$file" ;;
 				video/*|audio/*) ${PLAYER:- setsid -f mpv --sub-auto=fuzzy} "$file" ;;
 				*)
 					if xdg-open "$file"; then

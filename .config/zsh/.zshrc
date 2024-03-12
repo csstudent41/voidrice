@@ -108,7 +108,8 @@ bindkey '^[r' exec-zsh
 		if [ -n "$TMUX" ]; then
 			tmux send-keys -l "$(cat "$PREV_BUFFER")"
 		else
-			xdotool type "$(cat "$PREV_BUFFER")"
+			xdotool type --window "$(xdotool getactivewindow)" \
+				"$(cat "$PREV_BUFFER")"
 		fi
 		rm -f "$PREV_BUFFER"
 	} & disown
@@ -164,7 +165,7 @@ _command_fail_hook() {
 			if [ -n "$TMUX" ]; then
 				tmux send-keys C-p
 			else
-				xdotool key ctrl+p
+				xdotool key --window "$(xdotool getactivewindow)" ctrl+p
 			fi
 			;;
 	esac

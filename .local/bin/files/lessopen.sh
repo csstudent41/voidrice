@@ -6,8 +6,8 @@
 	exit
 }
 
-if command -V highlight; then
-		highlight --force --out-format=ansi -- "$1"
+if command -V highlight >/dev/null; then
+	highlight --force --out-format=ansi -- "$1"
 else
 	cat "$1"
 fi

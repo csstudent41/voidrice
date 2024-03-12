@@ -1,0 +1,15 @@
+#!/bin/sh
+
+for i in $(seq 5 -1 1); do
+	sleep 1
+	notify-send -r 43224 "F1 macro" "starting in $i seconds"
+done
+
+for _ in $(seq 90); do
+	# xdotool keyup shift ctrl super alt 1 2 3 4 5
+	# xdotool click 1
+	# sleep 0.5
+	# xdotool key Delete Page_Down
+
+	xdotool key Delete Down Down Down
+done

@@ -16,7 +16,9 @@ cmap ;ad ~/Arduino
 cmap ;dv ~/Dev
 cmap ;td ~/Dev/test
 cmap ;gd ~/GDrive/vartak/CS
-cmap ;clg ~/GDrive/vartak/CS/practical-files/sem4
+cmap ;gf ~/GDrive/vartak/CS/practical-files/sem4
+cmap ;gp ~/GDrive/vartak/CS/practical-notes/sem4
+cmap ;gn ~/GDrive/vartak/CS/notes/sem4
 cmap ;rs ~/GDrive/vartak/results
 cmap ;ph ~/Phone
 cmap ;stv ~/Phone/.stversions
@@ -26,7 +28,6 @@ cmap ;stg /mnt/Storage
 cmap ;lbr /mnt/Storage/Library
 cmap ;med /mnt/Storage/Media
 cmap ;mp /run/media/master/
-cmap ;rclg /run/media/master/DRIVE8/sycs19
 cmap ;mtp /run/user/1000/gvfs
 cmap ;usr /usr
 cmap ;ush /usr/share

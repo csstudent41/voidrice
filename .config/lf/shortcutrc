@@ -16,7 +16,9 @@ map cad :cd ~/Arduino
 map cdv :cd ~/Dev
 map ctd :cd ~/Dev/test
 map cgd :cd ~/GDrive/vartak/CS
-map cclg :cd ~/GDrive/vartak/CS/practical-files/sem4
+map cgf :cd ~/GDrive/vartak/CS/practical-files/sem4
+map cgp :cd ~/GDrive/vartak/CS/practical-notes/sem4
+map cgn :cd ~/GDrive/vartak/CS/notes/sem4
 map crs :cd ~/GDrive/vartak/results
 map cph :cd ~/Phone
 map cstv :cd ~/Phone/.stversions
@@ -26,7 +28,6 @@ map cstg :cd /mnt/Storage
 map clbr :cd /mnt/Storage/Library
 map cmed :cd /mnt/Storage/Media
 map cmp :cd /run/media/master/
-map crclg :cd /run/media/master/DRIVE8/sycs19
 map cmtp :cd /run/user/1000/gvfs
 map cusr :cd /usr
 map cush :cd /usr/share

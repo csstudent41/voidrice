@@ -114,9 +114,9 @@ map dtc $trash-empty
 map dtr $trash-restore
 
 # Dragon Mapping
-map dr %dragon-drag-and-drop -a -x $fx
-map ds %dragon-drag-and-drop -a $fx
-map di %dragon-drag-and-drop $fx
+map dr %dragon-drop -a -x $fx
+map ds %dragon-drop -a $fx
+map di %dragon-drop $fx
 map dm %cpdragon
 map dc %mvdragon
 map dl %dlfile

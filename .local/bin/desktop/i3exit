@@ -14,13 +14,16 @@ system_control() {
 }
 
 lockWall="$HOME/.local/share/lockWall"
-i3_lock() { [ -f "$lockWall" ] &&
-	i3lock --tiling --image="$lockWall" ||
-	i3lock --color=001177; }
+lock_desktop() {
+	[ -f "$lockWall" ] &&
+		i3lock --tiling --image="$lockWall" ||
+		i3lock --color=001177
+	pkill ssh-agent
+}
 
 case "$command" in
     lock)
-        i3_lock
+        lock_desktop
 				xset dpms force off
         ;;
     logout)
@@ -31,10 +34,10 @@ case "$command" in
         dm-tool switch-to-greeter
         ;;
     suspend)
-        i3_lock && $logind suspend
+        lock_desktop && $logind suspend
         ;;
     hibernate)
-        system_control i3_lock && $logind hibernate
+        system_control lock_desktop && $logind hibernate
         ;;
     reboot)
         system_control $logind reboot

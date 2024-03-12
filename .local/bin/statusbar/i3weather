@@ -13,7 +13,7 @@ esac
 
 # weather="$(curl -s wttr.in?format="%c%C++❄️+%t++☀️+%f++🌬️+%w")"
 weather="$(curl -Ss 'https://wttr.in?0&T&Q' | cut -c 16- | head -2 |
-	xargs -r echo "$(curl -s wttr.in?format="%c")")"
+	xargs echo "$(curl -s wttr.in?format="%c")")"
 
 if [ "$(echo "$weather" | grep -Ec "(Unknown|curl|HTML)")" -gt 0 ]; then
     echo "WEATHER UNAVAILABLE"
