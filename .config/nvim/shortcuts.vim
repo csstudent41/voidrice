@@ -27,12 +27,7 @@ cmap ;mn /mnt
 cmap ;stg /mnt/Storage
 cmap ;lbr /mnt/Storage/Library
 cmap ;med /mnt/Storage/Media
-<<<<<<< HEAD
 cmap ;mp /run/media/master/
-=======
-cmap ;mp /run/media/u0_a268/
-cmap ;rclg /run/media/u0_a268/DRIVE8/sycs19
->>>>>>> dca3326baa577a7d40b2040cba88cd44ee64670c
 cmap ;mtp /run/user/1000/gvfs
 cmap ;usr /usr
 cmap ;ush /usr/share

@@ -28,12 +28,7 @@ alias mn='cd /mnt && ls -A'
 alias stg='cd /mnt/Storage && ls -A'
 alias lbr='cd /mnt/Storage/Library && ls -A'
 alias med='cd /mnt/Storage/Media && ls -A'
-<<<<<<< HEAD
 alias mp='cd /run/media/master/ && ls -A'
-=======
-alias mp='cd /run/media/u0_a268/ && ls -A'
-alias rclg='cd /run/media/u0_a268/DRIVE8/sycs19 && ls -A'
->>>>>>> dca3326baa577a7d40b2040cba88cd44ee64670c
 alias mtp='cd /run/user/1000/gvfs && ls -A'
 alias usr='cd /usr && ls -A'
 alias ush='cd /usr/share && ls -A'

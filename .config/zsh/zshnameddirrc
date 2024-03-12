@@ -27,12 +27,7 @@ hash -d mn=/mnt
 hash -d stg=/mnt/Storage
 hash -d lbr=/mnt/Storage/Library
 hash -d med=/mnt/Storage/Media
-<<<<<<< HEAD
 hash -d mp=/run/media/master/
-=======
-hash -d mp=/run/media/u0_a268/
-hash -d rclg=/run/media/u0_a268/DRIVE8/sycs19
->>>>>>> dca3326baa577a7d40b2040cba88cd44ee64670c
 hash -d mtp=/run/user/1000/gvfs
 hash -d usr=/usr
 hash -d ush=/usr/share
