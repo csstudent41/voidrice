@@ -5,7 +5,7 @@ case "$(git config --get remote.origin.url)" in
 	*labstudent41*) sshadd ~/.ssh/labstudent41_id_ed25519 ;;
 esac
 
-git pull
 git add --all
 git commit --allow-empty-message
+git pull
 git push -u origin master
