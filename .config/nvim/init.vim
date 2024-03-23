@@ -130,7 +130,7 @@ nnoremap <leader>o  :LfCurrentFileNewTab<CR>
 nnoremap <leader>l  :LfWorkingDirectoryExistingOrNewTab<CR>
 
 " --> onedark theme
-if exists('+termguicolors')
+if exists('+termguicolors') && filereadable(system('echo -n "${XDG_CONFIG_HOME:-$HOME/.config}/nvim/autoload/onedark.vim"'))
 	let g:airline_theme = 'onedark'
 	let g:onedark_terminal_italics = 1
 	let g:onedark_color_overrides = {
