@@ -44,7 +44,7 @@ edit-command() {
 		command)
 			file=$(whence -ps "$cmd" | awk -F' -> ' '{print $NF}')
 			case "$(file --mime-type --brief "$file")" in
-				text/*) nvim "$file" ;;
+				text/*) $EDITOR "$file" ;;
 				*) echo "$0: not a text file: $file" >&2; return 2 ;;
 			esac
 			return
@@ -56,9 +56,9 @@ edit-command() {
 	esac
 
 	if [ -n "$query" ]; then
-		nvim +${line:-1} +/"$query" "$file"
+		$EDITOR +${line:-1} +/"$query" "$file"
 	else
-		nvim "$file"
+		$EDITOR "$file"
 	fi
 }
 
