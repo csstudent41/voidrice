@@ -87,14 +87,12 @@ pkg_info() {
 ##########################################################
 
 
-list_help() {
-	sed -ne "/^###    H E L P/,/^###    E N D/ s/^\([a-zA-Z0-9_]\+\)\(\).*/\1/p" "$0"
-}
+help_funcs="$(sed -ne "/^###    H E L P/,/^###    E N D/ s/^\([a-zA-Z0-9_]\+\)\(\).*/\1/p" "$0")"
 main() {
 	if [ "$aflag" = 0 ]; then
-		eval "$(list_help)"
+		eval "$help_funcs"
 	else
-		eval "$(list_help | sed -z 's/\n/||/g' | sed 's/||$//')"
+		eval "$(echo "$help_funcs" | sed -z 's/\n/||/g' | sed 's/||$//')"
 	fi
 }
 

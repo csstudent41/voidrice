@@ -7,7 +7,6 @@ gui -e
 # 	--log-max-old-files=0 >/dev/null &
 
 if ! pidof -q copyq; then
-	xclickroot sh -c "rm -f ~/.jgmenu-lockfile && jgmenu --at-pointer" &
 	numlockx on &
 	dunst &
 	copyq &

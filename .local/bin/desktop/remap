@@ -117,10 +117,10 @@ toggle_remap() {
 
 remap_status() {
   if [ -f "$status_file" ]; then
-    echo " Keys are remapped since:"
+    printf "Keys are remapped since "
 		cat "$status_file"
   else
-    echo " Keys are NOT remapped"
+    echo "Keys are NOT remapped"
   fi
 }
 

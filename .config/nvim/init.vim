@@ -12,33 +12,24 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'ptzz/lf.vim'
 Plug 'voldikss/vim-floaterm'
-Plug 'junegunn/fzf'
-Plug 'junegunn/fzf.vim'
 Plug 'KabbAmine/zeavim.vim'  ",     {'on': ['Zeavim', 'ZeavimV', 'ZVVisSelection', 'ZVOperator', 'ZVKeyDocset']}
 Plug 'neoclide/coc.nvim',        {'on': ['CocList', 'CocConfig'], 'branch': 'release'}
 Plug 'ap/vim-css-color'  " color code highlighting
-Plug 'goballooning/vim-live-latex-preview'
-" Plug 'sheerun/vim-polyglot'  " syntax highlighting
+Plug 'xuhdev/vim-latex-live-preview', {'for': 'tex'}
 Plug 'machakann/vim-verdin',     {'for': 'vim'}
 Plug 'puremourning/vimspector',   {'for': 'python'}
 " Plug 'powerman/vim-plugin-AnsiEsc'
 " Plug 'junegunn/goyo.vim',        {'on': 'Goyo'}
-" Plug 'numirias/semshi',          {'for': 'python'}
-Plug 'udalov/kotlin-vim',        {'for': 'kotlin'}
 " Plug 'jreybert/vimagit'
 " Plug 'lukesmithxyz/vimling'
 " Plug 'vimwiki/vimwiki'
-" Plug 'preservim/nerdtree'
-" Plug 'ryanoasis/vim-devicons'
 Plug 'vim-airline/vim-airline',  {'on': 'AirlineTheme'}
 Plug 'vim-airline/vim-airline-themes',   {'on': 'AirlineTheme'}
 Plug 'joshdick/onedark.vim'
-" Plug 'dracula/vim'
-" Plug 'squarefrog/tomorrow-night.vim'
-" Plug 'tomasiser/vim-code-dark',  {'on': 'AirlineTheme'}
 call plug#end()
 
 let g:Verdin#autocomplete = 1
+let g:livepreview_previewer = 'zathura'
 
 set title showmatch nowrap
 set mouse=a
@@ -48,15 +39,16 @@ set cursorline cursorcolumn
 set cc=80
 set scrolloff=5
 set splitbelow splitright
+set updatetime=500
 
 syntax on
-filetype plugin on
 filetype plugin indent on
 autocmd FileType text setlocal tabstop=8 shiftwidth=4
 autocmd FileType html setlocal tabstop=2 shiftwidth=2
 autocmd FileType sql  setlocal commentstring=--\ %s
 autocmd BufEnter bm-files,bm-dirs setlocal tabstop=8 shiftwidth=8
 autocmd BufWritePost bm-files,bm-dirs silent !shortcuts
+autocmd BufWritePost config.h,config.def.h !cd "%:h"; sudo make clean install
 autocmd BufWritePre  * %s/\s\+$//e
 au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
 
@@ -125,25 +117,6 @@ nnoremap <A-o>       <Plug>VimspectorStepOut
 nnoremap <A-b>       <Plug>VimspectorToggleBreakpoint
 nnoremap <A-c>       <Plug>VimspectorRunToCursor
 
-"  --> Fzf
-let g:fzf_layout = { 'window': { 'width': 1, 'height': 1 } }
-command! -bang -nargs=? -complete=dir Files
-			\ call fzf#vim#files(<q-args>, {'options': ['--info=inline', '--preview', 'preview {}']}, <bang>0)
-
-" Mapping selecting mappings
-nmap <leader><tab> <plug>(fzf-maps-n)
-xmap <leader><tab> <plug>(fzf-maps-x)
-omap <leader><tab> <plug>(fzf-maps-o)
-
-" Insert mode completion
-imap <c-x><c-k> <plug>(fzf-complete-word)
-imap <c-x><c-f> <plug>(fzf-complete-path)
-imap <c-x><c-l> <plug>(fzf-complete-line)
-
-" Fzf keybindings
-nnoremap <leader>f   :Files<CR>
-nnoremap <leader>.   :Files %:p:h<CR>
-
 " --> Lf
 " let g:lf_command_override = 'lf -command ...'
 let g:NERDTreeHijackNetrw = 0
@@ -211,8 +184,8 @@ nnoremap g9 :tablast<CR>
 
 vnoremap <C-c> "*y :let @+=@*<CR>
 vnoremap <C-A-c> "*d :let @+=@*<CR>
-nnoremap <C-p> "+p
-nnoremap <C-A-p> "+P
+noremap <C-p> "+p
+noremap <C-A-p> "+P
 
 nnoremap c "_c
 inoremap jk <Esc>
@@ -227,17 +200,15 @@ autocmd FileType html,markdown inoremap ;b <Esc>b"tywi<<Esc>ea><CR><++><CR></><C
 autocmd FileType html,markdown inoremap ;ap <p><CR><++><CR></p><CR><++><Esc>3k$i
 autocmd FileType html,markdown inoremap ;aa <a href=""><CR><++><CR></a><CR><++><Esc>3k$hi
 
-autocmd BufEnter * nmap <leader>t :w<CR>:se nornu<CR>:!tst "%"<CR>:se rnu<CR>
-autocmd BufEnter * nmap <leader>T :w<CR>:se nornu<CR>:T tst "%"<CR>
-autocmd BufEnter * imap <F5> <Esc>:w<CR>:se nornu<CR>:T tst "%"<CR>
-autocmd BufEnter toppers nmap <leader>t :w<CR>:!tst "%" FYCS-SEM-II-REGULAR-APR-2023.txt<CR>
-autocmd BufEnter toppers nmap <leader>T :w<CR>:T tst "%" FYCS-SEM-II-REGULAR-APR-2023.txt<CR>
-autocmd BufEnter test.awk nmap <leader>t :w<CR>:!tst "%" "%:h/text.txt"<CR>
-autocmd BufEnter test.awk nmap <leader>T :w<CR>:T tst "%" "%:h/text.txt"<CR>
-autocmd BufEnter vartak-results-final.awk nmap <leader>t :w<CR>:!tst "%" names.csv marks.csv CGP.csv<CR>
-autocmd BufEnter vartak-results-final.awk nmap <leader>T :w<CR>:T tst "%" names.csv marks.csv CGP.csv<CR>
-" autocmd BufEnter vartak-results-final.awk nmap <leader>t :w<CR>:!tst "%:h/vartak-results.sh"<CR>
-" autocmd BufEnter vartak-results-final.awk nmap <leader>T :w<CR>:T tst "%:h/vartak-results.sh"<CR>
+nnoremap <leader>fl :w<CR>:!dev lint "%"<CR>
+nnoremap <leader>fm :w<CR>:!dev format "%"<CR>
+nnoremap <leader>fc :w<CR>:!dev compile "%"<CR>
+nnoremap <leader>fr :w<CR>:!dev run "%"<CR>
+nnoremap <leader>ft :w<CR>:!dev test "%"<CR>
+
+autocmd BufEnter * nmap <leader>t :w<CR>:se nornu<CR>:!dev test "%"<CR>:se rnu<CR>
+autocmd BufEnter * nmap <leader>T :w<CR>:se nornu<CR>:T dev test "%"<CR>
+autocmd BufEnter * imap <F5> <Esc>:w<CR>:se nornu<CR>:T dev test "%"<CR>
 
 nnoremap <leader>w :set wrap!<CR>
 nnoremap <leader>p :!opout "%:p"<CR>
@@ -252,4 +223,3 @@ nnoremap <leader>R :w<CR>:T %:p<CR>
 nnoremap <leader>gc :T git add --all && git commit<CR>
 
 source ~/.config/nvim/shortcuts.vim
-nmap <F5> <Esc>:w<CR>:se nornu<CR>:T tst "%"<CR>

@@ -18,7 +18,8 @@ for file in "$@"; do
 		*.sim1) simulide "$file" ;;
 
 		*)
-			case "$(file --dereference --brief --mime-type "$file")" in
+			filetype="$(file --dereference --brief --mime-type "$file")"
+			case "$filetype" in
 				*directory) ${FILES:-lf} "$file" ;;
 				text/html*) ${BROWSER:-w3m} "$file" ;;
 				text/*|application/json|application/zip) LESSOPEN="lesspreview.sh %s" less -r "$file" ;;
@@ -28,9 +29,8 @@ for file in "$@"; do
 				video/*|audio/*) ${PLAYER:- setsid -f mpv --sub-auto=fuzzy} "$file" ;;
 				*)
 					if xdg-open "$file"; then
-						msg="$file: unrecoginzed file type"
-						[ -n "$DISPLAY" ] && notify-send "⚠️ open" "$msg"
-						echo "open: $msg" >&2
+						[ -n "$DISPLAY" ] && notify-send "⚠️ open: unknown filetype" "$filetype"
+						echo "open: unknown filetype: $filetype" >&2
 					fi
 					;;
 			esac

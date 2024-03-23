@@ -25,8 +25,3 @@ Host rpi
 	Hostname rpi
 	User master
 	IdentityFile ~/.ssh/rpi_id_ed25519
-
-Host rrpi
-	Hostname rpi
-	User root
-	IdentityFile ~/.ssh/rpi_id_ed25519

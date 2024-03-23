@@ -1,0 +1,50 @@
+# i3blocks configuration file
+#
+# The i3blocks man page describes the usage of the binary,
+# and its website describes the configuration:
+# https://vivien.github.io/i3blocks
+#
+#     List of valid properties:
+# align
+# color
+# command
+# full_text
+# instance
+# interval
+# label
+# min_width
+# name
+# separator
+# separator_block_width
+# short_text
+# signal
+# urgent
+
+
+# Global properties
+separator=false
+separator_block_width=35
+
+[badwidth]
+seprator=false
+command=echo "$(i3bandwidth)"
+interval=1
+
+[wifi]
+# command=echo "📡 $(i3wifi wlp0s20f3)"
+command=i3wifi wlp0s20f3
+interval=1
+
+[battery]
+command=i3battery
+interval=1
+
+[cpu]
+command=echo " $(i3cpu)"
+interval=3
+
+[memory]
+separator=true
+separator_block_width=50
+command=echo " $(i3memory)"
+interval=1

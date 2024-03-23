@@ -42,6 +42,7 @@ cmd extract ${{
 	# (xkcd link: https://xkcd.com/1168/)
 	set -f
 	for f in $fx; do case "$f" in
+				*.tar) tar xvf "$f" ;;
 				*.tar.bz|*.tar.bz2|*.tbz|*.tbz2) tar xjvf "$f" ;;
 				*.tar.gz|*.tgz) tar xzvf "$f" ;;
 				*.tar.xz|*.txz) tar xJvf "$f" ;;
@@ -50,6 +51,18 @@ cmd extract ${{
 				*.7z) 7z x "$f" ;;
 				*) echo "Unsupported format" >&2; exit 1 ;;
 		esac done
+}}
+
+cmd link_index %{{
+	case "$f" in
+		*.html) index="index.html" ;;
+		*) echo "Unsupported file"; exit 1 ;;
+	esac
+	[ -e "$index" ] && [ ! -L "$index" ] && {
+		echo "Failed: $index already exists and is not a symbolic link"
+		exit
+	}
+	ln -sf "$f" "$index"
 }}
 
 cmd select_eval ${{
@@ -99,10 +112,7 @@ map gL %lf -remote "send ${id} select '$(readlink $f)'"
 map gd !du -hd1
 map gy %{{ printf "%s" "$f" | xsel -b }}
 map gY %{{ printf "%s" "$fs" | xsel -b }}
-map gi %{{ [ -e index.html ] && [ ! -L index.html ] &&
-	{ echo "Failed: index.html already exists and is not a symbolic link"; exit; }
-	ln -sf "$f" index.html }}
-
+map gi link_index
 map zpd set previewer preview
 map zpt set previewer cat
 map zpb set previewer bat-preview

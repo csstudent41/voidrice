@@ -1,14 +1,16 @@
 #!/bin/sh
 
 [ "$#" -lt 1 ] && { echo "savesite - save local copy of a website
-USAGE: savesite <URL>"; exit 1; }
+USAGE: savesite <URL> [DEST_DIR]"; exit 1; }
 
-url="$*"
-site="$(echo "$url" | sed 's|\(https\?://\)\?\([A-Za-z0-9.-]*\)/.*|\2|')"
-log=".logs/$site.log"
+url="$1"
+site="${2:-"$(echo "$url" | sed 's|\(https\?://\)\?\([A-Za-z0-9.-]*\)/.*|\2|')"}"
+WGETLOGS="${3:-.logs/$site.log}"
+started="$(date)"
 
+touch "$WGETLOGS" || exit
 printf ":: Downloading site: %s\n" "$site"
-printf ":: Logging to: %s\n" "$log"
+printf ":: Logging to: %s\n" "$WGETLOGS"
 
 {
 	setsid wget \
@@ -21,11 +23,13 @@ printf ":: Logging to: %s\n" "$log"
 		--restrict-file-names=windows \
 		--domains "$site" \
 		--no-parent \
-		--output-file "$log" \
+		--output-file "$WGETLOGS" \
 		"$url"
 
 	[ -n "$DISPLAY" ] && notify-send "savesite: finished downloading" "$site"
-	printf ":: Finished downloading site: %s\n" "$site"
-	printf ":: Finished at: "
-	date
+	printf "%s\n" ":: Finished downloading site: $site" \
+		":: Started at: $started" \
+		":: Finished at: $(date)" >> "$WGETLOGS"
 } &
+
+tail -f "$WGETLOGS"

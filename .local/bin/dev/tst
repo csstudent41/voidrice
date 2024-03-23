@@ -101,6 +101,7 @@ case "$file" in
 	*.zsh)  zsh_file "$@" ;;
 	*.kt)   kotlin_file "$@" ;;
 	*.ino)  arduino_file "$@" ;;
+	*.ts)   tsc "$file" "$@" ;;
 
 	*)
 		filetype=$(file --brief --mime-type "$file")

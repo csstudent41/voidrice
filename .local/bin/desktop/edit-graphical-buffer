@@ -4,9 +4,14 @@ sleep 0.5
 xdotool key --clearmodifiers ctrl+a ctrl+c
 content="$(xclip -o -sel clipboard)"
 
-TEMPFILE=/tmp/scratch-buffer.tmp
-echo "$content" > "$TEMPFILE"
-alacritty --class=floating_buffer -e nvim "$TEMPFILE"
+tempfile=/tmp/scratch-buffer/$$.txt
+mkdir -pv /tmp/scratch-buffer
+echo "$content" | tee "$tempfile" > "$tempfile.bak"
+alacritty --class=floating_buffer -e nvim "$tempfile"
 
-cat "$TEMPFILE" | xclip -sel clipboard
-xdotool key --clearmodifiers ctrl+a ctrl+v
+diff "$tempfile" "$tempfile.bak" >/dev/null || {
+	xclip -sel clipboard < "$tempfile"
+	xdotool key --clearmodifiers ctrl+a ctrl+v
+}
+
+rm -f "$tempfile" "$tempfile.bak"

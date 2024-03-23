@@ -28,9 +28,11 @@ pw	~/Phone/Android/media/com.whatsapp/WhatsApp/Media/WhatsApp\ Documents
 
 mn	/mnt
 stg	/mnt/Storage
-lbr	/mnt/Storage/Library
+lr	/mnt/Storage/Library
 med	/mnt/Storage/Media
+sts	/mnt/Storage/sites
 mp	/run/media/$USER/
 mtp	/run/user/1000/gvfs
 usr	/usr
 ush	/usr/share
+usha	/usr/share/applications

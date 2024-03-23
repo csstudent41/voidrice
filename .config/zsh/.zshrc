@@ -263,3 +263,4 @@ fw() {
 # }
 # alias ssudo='sudofu '
 
+stty -ixon

@@ -34,7 +34,7 @@ case "$command" in
         dm-tool switch-to-greeter
         ;;
     suspend)
-        lock_desktop && $logind suspend
+        lock_desktop; $logind suspend
         ;;
     hibernate)
         system_control lock_desktop && $logind hibernate

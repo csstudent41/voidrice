@@ -4,8 +4,8 @@
 case "$BLOCK_BUTTON" in
 	'') ;;
 	1)
-		$TERMINAL -e less ~/.cache/wttr.txt & sleep 0.3
-		i3-msg 'move to workspace "12: 摒 "; workspace "12: 摒 "' >/dev/null 2>&1
+		$TERMINAL -e less -r ~/.cache/wttr.txt & sleep 0.3
+		i3-msg 'move to workspace "12: Weather"; workspace "12: Weather"' >/dev/null 2>&1
 		;;
 	2) $TERMINAL -e nvim "$0" ;;
 	*) notify-send "⛅ Refreshing weather info..." ;;

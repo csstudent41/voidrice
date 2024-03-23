@@ -25,12 +25,14 @@ map cstv :cd ~/Phone/.stversions
 map cpw :cd ~/Phone/Android/media/com.whatsapp/WhatsApp/Media/WhatsApp\ Documents
 map cmn :cd /mnt
 map cstg :cd /mnt/Storage
-map clbr :cd /mnt/Storage/Library
+map clr :cd /mnt/Storage/Library
 map cmed :cd /mnt/Storage/Media
+map csts :cd /mnt/Storage/sites
 map cmp :cd /run/media/master/
 map cmtp :cd /run/user/1000/gvfs
 map cusr :cd /usr
 map cush :cd /usr/share
+map cusha :cd /usr/share/applications
 map Ebf $$EDITOR ~/.config/shell/bm-files
 map Ebd $$EDITOR ~/.config/shell/bm-dirs
 map Epf $$EDITOR ~/.profile
@@ -40,10 +42,12 @@ map Egi $$EDITOR ~/.gitignore
 map Ezc $$EDITOR ~/.config/zsh/.zshrc
 map Ezh $$EDITOR ~/.config/history
 map Eza $$EDITOR ~/.config/shell/aliasrc
-map Elr $$EDITOR ~/.config/lf/lfrc
+map Elc $$EDITOR ~/.config/lf/lfrc
 map ElS $$EDITOR ~/.config/lf/scope
 map Esx $$EDITOR ~/.config/sxiv/exec/key-handler
 map Ein $$EDITOR ~/.config/nvim/init.vim
 map Eac $$EDITOR ~/.config/alacritty/alacritty.yml
+map Emm $$EDITOR ~/.config/mimeapps.list
 map Essc $$EDITOR ~/.ssh/config
 map Eqn $$EDITOR ~/Documents/Notes/QuickNote.md
+map Ebm $$EDITOR ~/Documents/Notes/bookmarks.txt

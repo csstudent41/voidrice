@@ -25,12 +25,14 @@ cmap ;stv ~/Phone/.stversions
 cmap ;pw ~/Phone/Android/media/com.whatsapp/WhatsApp/Media/WhatsApp\ Documents
 cmap ;mn /mnt
 cmap ;stg /mnt/Storage
-cmap ;lbr /mnt/Storage/Library
+cmap ;lr /mnt/Storage/Library
 cmap ;med /mnt/Storage/Media
+cmap ;sts /mnt/Storage/sites
 cmap ;mp /run/media/master/
 cmap ;mtp /run/user/1000/gvfs
 cmap ;usr /usr
 cmap ;ush /usr/share
+cmap ;usha /usr/share/applications
 cmap ;bf ~/.config/shell/bm-files
 cmap ;bd ~/.config/shell/bm-dirs
 cmap ;pf ~/.profile
@@ -40,10 +42,12 @@ cmap ;gi ~/.gitignore
 cmap ;zc ~/.config/zsh/.zshrc
 cmap ;zh ~/.config/history
 cmap ;za ~/.config/shell/aliasrc
-cmap ;lr ~/.config/lf/lfrc
+cmap ;lc ~/.config/lf/lfrc
 cmap ;lS ~/.config/lf/scope
 cmap ;sx ~/.config/sxiv/exec/key-handler
 cmap ;in ~/.config/nvim/init.vim
 cmap ;ac ~/.config/alacritty/alacritty.yml
+cmap ;mm ~/.config/mimeapps.list
 cmap ;ssc ~/.ssh/config
 cmap ;qn ~/Documents/Notes/QuickNote.md
+cmap ;bm ~/Documents/Notes/bookmarks.txt
