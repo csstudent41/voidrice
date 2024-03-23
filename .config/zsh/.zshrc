@@ -206,9 +206,6 @@ bindkey '^[H' get-help
 source "$SDOTDIR/aliasrc"
 source "$SDOTDIR/shortcutrc"
 
-alias l='ls -hAF --group-directories-first --color=always'
-lt() { tree -aC "$@" | less -rF; }
-
 case "$TERM" in *256*)
 	if [ -x /bin/eza ] || [ -x /usr/bin/eza ]; then
 		alias l='exa -aF --group-directories-first --color=always --icons'
@@ -226,7 +223,6 @@ case "$TERM" in *256*)
 	;;
 esac
 
-alias ll='l -l'
 alias p='pacman'
 alias sp='sudo pacman'
 alias mmv='noglob zmv -W'
