@@ -66,7 +66,7 @@ shift_exercise() {
 				tmux send-keys -t gtypist "$key";
 			done
 		else
-			xdotool key --clearmodifiers --delay 50 "$@"
+			xdotool key --clearmodifiers --delay 100 "$@"
 		fi
 	}
 

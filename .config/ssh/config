@@ -9,6 +9,11 @@ Host blue
 	User u0_a268
 	IdentityFile ~/.ssh/blue_id_rsa
 
+Host tab
+	Hostname tab
+	Port 8022
+	User u0_a209
+
 Host github.com
 	Hostname github.com
 	User git

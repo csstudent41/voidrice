@@ -90,7 +90,7 @@ remap_keys() {
 	killall xcape 2>/dev/null
 	xcape -t "$timeout" -e "Super_L=Tab"
 	xcape -t "$timeout" -e "Control_R=Escape"
-	xcape -t "$timeout" -e "Control_L=Caps_Lock"
+	xcape -t "$timeout" -e "Shift_L=Caps_Lock"
 	xcape -t "$timeout" -e "Shift_R=space"
 	date > "$status_file"
 	xset led 3

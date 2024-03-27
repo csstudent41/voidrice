@@ -51,3 +51,4 @@ hash -d mm=~/.config/mimeapps.list
 hash -d ssc=~/.ssh/config
 hash -d qn=~/Documents/Notes/QuickNote.md
 hash -d bm=~/Documents/Notes/bookmarks.txt
+hash -d akn=~/Documents/Notes/ak47.txt

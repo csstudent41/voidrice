@@ -51,3 +51,4 @@ cmap ;mm ~/.config/mimeapps.list
 cmap ;ssc ~/.ssh/config
 cmap ;qn ~/Documents/Notes/QuickNote.md
 cmap ;bm ~/Documents/Notes/bookmarks.txt
+cmap ;akn ~/Documents/Notes/ak47.txt

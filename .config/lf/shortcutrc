@@ -51,3 +51,4 @@ map Emm $$EDITOR ~/.config/mimeapps.list
 map Essc $$EDITOR ~/.ssh/config
 map Eqn $$EDITOR ~/Documents/Notes/QuickNote.md
 map Ebm $$EDITOR ~/Documents/Notes/bookmarks.txt
+map Eakn $$EDITOR ~/Documents/Notes/ak47.txt

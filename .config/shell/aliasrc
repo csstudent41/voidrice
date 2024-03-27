@@ -8,7 +8,7 @@ alias md='mkdir'
 # open
 alias o='$OPENER'
 alias n='$EDITOR'
-alias s='$EDITOR "$(ff -L ~/.config ~/.local/bin ~/bin)"'
+alias sr='$EDITOR "$(ff -L ~/.config ~/.local/bin ~/bin)"'
 
 lt() { tree -aC "$@" | less -rF; }
 dul() { du -ahd 1 "$@" | sort -h | less -FX; }
@@ -64,10 +64,8 @@ alias grep='grep --color=auto'
 alias tree='tree -C'
 alias ls='ls -h --group-directories-first --color=auto --classify=auto'
 alias info='info --vi-keys --init-file ~/.config/infokey'
-alias gtypist="gtypist $GTYPIST_OPTS"
 
 # userful aliases
 alias l='ls -hAF --group-directories-first --color=always'
 alias ll='l -l'
-alias typ='launch-gtypist "$(sed "/^gtypist lesson - \(.*\)$/!d; s//\1/" ~/Documents/Notes/QuickNote.md)"'
 

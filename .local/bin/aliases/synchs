@@ -1,0 +1,9 @@
+#!/bin/sh
+
+cd ~ || exit
+
+rsync -PRu \
+	.config/tmux/tmux.conf \
+	.config/shell/aliasrc \
+	.config/shell/inputrc \
+	rpi:

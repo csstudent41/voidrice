@@ -1,0 +1,6 @@
+#!/bin/sh
+
+MOUNTPOINT="/run/media/$USER"
+sudo mkdir -pv "$MOUNTPOINT"
+sudo chown "$USER:$USER" "$MOUNTPOINT"
+"$@"

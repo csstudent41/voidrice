@@ -103,9 +103,9 @@ zle -N exec-zsh _exec-zsh
 bindkey '^[r' exec-zsh
 
 [ -f "$PREV_BUFFER" ] && {
-	[ -n "$TMUX" ] || [ -z "$TERMUX_VERSION" ] && {
+	[ -n "$TMUX_TMPDIR" ] || [ -z "$TERMUX_VERSION" ] && {
 		sleep 0.1
-		if [ -n "$TMUX" ]; then
+		if [ -n "$TMUX_TMPDIR" ]; then
 			tmux send-keys -l "$(cat "$PREV_BUFFER")"
 		else
 			xdotool type --window "$(xdotool getactivewindow)" \
@@ -227,11 +227,14 @@ alias p='pacman'
 alias sp='sudo pacman'
 alias mmv='noglob zmv -W'
 alias loop='loop '
-alias sudo='sudo '
+alias s='sudo '
 alias mirror='sudo reflector -f 30 -l 30 --number 10 --verbose --save /etc/pacman.d/mirrorlist'
 alias mirrord='sudo reflector --latest 50 --number 20 --sort delay --save /etc/pacman.d/mirrorlist'
 alias cleanup='sudo pacman -Rns $(pacman -Qtdq)'
 alias fixpacman='sudo rm /var/lib/pacman/db.lck'
+alias gtypist="gtypist $GTYPIST_OPTS"
+alias typ='launch-gtypist "$(sed "/^gtypist lesson - \(.*\)$/!d; s//\1/" ~/Documents/Notes/QuickNote.md)"'
+alias typa='launch-gtypist "$(sed "/^gtypist lesson - \(.*\)$/!d; s//\1/" ~/Documents/Notes/ak47.txt)"'
 
 f() {
 	ret=$?

@@ -1,18 +1,6 @@
-[ -n "$ZSH_CACHE_DIR" ] || export ZSH_CACHE_DIR="$HOME/.cache/zsh"
-[ -d "$ZSH_CACHE_DIR" ] || mkdir -p "$ZSH_CACHE_DIR"
-zalias_trace="$ZSH_CACHE_DIR/zsh_aliases.trace"
-query_zalias_trace() { sed -E "/alias[ '$]*$1=/!d" "$zalias_trace"; }
-
 whereis_alias() {
-	location="$(query_zalias_trace "$1")"
-	if [ -z "$location" ]; then
-		zsh -xic exit 2> >(grep "+/.*>.*alias .*=" > "$zalias_trace")
-		location="$(query_zalias_trace "$1")"
-	fi
-
-	location="$(echo "$location" |
-		fzf --exit-0 --select-1 --ansi \
-			--header-first --header='Select alias location' |
+	location="$(zsh -xic exit 2>&1 | sed -E "/alias[ '$]*$1=/!d" |
+		fzf --exit-0 --select-1 --ansi --header-first --header='Select alias location' |
 		sed -n "s|^\+\(/.*:[0-9]*\)>.*$|\1|p")"
 
 	if [ -z "$location" ]; then
