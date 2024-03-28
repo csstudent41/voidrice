@@ -7,5 +7,4 @@ esac
 
 git add --all
 git commit --allow-empty-message
-git pull
 git push -u origin master
