@@ -17,4 +17,4 @@ if [ "$msg" = "The agent has no identities." ] ||
 	[ -e "$private_key" ] && ssh-add "$private_key" || ssh-add
 fi
 
-ssh "$@"
+ssh "$@" -t "tmux attach -t $USER || tmux new -s $USER"

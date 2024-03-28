@@ -66,6 +66,7 @@ alias ls='ls -h --group-directories-first --color=auto --classify=auto'
 alias info='info --vi-keys --init-file ~/.config/infokey'
 
 # userful aliases
-alias l='ls -hAF --group-directories-first --color=always'
-alias ll='l -l'
+alias s='sudo'
+alias l='ls -A'
+alias ll='ls -al'
 

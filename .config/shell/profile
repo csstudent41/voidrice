@@ -34,7 +34,7 @@ export FZF_ALT_C_COMMAND='find -L . -type d ! -wholename "*.git*" -printf "%p/\n
 export FZF_DEFAULT_COMMAND="find -L . ! -wholename '*.git*' \( -type d -printf '%p/\n' , ! -type d -print \)"
 export FZF_DEFAULT_OPTS="
 	--history='${XDG_DATA_HOME:-$XDG_DATA_HOME}/fzf/history'
-	--preview='$PREVIEWER {}' --preview-window=hidden
+	--preview='\$PREVIEWER {}' --preview-window=hidden
 	--bind 'ctrl-y:execute-silent(printf \"%s\\\n\" {+} | xsel --clipboard)'
 	--bind 'ctrl-v:toggle-preview,ctrl-space:toggle-preview'
 	--bind 'alt-space:toggle-preview,alt-w:toggle-preview-wrap'
@@ -54,9 +54,10 @@ export FZF_DEFAULT_OPTS="
 	--bind 'alt-0:change-preview(echo {})'
 	--bind 'alt-1:change-preview(highlight --out-format=ansi -- {} 2>/dev/null ||
 		ls -Als --group-directories-first --color=always --classify=always -- {})'
-	--bind 'alt-2:change-preview($PREVIEWER {})'
+	--bind 'alt-2:change-preview(\$PREVIEWER {})'
+	--bind 'alt-9:change-preview(printf \"%s\\\n\" {+})'
 	--bind 'alt-!:execute(less {})'
-	--bind 'alt-@:execute($PREVIEWER {} | less)'
+	--bind 'alt-@:execute(\$PREVIEWER {} | less)'
 	--bind 'alt-v:execute(echo {q} >> \"$FZF_HIST\"; LESSOPEN=\"lesspreview.sh %s\" less {})'
 	--bind 'alt-e:execute(echo {q} >> \"$FZF_HIST\"; eval \"\${EDITOR:-vi} {}\")'
 	--bind 'ctrl-o:execute(echo {q} >> \"$FZF_HIST\"; eval \"\${OPENER:-xdg-open} {}\")'
