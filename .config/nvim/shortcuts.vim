@@ -42,6 +42,7 @@ cmap ;gi ~/.gitignore
 cmap ;zc ~/.config/zsh/.zshrc
 cmap ;zh ~/.config/history
 cmap ;za ~/.config/shell/aliasrc
+cmap ;arc ~/.config/shell/aliasrc
 cmap ;lc ~/.config/lf/lfrc
 cmap ;lS ~/.config/lf/scope
 cmap ;sx ~/.config/sxiv/exec/key-handler

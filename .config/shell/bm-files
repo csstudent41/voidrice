@@ -11,6 +11,7 @@ gi	~/.gitignore
 zc	~/.config/zsh/.zshrc
 zh	~/.config/history
 za	~/.config/shell/aliasrc
+arc	~/.config/shell/aliasrc
 lc	~/.config/lf/lfrc
 lS	~/.config/lf/scope
 sx	~/.config/sxiv/exec/key-handler

@@ -5,16 +5,30 @@ alias xx='chmod u+x'
 alias x-='chmod -x'
 alias th='touch'
 alias md='mkdir'
+alias s='sudo'
+alias l='ls -A'
+alias ll='ls -al'
 # open
-alias o='$OPENER'
-alias n='$EDITOR'
-alias sr='$EDITOR "$(ff -L ~/.config ~/.local/bin ~/bin)"'
+alias o='${OPENER:-xdg-open}'
+alias e='${EDITOR:-vi}'
+alias se='sudoedit'
+alias sr='e "$(ff -L ~/.config ~/.local/bin ~/bin)"'
 
 lt() { tree -aC "$@" | less -rF; }
 dul() { du -ahd 1 "$@" | sort -h | less -FX; }
 v() { LESSOPEN="|preview %s" less -r -F "${1:-.}"; }
 ff() {  find "$@" ! -wholename '*.git*' \( -type d -printf '%p/\n' , ! -type d -print \) | fzf -m; }
 senv() { source "$HOME/Applications/virtualenvs/${1:-main}/bin/activate"; }
+
+sudoedit() {
+	if command -V nvim >/dev/null 2>&1; then
+		sudo nvim -u ~/.config/nvim/init.vim "$@"
+	elif command -V vim >/dev/null 2>&1; then
+		sudo vim -u ~/.vimrc "$@"
+	else
+		sudo "${EDITOR:-vi}" "$@"
+	fi
+}
 
 lfcd () {
 	[ $# -gt 0 ] && [ -z "$1" ] && return 2
@@ -64,9 +78,4 @@ alias grep='grep --color=auto'
 alias tree='tree -C'
 alias ls='ls -h --group-directories-first --color=auto --classify=auto'
 alias info='info --vi-keys --init-file ~/.config/infokey'
-
-# userful aliases
-alias s='sudo'
-alias l='ls -A'
-alias ll='ls -al'
 

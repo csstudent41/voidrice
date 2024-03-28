@@ -42,6 +42,7 @@ map Egi $$EDITOR ~/.gitignore
 map Ezc $$EDITOR ~/.config/zsh/.zshrc
 map Ezh $$EDITOR ~/.config/history
 map Eza $$EDITOR ~/.config/shell/aliasrc
+map Earc $$EDITOR ~/.config/shell/aliasrc
 map Elc $$EDITOR ~/.config/lf/lfrc
 map ElS $$EDITOR ~/.config/lf/scope
 map Esx $$EDITOR ~/.config/sxiv/exec/key-handler

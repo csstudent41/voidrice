@@ -42,6 +42,7 @@ hash -d gi=~/.gitignore
 hash -d zc=~/.config/zsh/.zshrc
 hash -d zh=~/.config/history
 hash -d za=~/.config/shell/aliasrc
+hash -d arc=~/.config/shell/aliasrc
 hash -d lc=~/.config/lf/lfrc
 hash -d lS=~/.config/lf/scope
 hash -d sx=~/.config/sxiv/exec/key-handler
