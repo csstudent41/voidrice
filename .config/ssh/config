@@ -30,3 +30,8 @@ Host rpi
 	Hostname rpi
 	User master
 	IdentityFile ~/.ssh/rpi_id_ed25519
+
+Host shared
+	Hostname rpi
+	User shared
+	IdentityFile ~/.ssh/shared_id_ed25519
