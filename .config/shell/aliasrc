@@ -21,12 +21,10 @@ ff() {  find "$@" ! -wholename '*.git*' \( -type d -printf '%p/\n' , ! -type d -
 senv() { source "$HOME/Applications/virtualenvs/${1:-main}/bin/activate"; }
 
 sudoedit() {
-	if command -V nvim >/dev/null 2>&1; then
-		sudo nvim -u ~/.config/nvim/init.vim "$@"
-	elif command -V vim >/dev/null 2>&1; then
+	if [ -x /bin/vim ] && [ ! -L /bin/vim ]; then
 		sudo vim -u ~/.vimrc "$@"
 	else
-		sudo "${EDITOR:-vi}" "$@"
+		sudoedit "$@"
 	fi
 }
 
