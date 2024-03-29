@@ -32,6 +32,6 @@ Host rpi
 	IdentityFile ~/.ssh/rpi_id_ed25519
 
 Host shared
-	Hostname rpi
+	Hostname 192.168.8.120
 	User shared
 	IdentityFile ~/.ssh/shared_id_ed25519
