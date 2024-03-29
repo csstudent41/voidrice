@@ -33,6 +33,6 @@ med	/mnt/Storage/Media
 sts	/mnt/Storage/sites
 mp	/run/media/$USER/
 mtp	/run/user/1000/gvfs
-usr	/usr
+usr	${PREFIX:=/usr}
 ush	/usr/share
 usha	/usr/share/applications

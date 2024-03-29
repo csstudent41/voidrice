@@ -93,7 +93,7 @@ _ng_yargs_completions()
 compdef _ng_yargs_completions ng
 
 
-export PREV_BUFFER="$ZSH_CACHE_DIR/previous-command-buffer-$$.tmp"
+export PREV_BUFFER="${ZCACHEDIR:=$HOME/.cache/zsh}/previous-command-buffer-$$.tmp"
 _exec-zsh() {
 	echo "$BUFFER" > "$PREV_BUFFER"
 	BUFFER=' exec zsh'

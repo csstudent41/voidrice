@@ -3,4 +3,17 @@
 MOUNTPOINT="/run/media/$USER"
 sudo mkdir -pv "$MOUNTPOINT"
 sudo chown "$USER:$USER" "$MOUNTPOINT"
-"$@"
+
+case "$1" in
+
+	*:|*:/*)
+		path="$MOUNTPOINT/${1%%:*}"
+		mkdir -pv "$path"
+		sshfs "$1" "$path"
+		;;
+
+	*)
+		udisksctl mount -b "$1"
+		;;
+
+esac
