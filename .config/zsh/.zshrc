@@ -14,8 +14,8 @@ source "$ZDOTDIR/command-tools.zsh"
 source "$ZDOTDIR/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 source "$ZDOTDIR/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
 source "$ZDOTDIR/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh"
-source "$ZDOTDIR/fzf/key-bindings.zsh"
-source "$ZDOTDIR/fzf/completion.zsh"
+source "$ZDOTDIR/plugins/fzf/key-bindings.zsh"
+source "$ZDOTDIR/plugins/fzf/completion.zsh"
 
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 ZSH_AUTOSUGGEST_ACCEPT_WIDGETS=(end-of-line vi-end-of-line vi-add-eol)
@@ -235,6 +235,7 @@ alias fixpacman='sudo rm /var/lib/pacman/db.lck'
 alias gtypist="gtypist $GTYPIST_OPTS"
 alias typ='launch-gtypist "$(sed "/^gtypist lesson - \(.*\)$/!d; s//\1/" ~/Documents/Notes/QuickNote.md)"'
 alias typa='launch-gtypist "$(sed "/^gtypist lesson - \(.*\)$/!d; s//\1/" ~/Documents/Notes/ak47.txt)"'
+alias uc='cd ~ && gitpush'
 
 f() {
 	ret=$?

@@ -20,9 +20,22 @@
 /.config/*
 !/.config/gh/config.yml
 
-!/.config/terminal-colors.d
 !/.config/shell
+/.config/shell/*
+!/.config/shell/aliasrc
+!/.config/shell/bm-files
+!/.config/shell/bm-dirs
+!/.config/shell/inputrc
+!/.config/shell/profile
+
 !/.config/zsh
+/.config/zsh/*
+!/.config/zsh/plugins
+!/.config/zsh/command-tools.zsh
+!/.config/zsh/zprofile
+!/.config/zsh/.zshrc
+
+!/.config/terminal-colors.d
 !/.config/wget
 !/.config/ssh
 !/.config/htop
