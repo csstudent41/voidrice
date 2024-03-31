@@ -13,6 +13,7 @@ Host tab
 	Hostname tab
 	Port 8022
 	User u0_a209
+	IdentityFile ~/.ssh/tab_id_ed25519
 
 Host github.com
 	Hostname github.com
