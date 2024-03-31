@@ -28,9 +28,9 @@ cmap ;stg /mnt/Storage
 cmap ;lr /mnt/Storage/Library
 cmap ;med /mnt/Storage/Media
 cmap ;sts /mnt/Storage/sites
-cmap ;mp /run/media/master/
+cmap ;mp /run/media/u0_a268/
 cmap ;mtp /run/user/1000/gvfs
-cmap ;usr /usr
+cmap ;usr /data/data/com.termux/files/usr
 cmap ;ush /usr/share
 cmap ;usha /usr/share/applications
 cmap ;bf ~/.config/shell/bm-files

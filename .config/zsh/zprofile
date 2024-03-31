@@ -8,6 +8,7 @@ KEYTIMEOUT=1
 
 case "${TTY#/dev/tty}" in
 	1) command -V i3 >/dev/null && { pgrep i3 || startx } ;;
+	2) ;;
 	3) tmux new -s work ;;
-	[2-5]) tmux new -s "${TTY#/dev/}" ;;
+	*) exec tmux new -s "${TTY#/dev/}" ;;
 esac

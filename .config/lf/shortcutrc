@@ -28,9 +28,9 @@ map cstg :cd /mnt/Storage
 map clr :cd /mnt/Storage/Library
 map cmed :cd /mnt/Storage/Media
 map csts :cd /mnt/Storage/sites
-map cmp :cd /run/media/master/
+map cmp :cd /run/media/u0_a268/
 map cmtp :cd /run/user/1000/gvfs
-map cusr :cd /usr
+map cusr :cd /data/data/com.termux/files/usr
 map cush :cd /usr/share
 map cusha :cd /usr/share/applications
 map Ebf $$EDITOR ~/.config/shell/bm-files

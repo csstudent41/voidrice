@@ -8,6 +8,8 @@ case "$1" in
 
 	*:|*:/*)
 		path="$MOUNTPOINT/${1%%:*}"
+		[ -d "$path" ] &&
+			{ echo "mnt: already mounted: $path"; exit 1; }
 		mkdir -pv "$path"
 		sshfs "$1" "$path"
 		;;
