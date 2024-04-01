@@ -68,5 +68,4 @@ shortcuts*
 !/.local/share/wallpapers
 !/.local/share/fzf
 /.local/share/fzf/*
-!/.local/share/zsh
 
