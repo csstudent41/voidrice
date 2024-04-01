@@ -15,6 +15,8 @@
 /.config/*
 !/.config/gh/config.yml
 
+shortcuts*
+
 !/.config/shell
 /.config/shell/*
 !/.config/shell/aliasrc

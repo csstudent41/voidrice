@@ -25701,7 +25701,6 @@ tasks="$(sed -n "/^### BEGIN TASKS$/,$ s/\(^[a-zA-Z0-9_]\+\)().*/\1/p" "$0")"\
 : 1711609813:0;sp -Rns vim
 : 1711609826:1;vi
 : 1711609836:9;run-help vi
-: 1711596096:1;edit-command ssha
 : 1711597111:0;sudo chown sftp-user:sftp-user Storage
 : 1711605756:0;cd .ssh
 : 1711605788:14;run-help ssh-keygen
@@ -26050,3 +26049,4 @@ tasks="$(sed -n "/^### BEGIN TASKS$/,$ s/\(^[a-zA-Z0-9_]\+\)().*/\1/p" "$0")"\
 : 1711982313:0;rm gowiki
 : 1711982316:0;rm wiki
 : 1711983105:0;tty
+: 1711982506:1264;edit-command ssha
