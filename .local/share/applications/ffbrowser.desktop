@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Firefox Wrapper
+GenericName=Web Browser Launcher
+Comment=Browse the World Wide Web
+Icon=firefox
+Exec=ffbrowser %u
+Categories=GNOME;GTK;Network;WebBrowser;
+Keywords=Internet;WWW;Browser;Web;Explorer;

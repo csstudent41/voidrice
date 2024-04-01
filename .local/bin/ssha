@@ -9,7 +9,10 @@ if [ "$msg" = 'Could not open a connection to authentication agent.' ] ||
 	ssh-agent -a "${SSH_AUTH_SOCK}" > /dev/null
 fi
 
-public_key="$(find ~/.ssh -name "${1}_id_*.pub")"
+remote=$1; shift
+host=${remote%%:*}
+path=${remote##*:}
+public_key="$(find ~/.ssh -name "${host}_id_*.pub")"
 private_key="${public_key%.pub}"
 content="$(cat "$public_key")"
 if [ "$msg" = "The agent has no identities." ] ||
@@ -17,4 +20,4 @@ if [ "$msg" = "The agent has no identities." ] ||
 	[ -e "$private_key" ] && ssh-add "$private_key" || ssh-add
 fi
 
-ssh "$@" -t "tmux attach -t $USER || tmux new -s $USER"
+ssh "$host" -t "cd \"$path\"; tmux attach -t $USER || tmux new -s $USER"

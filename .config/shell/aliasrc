@@ -24,7 +24,7 @@ sudoedit() {
 	if [ -x /bin/vim ] && [ ! -L /bin/vim ]; then
 		sudo vim -u ~/.vimrc "$@"
 	else
-		sudoedit "$@"
+		command sudoedit "$@"
 	fi
 }
 

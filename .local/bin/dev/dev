@@ -17,16 +17,21 @@ shift 2
 
 ### BEGIN TASKS
 
+c_compile() { make "${file%.c}"; }
+c_run() { "$(realpath "${file%.c}")" "$@"; }
 awk_run() { awk -f "$file" "$@"; }
 html_lint() { tidy -q "$file" >/dev/null; }
 html_run() { w3m "$file"; }
 js_test() { node "$file"; }
 md_run() { glow --pager --style dark "$file"; }
-php_run() { php "$file"; }
+php_run() { php "$file" "$@"; }
 sh_lint() { shellcheck -x "$file"; }
 sh_run() { $(sed -n '1s|^#!/.*/\(.*\)|\1|p' "$file") "$file" "$@"; }
 tex_compile() { pdflatex "$file"; }
-zsh_run() { zsh "$file"; }
+zsh_run() { zsh "$file" "$@"; }
+go_test() { go run "$file" "$@"; }
+go_compile() { go build "$file"; }
+go_run() { "$(realpath "${file%.go}")" "$@"; }
 
 c_test() {
 	out="${file%.c}"

@@ -11,11 +11,6 @@
 /.ssh/*
 !/.ssh/config
 
-!/.local
-/.local/*
-!/.local/bin
-/.local/bin/.st*
-
 !/.config
 /.config/*
 !/.config/gh/config.yml
@@ -59,3 +54,17 @@
 !/.config/keepassxc
 !/.config/zathura
 !/.config/Zeal
+
+!/.local
+/.local/*
+!/.local/bin
+/.local/bin/.st*
+
+!/.local/share
+/.local/share/*
+!/.local/share/applications
+!/.local/share/wallpapers
+!/.local/share/fzf
+/.local/share/fzf/*
+!/.local/share/zsh
+
