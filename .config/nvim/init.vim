@@ -39,7 +39,7 @@ set cursorline cursorcolumn
 set cc=80
 set scrolloff=5
 set splitbelow splitright
-set updatetime=500
+set updatetime=1000
 
 syntax on
 filetype plugin indent on
@@ -211,7 +211,7 @@ autocmd BufEnter * nmap <leader>T :w<CR>:se nornu<CR>:T dev test "%"<CR>
 autocmd BufEnter * imap <F5> <Esc>:w<CR>:se nornu<CR>:T dev test "%"<CR>
 
 nnoremap <leader>w :set wrap!<CR>
-nnoremap <leader>p :!opout "%:p"<CR>
+nnoremap <leader>fo :!opout "%:p"<CR>
 nnoremap <leader>F :Goyo<CR>
 nnoremap <leader>O :T mimeopen --ask %<CR>
 nnoremap <leader>ec :tabnew ~/.config/nvim/init.vim<CR>

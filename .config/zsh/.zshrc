@@ -81,39 +81,41 @@ HISTFILE="$HOME/.local/share/zsh/history"
 HISTSIZE=100000
 SAVEHIST=50000
 
-_ng_yargs_completions()
-{
-  local reply
-  local si=$IFS
-  IFS=$'
-' reply=($(COMP_CWORD="$((CURRENT-1))" COMP_LINE="$BUFFER" COMP_POINT="$CURSOR" ng --get-yargs-completions "${words[@]}"))
-  IFS=$si
-  _describe 'values' reply
-}
-compdef _ng_yargs_completions ng
+# Angular
+# _ng_yargs_completions()
+# {
+#   local reply
+#   local si=$IFS
+#   IFS=$'
+# ' reply=($(COMP_CWORD="$((CURRENT-1))" COMP_LINE="$BUFFER" COMP_POINT="$CURSOR" ng --get-yargs-completions "${words[@]}"))
+#   IFS=$si
+#   _describe 'values' reply
+# }
+# compdef _ng_yargs_completions ng
 
 
-export PREV_BUFFER="${ZCACHEDIR:=$HOME/.cache/zsh}/previous-command-buffer-$$.tmp"
+export BUFFER_CACHE="${ZCACHEDIR:=$HOME/.cache/zsh}/previous-command-buffer-$$.tmp"
 _exec-zsh() {
-	echo "$BUFFER" > "$PREV_BUFFER"
+	echo "$BUFFER" > "$BUFFER_CACHE"
 	BUFFER=' exec zsh'
 	zle accept-line
 }
 zle -N exec-zsh _exec-zsh
 bindkey '^[r' exec-zsh
 
-[ -f "$PREV_BUFFER" ] && {
-	[ -n "$TMUX_TMPDIR" ] || [ -z "$TERMUX_VERSION" ] && {
+[ -f "$BUFFER_CACHE" ] && {
+	[ -n "$TMUX" ] || [ -z "$TERMUX_VERSION" ] && {
 		sleep 0.1
-		if [ -n "$TMUX_TMPDIR" ]; then
-			tmux send-keys -l "$(cat "$PREV_BUFFER")"
+		if [ -n "$TMUX" ]; then
+			tmux send-keys -l "$(cat "$BUFFER_CACHE")"
 		else
 			xdotool type --window "$(xdotool getactivewindow)" \
-				"$(cat "$PREV_BUFFER")"
+				"$(cat "$BUFFER_CACHE")"
 		fi
-		rm -f "$PREV_BUFFER"
+		rm -f "$BUFFER_CACHE"
 	} & disown
 }
+
 
 _cd_path_history() {
 	FZF_ALT_C_COMMAND="cat ~/.local/share/cdhist" \
@@ -122,6 +124,7 @@ _cd_path_history() {
 }
 zle -N cd-path-history _cd_path_history
 bindkey '^[k' cd-path-history
+
 
 bindkey -s '^[o' '^[q lfcd^M'
 bindkey -s '^[j' '^[q lfcd "$(ff)"^M'
@@ -159,16 +162,17 @@ if (( ${+terminfo[smkx]} && ${+terminfo[rmkx]} )); then
 	add-zle-hook-widget -Uz zle-line-finish zle_application_mode_stop
 fi
 
+
+command -V xdotool >/dev/null &&
+	export XDOTOOL_WINDOW_ID="$(xdotool getactivewindow)"
+
 _command_fail_hook() {
-	case "$?" in
-		1)
-			if [ -n "$TMUX" ]; then
-				tmux send-keys C-p
-			else
-				xdotool key --window "$(xdotool getactivewindow)" ctrl+p
-			fi
-			;;
-	esac
+	[ $? != 1 ] && return
+	if [ -n "$TMUX" ]; then
+		tmux send-keys C-p
+	elif [ -n "$XDOTOOL_WINDOW_ID" ]; then
+		xdotool key --window "$XDOTOOL_WINDOW_ID" ctrl+p
+	fi
 }
 add-zsh-hook precmd _command_fail_hook
 
@@ -203,6 +207,7 @@ _get-help() {
 zle -N get-help _get-help
 bindkey '^[H' get-help
 
+
 source "$SDOTDIR/aliasrc"
 source "$SDOTDIR/shortcutrc"
 
@@ -233,27 +238,15 @@ alias mirrord='sudo reflector --latest 50 --number 20 --sort delay --save /etc/p
 alias cleanup='sudo pacman -Rns $(pacman -Qtdq)'
 alias fixpacman='sudo rm /var/lib/pacman/db.lck'
 alias gtypist="gtypist $GTYPIST_OPTS"
-alias typ='launch-gtypist "$(sed "/^gtypist lesson - \(.*\)$/!d; s//\1/" ~/Documents/Notes/QuickNote.md)"'
-alias typa='launch-gtypist -e 5 "$(sed "/^gtypist lesson - \(.*\)$/!d; s//\1/" ~/Documents/Notes/ak47.txt)"'
-alias uc='cd ~ && gitpush'
+alias typ='launch-gtypist -l "$(sed "/^gtypist lesson - \(.*\)$/!d; s//\1/" ~/Documents/Notes/QuickNote.md)"'
+alias typa='launch-gtypist -e 5 -l "$(sed "/^gtypist lesson - \(.*\)$/!d; s//\1/" ~/Documents/Notes/ak47.txt)"'
+alias uc='cd ~ && gitpush'  # update configs
 
 f() {
 	ret=$?
 	[ -n "$1" ] && { pacman -F "$@"; return; }
 	[ "$ret" != 127 ] && echo "Return code of last command is not 127" >&2 && return 2
 	pacman -F "$(fc -s 2>&1 | tail -1 | cut -d\  -f5-)"
-}
-
-fw() {
-	export FZF_HIST="$HOME/.local/share/fzf/wiki_history"
-	export FZF_HEADER="Search local wiki files"
-	export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --delimiter='/' --with-nth=-1"
-	fmd \
-		/mnt/Storage/Media/Tech/ \
-		/mnt/Storage/Library \
-		/usr/share/doc/arch-wiki/html/en \
-		/usr/share/doc/arduino \
-		"$@" ! -name '*.css'
 }
 
 # Execute functions with sudo

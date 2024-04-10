@@ -65,7 +65,7 @@ bindsym $super+F7 exec --no-startup-id sh -c 'find ~/.mozilla/firefox -maxdepth 
 bindsym $super+b exec --no-startup-id ffbrowser
 bindsym $super+c exec --no-startup-id edit-graphical-buffer
 bindsym $super+x exec --no-startup-id toggle-xeyes
-bindsym $super+i exec --no-startup-id sh -c 'xdotool type "$(grep -v "^#\|^\s*$" ~/Documents/Notes/bookmarks.txt| dmenu -i -l 50 | cut -d\  -f1)"'
+bindsym $super+i exec --no-startup-id sh -c 'xdotool type "$(grep -v "^#\|^\s*$" ~/Documents/Notes/bookmarks.txt | tac | dmenu -i -l 50 | cut -d\  -f1)"'
 bindsym $super+Shift+z exec --no-startup-id dmenu-zeal
 bindsym $super+Shift+b exec --no-startup-id open-xsel ffbrowser
 bindsym $super+comma exec --no-startup-id torbrowser open
@@ -111,8 +111,8 @@ bindsym $super+m bar mode toggle
 set $i3dmenu i3-dmenu-desktop --dmenu="dmenu -i"
 set $i3rofi  rofi -lines 12 -padding 18 -width 60 -location 0 -show drun -sidebar-mode -columns 3 -font 'Noto Sans 12'
 
-bindsym $super+Shift+d exec $i3dmenu
-bindsym $super+d exec dmenu_run
+bindsym $super+Shift+d exec --no-startup-id $i3dmenu
+bindsym $super+d exec --no-startup-id dmenu_run
 
 
 

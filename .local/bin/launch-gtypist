@@ -50,15 +50,17 @@ fi
 [ -n "$1" ] && current="$1" && shift
 [ "${current#*:}" != "$current" ] && lesson="${current%:*}" &&
 	exercise="${current##*:}" || lesson="$current"
-[ -n "$lesson" ] && msg "Gtypist lesson name: $lesson" &&
+[ -n "$lesson" ] && {
+	msg "Gtypist lesson name: $lesson"
 	export GTYPIST_OPTS="$GTYPIST_OPTS --start-label=$lesson"
+}
 
 tmuxx() { [ -z "$TMUX" ] && return 1; tmux "$@"; }
 
 
 shift_exercise() {
 	msg "Shifting to exercise $exercise"
-	sleep 0.5
+	sleep 1
 
 	keys() {
 		if [ -n "$TMUX" ]; then

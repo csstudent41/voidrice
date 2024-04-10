@@ -9,11 +9,6 @@ case "$1" in
 	*.ytd) yt-dlp --config "$@" --config ~/.config/yt-dlp/videos.conf ;;
 	*.ytp) yt-dlp --config "$@" --config ~/.config/yt-dlp/playlist.conf ;;
 	*.ytps) yt-dlp --config "$@" --config ~/.config/yt-dlp/sequenced-playlist.conf ;;
-
-	*.ytc)
-		mkdir -pv .info
-		yt-dlp --config "$@" --config ~/.config/yt-dlp/channel.conf
-		;;
-
+	*.ytc) mkdir -pv .info yt-dlp --config "$@" --config ~/.config/yt-dlp/channel.conf ;;
 	*) echo "ytf: $1: config file not understood"; exit 1 ;;
 esac

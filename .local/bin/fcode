@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# fzf-unicode: get a list of emojis or unicode charecters using fzf
+# place your charecter files in plain text in ~/.local/share/chars/*
+
+FZF_HIST="$HOME/.local/share/fzf/unicode_history"
+mkdir -pv ~/.local/share/fzf
+
+if [ "$OPENFLAG" = 0 ]; then
+	notify-send fzf-unicode "$*"
+	chosen="$(printf '%s\n' "$@" | cut -d\  -f1 | tr -d '\n')"
+	echo "$chosen" | xclip -selection clipboard
+	notify-send "'$chosen' copied to clipboard."
+	exit
+fi
+
+cut -d ';' -f1 ~/.local/share/chars/* |
+	fzf -m --history="$FZF_HIST" \
+		--header="Copy Emojis to Clipboard" --header-first \
+		--preview 'printf "%s\n" {+} | cut -d\  -f1 | tr -d "\n"' \
+		--preview-window=nohidden,up,1 \
+		--bind 'ctrl-/:change-preview-window(down|up)' \
+		--bind 'enter:execute(echo {q} >> $FZF_HIST; OPENFLAG=0 fzf-unicode {+})'

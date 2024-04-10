@@ -1,0 +1,158 @@
+#!/bin/sh
+
+help() { echo "fzf-pm - fzf package manager
+
+USAGE:
+	fzf-pkgs [OPTION]... [QUERY]
+
+OPTIONS:
+	-g  list global [all] packages
+	-l  list local [instllaed] packages (default)
+	-i  select and install packages (implies -g)
+	-u  select and uninstall packages (implies -l)
+	-v  show verbose output
+	-h  show this help message
+
+	(for Arch linux only)
+	-a AUR_HELPER  specify command for AUR helper
+
+	(special options)
+	-s PACKAGE     print package info
+	-p             print package manager
+
+	Note: passing global (-g) or local (-l) pkg list will cancel
+	any install (-i) or uninstall (-u) operations started previously.
+
+ENVIRONMENT VARIABLES:
+	AUR_HELPER    set an AUR helper command for Arch linux
+
+Following package managers are supported:
+	apt, pkg, pacman and any pacman compatible AUR helper
+
+QUERY is mandatory when using an AUR Helper" ;}
+
+while getopts 's:gliuvha:p' o; do case "$o" in
+  s) sflag=0; pkg="$OPTARG" ;;
+  g) operation=""; opmsg=""; list_all=0 ;;
+  l) operation=""; opmsg=""; list_all=1 ;;
+  i) operation="install_pkgs"; opmsg="to Install"; list_all=0 ;;
+  u) operation="uninstall_pkgs"; opmsg="to Uninstall"; list_all=1 ;;
+	v) vflag=0 ;;
+  h) help; exit ;;
+  a) export AUR_HELPER="$OPTARG" ;;
+	p) pflag=0 ;;
+  *) printf "fzf-pkgs: invalid option -- '%s'"  "$OPTARG"; exit 1 ;;
+esac done
+shift $((OPTIND - 1))
+
+msg() { [ "$vflag" = 0 ] && printf ':: %s\n' "$@" >&2; true; }
+
+msg "Determining package manager..."
+if command -v apt-get >> /dev/null; then
+	alias pkg_sort='sed -e "s/ - / => /"'
+
+  if [ "$list_all" = 0 ]; then
+    export pkg_info='apt-cache show'
+    alias list_pkgs='apt-cache search .'
+    alias search_pkg='apt-cache search'
+  else
+    export DPKG_COLOR='always'
+    export pkg_info='dpkg-query --status'
+    format='${Package} - ${Description}\n'
+    alias list_pkgs='dpkg-query --show --showformat "$format"'
+    alias search_pkg='dpkg-query --show --showformat "$format" | grep'
+  fi
+
+	if command -v pkg >> /dev/null; then
+		export PKGMAN="pkg"
+		alias install_pkgs='pkg install'
+		alias uninstall_pkgs='pkg uninstall'
+	else
+		export PKGMAN="apt"
+		alias install_pkgs='sudo apt-get update && sudo apt-get install'
+		alias uninstall_pkgs='sudo apt-get remove'
+	fi
+
+elif command -v pacman >> /dev/null; then
+	alias pkg_sort='sed -e "N;s/\n\s*/ => /"'
+
+  if [ -n "$AUR_HELPER" ]; then
+    export PKGMAN="$AUR_HELPER"
+    if command -v "$PKGMAN" >/dev/null; then
+      alias install_pkgs='$PKGMAN -Syu'
+      alias uninstall_pkgs='$PKGMAN -Rns'
+    else
+      echo "fzf-pkgs: AUR Helper '$PKGMAN' command not found" >&2 &&
+      exit 1
+    fi
+  else
+    export PKGMAN='pacman'
+    alias install_pkgs='sudo $PKGMAN -S'
+    alias uninstall_pkgs='sudo $PKGMAN -Rns'
+  fi
+
+  if [ "$list_all" = 0 ]; then
+    export pkg_info="$PKGMAN --color=always -Si"
+    alias list_pkgs='$PKGMAN --color=always -Ss'
+    alias search_pkg='$PKGMAN --color=always -Ss'
+  else
+    export pkg_info="$PKGMAN --color=always -Qi"
+    alias list_pkgs='$PKGMAN --color=always -Qs'
+    alias search_pkg='$PKGMAN --color=always -Qs'
+  fi
+
+else
+	echo "fzf-pkgs: package manager not found" >&2
+	exit 1
+fi
+
+msg "Using '$PKGMAN'"
+
+if [ "$pflag" = 0 ]; then
+	msg "Printing package manager"
+	printf "%s\n" "$PKGMAN"
+	exit
+elif [ "$sflag" = 0 ]; then
+	msg "Printing package info for $pkg"
+	printf "$ %s '%s'\n" "$pkg_info" "$pkg"
+	$pkg_info $pkg
+	exit
+fi
+
+query="$1"
+if [ -n "$AUR_HELPER" ] && [ -z "$query" ] && [ "$list_all" = 0 ]; then
+	echo "fzf-pkgs: providing QUERY is mandatory when using an AUR Helper"
+	exit 1
+	# printf "query: "; read -r query
+	# [ -z "$query" ] && exit 1
+fi
+
+if [ -n "$query" ]; then
+	prompt="searching '$query' "
+	get_pkgs() { msg "Searching packages"; search_pkg "$query"; }
+else
+	get_pkgs() { msg "Listing packages"; list_pkgs; }
+fi
+
+[ -z "$FZF_HIST_DIR" ] && export FZF_HIST_DIR="$HOME/.local/share/fzf"
+fzff() {
+	msg "Starting fzf"
+	preview='
+		echo "selected packages:";
+		printf "\t%s\n" {+1} | tr " " "\n"
+		echo
+		eval "$pkg_info 2>/dev/null" {1} |
+		fold -sw $FZF_PREVIEW_COLUMNS;
+		'
+	fzf --ansi --multi \
+		--history="${FZF_HIST_DIR:-$HOME/.local/share}/package_history" \
+		--header="Select packages $opmsg" --header-first --prompt="$prompt> " \
+		--preview="$preview" --preview-window="hidden" --tiebreak='begin' \
+		--bind 'ctrl-v:toggle-preview,ctrl-space:toggle-preview'
+}
+
+pkgs="$(get_pkgs | pkg_sort | fzff | cut -d' ' -f1 | tr '\n' ' ')"
+[ -z "$pkgs" ] && msg "No package selected, exiting..." >&2 && exit 2
+echo "$pkgs"
+[ -n "$operation" ] && eval $operation $pkgs
+
