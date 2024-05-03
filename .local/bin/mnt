@@ -1,21 +1,26 @@
 #!/bin/sh
 
-MOUNTPOINT="/run/media/$USER"
-sudo mkdir -pv "$MOUNTPOINT"
+sudo mkdir -pv "${MOUNTPOINT:=/run/media/$USER}"
 sudo chown "$USER:$USER" "$MOUNTPOINT"
+
+makepath() {
+	[ -d "$path" ] && { rmdir "$path" || exit; }
+	mkdir -pv "$path"
+}
 
 case "$1" in
 
+	mtp:*)
+		path="$MOUNTPOINT/${1#mtp:}"
+		makepath
+		simple-mtpfs "$path"
+		;;
+
 	*:|*:/*)
 		path="$MOUNTPOINT/${1%%:*}"
-		[ -d "$path" ] &&
-			{ echo "mnt: already mounted: $path"; exit 1; }
-		mkdir -pv "$path"
+		makepath
 		sshfs "$1" "$path"
 		;;
 
-	*)
-		udisksctl mount -b "$1"
-		;;
-
+	*) udisksctl mount -b "$1" ;;
 esac

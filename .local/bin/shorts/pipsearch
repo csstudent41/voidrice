@@ -1,0 +1,4 @@
+#!/bin/sh
+
+{ sleep 1 && tmux send-keys /search\ results Enter; } &
+tmux new w3m "http://pypi.org/search?q=$*"

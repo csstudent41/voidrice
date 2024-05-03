@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Browser
+GenericName=Web Browser
+Icon=browser
+Exec=dmenu-choose %u
+Actions=new-window;new-private-window;
+Categories=Network;WebBrowser;
+Keywords=Internet;WWW;Browser;Web;Explorer;
+StartupNotify=true

@@ -1,3 +1,0 @@
-#!/bin/sh
-
-mediainfo "$1" | sed -n 's|Description\s*: \(.*\)|\1|p' | sed 's| / |\n|g'

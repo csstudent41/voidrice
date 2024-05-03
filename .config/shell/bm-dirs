@@ -16,6 +16,9 @@ rp	~/repos
 ap	~/Applications
 ad	~/Arduino
 dv	~/Dev
+cs	~/Dev/csstudent41.github.io
+cn	~/Dev/csstudent41.github.io/content
+pb	~/Dev/csstudent41.github.io/public
 td	~/Dev/test
 gd	~/GDrive/vartak/CS
 gf	~/GDrive/vartak/CS/practical-files/sem4

@@ -1,7 +1,0 @@
-#!/bin/sh
-
-cd ~/GDrive/Vartak\ BSc.\ CS/pracs || exit
-export GIT_SSH_COMMAND='ssh -i ~/.ssh/labstudent41_id_ed25519'
-git add --all
-git commit
-git push -u origin master

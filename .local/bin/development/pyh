@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# python-help: get help for keywords in python
+
+[ -x ~/Applications/virtualenvs/main/bin/python ] &&
+	alias python=~/Applications/virtualenvs/main/bin/python
+
+if [ "$#" -gt 0 ]; then
+	python -c "help('$*')"
+else
+	python -c "help()"
+fi

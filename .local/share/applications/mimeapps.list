@@ -1,0 +1,30 @@
+[Default Applications]
+application/octet-stream=mousepad.desktop
+application/pdf=qpdfview.desktop
+application/pdf=qpdfview.desktop
+application/x-gettext-translation=mousepad.desktop
+application/xml=mousepad.desktop
+application/x-wine-extension-ini=mousepad.desktop
+image/gif=viewnior.desktop;gimp.desktop
+image/gif=viewnior.desktop;gimp.desktop
+image/jpeg=org.xfce.ristretto.desktop
+image/png=org.xfce.ristretto.desktop
+text/plain=notepadqq.desktop
+video/mp4=vlc.desktop
+video/ogg=vlc.desktop
+video/x-flv=vlc.desktop
+video/x-ms-wmv=vlc.desktop
+video/x-ogm+ogg=vlc.desktop
+video/x-theora+ogg=vlc.desktop
+inode/directory=thunar.desktop
+x-scheme-handler/http=firefox.desktop
+x-scheme-handler/https=firefox.desktop
+x-scheme-handler/etcher=balena-etcher-electron.desktop
+text/html=firefox.desktop
+x-scheme-handler/about=firefox.desktop
+x-scheme-handler/unknown=firefox.desktop
+
+[Added Associations]
+text/plain=org.xfce.mousepad.desktop;
+application/octet-stream=org.xfce.mousepad.desktop;
+image/png=feh.desktop;sxiv.desktop;

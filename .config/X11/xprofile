@@ -13,4 +13,10 @@ if ! pidof -q copyq; then
 	{ remap -x; remap; } &
 fi
 
+if [ "$(cat /sys/class/power_supply/ACAD/online)" = 0 ]; then
+	brightnessctl set 5%
+else
+	brightnessctl set 20%
+fi
+
 setdp

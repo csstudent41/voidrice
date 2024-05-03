@@ -1,5 +1,0 @@
-#!/bin/sh
-
-mediainfo "$1" |
-	grep "^Comment\s*: " | cut -d: -f2- |
-	sed -E "s|\S*youtube\S*/(.*)|https://yewtu.be/\1\&nojs=1|"

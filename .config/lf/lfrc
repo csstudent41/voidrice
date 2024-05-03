@@ -98,7 +98,7 @@ map M select_eval fmd
 map D delete
 map W $setsid -f $TERMINAL >/dev/null 2>&1
 map X !$f
-map T !tst $f
+map T !dev test $f
 map B $vidir
 map b $setbg $f
 map V push :!nvim<space>""<c-b>
