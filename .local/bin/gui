@@ -36,7 +36,7 @@ WORKING:
 	     start multi-user.target
 
 	Note: This script is an hack and not a principle solution.
-	      So use it with your own care.
+	      Use it with your own responsibility.
 "; }
 
 err() { printf 'gui: %s\n' "$@" >&2; exit 1; }

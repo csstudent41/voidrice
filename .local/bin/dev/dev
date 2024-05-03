@@ -10,6 +10,7 @@ action="$1"
 file="$2"
 basename="${file##*/}"
 file_ext="${basename##*.}"
+task="${file_ext}_${action}"
 shift 2
 
 [ -e "$file" ] || err "$file: No such file or directory"
@@ -17,16 +18,22 @@ shift 2
 
 ### BEGIN TASKS
 
+c_compile() { make "${file%.c}"; }
+c_run() { "$(realpath "${file%.c}")" "$@"; }
 awk_run() { awk -f "$file" "$@"; }
 html_lint() { tidy -q "$file" >/dev/null; }
 html_run() { w3m "$file"; }
 js_test() { node "$file"; }
 md_run() { glow --pager --style dark "$file"; }
-php_run() { php "$file"; }
+php_run() { php "$file" "$@"; }
 sh_lint() { shellcheck -x "$file"; }
 sh_run() { $(sed -n '1s|^#!/.*/\(.*\)|\1|p' "$file") "$file" "$@"; }
 tex_compile() { pdflatex "$file"; }
-zsh_run() { zsh "$file"; }
+zsh_run() { zsh "$file" "$@"; }
+go_format() { gofmt -w "$file"; }
+go_lint() { gofmt -d "$file"; }
+go_compile() { go build "$file"; }
+go_run() { "$(realpath "${file%.go}")" "$@"; }
 
 c_test() {
 	out="${file%.c}"
@@ -109,19 +116,21 @@ tasks="$(sed -n "/^### BEGIN TASKS$/,/^### END TASKS$/ s/\(^[a-zA-Z0-9_]\+\)().*
 # calling this script. Avoid creating additional intermediate subprocesses.
 
 if [ "$action" = test ]; then
+	[ "${tasks#*"[$task]"}" != "$tasks" ] && { $task; exit; }
+
 	for act in lint compile run; do
-		DEV_SUPRESS_ERRORS=1 dev "$act" "$file"
-		ret=$?
+		DEV_SUPRESS_ERRORS=1 dev "$act" "$file"; ret=$?
 		[ "$ret" != 5 ] && {
-			[ "$ret" != 0 ] && printf "\nshell returned %s\n\n" "$ret"
 			tasked=1
+			[ "$ret" != 0 ] &&
+				{ printf "\nshell returned %s\n\n" "$ret"; break; }
 		}
 	done
+
 	[ "$tasked" != 1 ] && err "no tests for .$file_ext file"
 	exit 0
 fi
 
-task="${file_ext}_${action}"
 if [ "${basename#*.}" = "${basename}" ] || [ "${tasks#*"[$task]"}" = "$tasks" ]; then
 	filetype=$(file --brief --mime-type "$file")
 	case $filetype in
@@ -140,4 +149,4 @@ if [ "${basename#*.}" = "${basename}" ] || [ "${tasks#*"[$task]"}" = "$tasks" ];
 			err "no $action action for $filetype"
 fi
 
-$task "$file" "$@"
+$task
