@@ -7,7 +7,7 @@ Host blue
 	Hostname blue
 	Port 8022
 	User u0_a268
-	IdentityFile ~/.ssh/blue_id_rsa
+	IdentityFile ~/.ssh/blue_id_ed25519
 
 Host tab
 	Hostname tab
