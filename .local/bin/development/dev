@@ -21,6 +21,7 @@ shift 2
 c_compile() { make "${file%.c}"; }
 c_run() { "$(realpath "${file%.c}")" "$@"; }
 awk_run() { awk -f "$file" "$@"; }
+pl_run() { perl "$file" "$@"; }
 html_lint() { tidy -q "$file" >/dev/null; }
 html_run() { w3m "$file"; }
 js_test() { node "$file"; }

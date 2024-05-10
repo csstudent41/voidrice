@@ -12,20 +12,20 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'ptzz/lf.vim'
 Plug 'voldikss/vim-floaterm'
-Plug 'KabbAmine/zeavim.vim'  ",     {'on': ['Zeavim', 'ZeavimV', 'ZVVisSelection', 'ZVOperator', 'ZVKeyDocset']}
-Plug 'neoclide/coc.nvim',        {'on': ['CocList', 'CocConfig'], 'branch': 'release'}
-Plug 'ap/vim-css-color'  " color code highlighting
-Plug 'xuhdev/vim-latex-live-preview', {'for': 'tex'}
-Plug 'machakann/vim-verdin',     {'for': 'vim'}
-Plug 'puremourning/vimspector',   {'for': 'python'}
+" Plug 'KabbAmine/zeavim.vim'  ",     {'on': ['Zeavim', 'ZeavimV', 'ZVVisSelection', 'ZVOperator', 'ZVKeyDocset']}
+" Plug 'neoclide/coc.nvim',        {'on': ['CocList', 'CocConfig'], 'branch': 'release'}
+" Plug 'ap/vim-css-color'  " color code highlighting
+" Plug 'xuhdev/vim-latex-live-preview', {'for': 'tex'}
+" Plug 'machakann/vim-verdin',     {'for': 'vim'}
+" Plug 'puremourning/vimspector',   {'for': 'python'}
 " Plug 'powerman/vim-plugin-AnsiEsc'
 " Plug 'junegunn/goyo.vim',        {'on': 'Goyo'}
 " Plug 'jreybert/vimagit'
 " Plug 'lukesmithxyz/vimling'
 " Plug 'vimwiki/vimwiki'
-Plug 'vim-airline/vim-airline',  {'on': 'AirlineTheme'}
-Plug 'vim-airline/vim-airline-themes',   {'on': 'AirlineTheme'}
-Plug 'joshdick/onedark.vim'
+" Plug 'vim-airline/vim-airline',  {'on': 'AirlineTheme'}
+" Plug 'vim-airline/vim-airline-themes',   {'on': 'AirlineTheme'}
+" Plug 'joshdick/onedark.vim'
 call plug#end()
 
 let g:Verdin#autocomplete = 1
@@ -164,7 +164,7 @@ if exists('+termguicolors') && filereadable(system('echo -n "${XDG_CONFIG_HOME:-
   let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
   set termguicolors noshowmode
 	colorscheme onedark
-	autocmd VimEnter * AirlineTheme
+	" autocmd VimEnter * AirlineTheme
 endif
 
 if !exists('g:lasttab')
