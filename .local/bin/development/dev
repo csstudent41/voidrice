@@ -16,10 +16,11 @@ shift 2
 
 ### BEGIN TASKS
 
-awk_run() { awk -f "$file" "$@"; }
 sh_lint() { shellcheck -x "$file"; }
 sh_run() { $(sed -n '1s|^#!/.*/\(.*\)|\1|p' "$file") "$file" "$@"; }
 zsh_run() { zsh "$file" "$@"; }
+awk_run() { awk -f "$file" "$@"; }
+pl_run() { perl "$file" "$@"; }
 
 md_run() { glow --pager --style dark "$file"; }
 tex_compile() { pdflatex "$file"; }

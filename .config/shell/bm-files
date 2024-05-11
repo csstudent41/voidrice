@@ -9,7 +9,7 @@ xp	~/.xprofile
 zp	~/.zprofile
 gi	~/.gitignore
 zc	${XDG_CONFIG_HOME:-$HOME/.config}/zsh/.zshrc
-zh	${XDG_CONFIG_HOME:-$HOME/.config}/history
+zh	${XDG_CONFIG_HOME:-$HOME/.config}/zsh/history
 za	${XDG_CONFIG_HOME:-$HOME/.config}/shell/aliasrc
 arc	${XDG_CONFIG_HOME:-$HOME/.config}/shell/aliasrc
 lc	${XDG_CONFIG_HOME:-$HOME/.config}/lf/lfrc

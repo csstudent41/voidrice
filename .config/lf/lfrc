@@ -67,9 +67,23 @@ cmd link_index %{{
 
 cmd select_eval ${{
 	res="$(eval "$@")"
-  [ -d "$res" ] &&
+	[ -d "$res" ] &&
 		lf -remote "send $id cd \"$res\"" ||
 		lf -remote "send $id select \"$res\""
+}}
+
+cmd link %{{
+    set -- $(cat ~/.local/share/lf/files)
+    mode="$1"
+    shift
+    [ "$#" -lt 1 ] &&
+	{ lf -remote "send $id echo no files to link"; exit 0; }
+    case "$mode" in
+        copy) ln -sr -t . -- "$@";;
+        move) ln -t . -- "$@";;
+    esac
+    rm ~/.local/share/lf/files
+    lf -remote "send clear"
 }}
 
 # Basic Functions
@@ -108,7 +122,7 @@ map X !$f
 map T !dev test $f
 map b $vidir
 map V push :!nvim<space>""<c-b>
-map P $${PAGER:-less -r} "$f"
+map P :link
 
 map ge extract $f
 map gl clear

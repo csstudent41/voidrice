@@ -40,7 +40,7 @@ interval=1
 
 [wifi]
 # command=echo "📡 $(i3wifi wlp0s20f3)"
-command=i3wifi wlp0s20f3
+command=i3wifi wlp0s20f0u9
 interval=1
 
 [battery]

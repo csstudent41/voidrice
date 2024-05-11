@@ -1,0 +1,139 @@
+#!/bin/sh
+
+help() {
+	echo "gui - manage GUI, start when no options are passed
+
+USAGE:
+	gui [OPTION]...
+
+OPTIONS:
+	-e  execute any pending startup actions now
+	-s  show GUI status and pending startup actions
+	-x  exit GUI
+	-l  lock tty after starting gui
+	-h  show this help message
+
+	Set system startup actions:
+	-g MODE      set nvidia GPU MODE (uses optimus-manager)
+	-t TARGET    set system run level TARGET
+
+MODES:
+	integrated, nvidia, hybrid
+
+TARGETS:
+	Examples: multi-user.target, graphical.target
+	run \`systemctl list-targets --type target\` to get a full list.
+
+CONFIGURATIONS:
+	For this script to work, put \`gui -e\` in ~/.xprofile file
+
+WORKING:
+	When starting GUI,
+	     switch to nvidia graphics
+	     start graphical.target
+	When stopping GUI,
+	     switch to integrated graphics
+	     start multi-user.target
+
+	Note: This script is an hack and not a principle solution.
+	      Use it with your own responsibility.
+"; }
+
+err() { printf 'gui: %s\n' "$@" >&2; exit 1; }
+
+while getopts 'lesxg:t:h' o; do case "$o" in
+	l) lflag=0 ;;
+	e) eflag=0 ;;
+	s) sflag=0 ;;
+	x) xflag=0 ;;
+	g) gflag=0; newmode="$OPTARG" ;;
+	t) tflag=0; newtarget="$OPTARG" ;;
+	h) help >&2; exit ;;
+	*) err "invalid option -- '$OPTARG'" ;;
+esac done
+shift $((OPTIND - 1))
+
+gui_is_active() { systemctl --quiet is-active display-manager.service; }
+switch_target() {
+	switch_vt() { [ "${1%.target}" = "multi-user" ] && sudo chvt 3; }
+	switch_vt "$1"
+	sudo systemctl isolate "$1"
+	switch_vt "$1"
+}
+switch_mode() {
+	out="$(optimus-manager --print-mode)"
+	mode="$(echo "$out" | sed 's/^Current GPU mode : \(.*\)$/\1/')"
+	[ -z "$mode" ] && err "$out"
+	[ "$mode" != "$1" ] && optimus-manager --no-confirm --switch "$1"
+}
+
+halt_startup_file="$HOME/.cache/halt_startup"
+newmode_file="$HOME/.cache/switch_to_mode"
+newtarget_file="$HOME/.cache/switch_to_target"
+[ -n "$newmode" ] && echo "$newmode" > "$newmode_file"
+[ -n "$newtarget" ] && echo "$newtarget" > "$newtarget_file"
+
+if [ "$sflag" = 0 ]; then
+	gui_is_active && echo "GUI is active" || echo "GUI is inactive"
+	echo; optimus-manager --print-mode; echo
+	[ -f "$newmode_file" ] && newm=0
+	[ -f "$newtarget_file" ] && newt=0
+	[ -z "$newm" ] && [ -z "$newt" ] &&
+		echo "No pending startup actions" && exit 0
+	[ -n "$newm" ] &&
+		echo "Pending: switch gpu mode to $(cat "$newmode_file")"
+	[ -n "$newt" ] &&
+		echo "Pending: switch run level to $(cat "$newtarget_file")"
+	exit 1
+fi
+
+
+if [ "$eflag" = 0 ]; then
+	if [ -f "$halt_startup_file" ]; then
+		rm "$halt_startup_file"
+		notify-send "$(cat "$halt_startup_file")"
+		xtrlock & sleep 10
+		notify-send "Seems like a failure" \
+			"10 seconds have been passed and the last change did not happened"
+	fi
+	if [ -f "$newmode_file" ]; then
+		nextmode="$(cat "$newmode_file")"
+		rm "$newmode_file"
+		switch_mode "$nextmode"
+	fi
+	if [ -f "$newtarget_file" ]; then
+		nexttarget="$(cat "$newtarget_file")"
+		rm "$newtarget_file"
+		switch_target "$nexttarget"
+	fi
+	return
+fi
+
+
+[ "$gflag" = 0 ] || [ "$tflag" = 0 ] && exit
+
+if [ "$xflag" = 0 ]; then
+	gui_is_active || err "GUI is not running"
+	echo "multi-user.target" > "$newtarget_file"
+	switch_mode integrated
+	sudo systemctl restart display-manager.service
+	rm "$newtarget_file"
+	switch_target multi-user.target
+	exit
+fi
+
+gui_is_active && err "Gui is already active"
+echo "Switching to 'nvidia' graphics" > "$halt_startup_file"
+switch_target graphical.target
+for i in $(seq 100); do pidof -q xtrlock && break; sleep 0.1; done
+switch_mode nvidia
+sudo systemctl restart display-manager.service
+
+if [ "$lflag" = 0 ]; then
+	case "$TERM" in
+		linux*) vlock -a ;;
+		tmux*) tmux lock-server ;;
+		*) err "no lock command for TERM: $TERM" ;;
+	esac
+fi
+
