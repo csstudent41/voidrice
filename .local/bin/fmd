@@ -4,7 +4,7 @@
 # Useful when you want to look through a list of video without having to
 # bother with their individual supplementary files like subtitles.
 
-[ -z "$PREVIEW" ] && export PREVIEW='cat "$(dirname {})/.description/${$(basename {})%.*}.txt" 2>/dev/null || preview {}'
+export PREVIEW="${PREVIEW:-"cat \"\$(dirname {})/.description/\${\$(basename {})%.*}.txt\" 2>/dev/null || preview {}"}"
 
 find "$@" -type f \
 		! -path '*/.*' \
@@ -20,7 +20,7 @@ find "$@" -type f \
 		--history="${FZF_HIST:-$HOME/.local/share/fzf/media_history}" \
 		--header="${FZF_HEADER:-Browse Media Files}" --header-first \
 		--preview="$PREVIEW" --preview-window=hidden \
-		--bind 'alt-C:execute( ffbrowser "$(mediainfo --inform="General;%Comment%" "Weather in the Terminal.mkv")" )' \
+		--bind 'alt-C:execute( ffbrowser "$(mediainfo --inform="General;%Comment%" {})" )' \
 		--bind 'ctrl-o:execute(echo {q} >> "$FZF_HIST"; ${OPENER:-xdg-open} {})' \
-		--bind 'alt-3:change-preview($PREVIEW)' \
+		--bind "alt-3:change-preview($PREVIEW)" \
 		--bind 'alt-#:execute($PREVIEW | less)'

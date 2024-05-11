@@ -18,7 +18,8 @@ case "$1" in
 	# *.vim) highlight --syntax=vim --replace-tabs=2 -- "$1" ;;
 	*.js|*.vim|*.lua) highlight -- "$1" ;;
 	*.txt|*.description|*.srt) cat -- "$1" ;;
-	*.png|*.jpg|*.jpeg|*.webp|*.mp3|*.mp4|*.mkv|*.webm) mediainfo -- "$1" ;;
+	*.png|*.jpg|*.jpeg|*.webp|*.mp3|*.ogg|*.mp4|*.mkv|*.webm) mediainfo -- "$1" ;;
+	*.info.json) jq -C . "$1" ;;
 	*.json|*.ipynb) highlight --syntax=json -- "$1" ;;
 	*.tgz|*.tar.gz) tar tzf "$1" ;;
 	*.tar.bz2|*.tbz2) tar tjf "$1" ;;

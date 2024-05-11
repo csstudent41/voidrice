@@ -1,3 +1,0 @@
-#!/bin/sh
-
-yt-dlp "$@" --config ~/.config/yt-dlp/videos.conf

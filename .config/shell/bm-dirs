@@ -1,13 +1,13 @@
 # You can add comments to these files with #
-cac	~/.cache
-cg	~/.config
-lsh	~/.local/share
-dn	~/Downloads
-dx	~/Documents
-nt	~/Documents/Notes
-ms	~/Music
-px	~/Pictures
-vd	~/Videos
+cac	${XDG_CACHE_HOME:-$HOME/.cache}
+cg	${XDG_CONFIG_HOME:-$HOME/.config}
+lsh	${XDG_DATA_DIR:-$HOME/.local/share}
+dn	${XDG_DOWNLOAD_DIR:-$HOME/Downloads}
+dx	${XDG_DOCUMENTS_DIR:-$HOME/Documents}
+nt	${XDG_DOCUMENTS_DIR:-$HOME/Documents}/Notes
+ms	${XDG_MUSIC_DIR:-$HOME/Music}
+px	${XDG_PICTURES_DIR:-$HOME/Pictures}
+vd	${XDG_VIDEOS_DIR:-$HOME/Videos}
 
 lb	~/.local/bin
 bn	~/bin
@@ -17,8 +17,9 @@ ap	~/Applications
 ad	~/Arduino
 dv	~/Dev
 cs	~/Dev/csstudent41.github.io
-cn	~/Dev/csstudent41.github.io/content
-pb	~/Dev/csstudent41.github.io/public
+csc	~/Dev/csstudent41.github.io/content
+csl	~/Dev/csstudent41.github.io/layouts
+csp	~/Dev/csstudent41.github.io/public
 td	~/Dev/test
 gd	~/GDrive/vartak/CS
 gf	~/GDrive/vartak/CS/practical-files/sem4

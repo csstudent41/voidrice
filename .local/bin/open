@@ -1,4 +1,4 @@
-#!/bin/sh -x
+#!/bin/sh
 
 [ -z "$1" ] && echo "USAGE: open <FILE>" >&2 && exit 1
 
@@ -20,21 +20,25 @@ for file in "$@"; do
 		*)
 			filetype="$(file --dereference --brief --mime-type "$file")"
 			case "$filetype" in
-				*directory) ${FILES:-lf} "$file" ;;
+				inode/directory) ${FILES:-lf} "$file" ; exit ;;
 				text/html*) ${BROWSER:-w3m} "$file" ;;
-				text/*|application/json|application/zip) LESSOPEN="|preview %s" less -r "$file" ;;
+				text/*|application/json|application/zip) "${EDITOR:-nvim}" "$file" ;;
+				# text/*|application/json|application/zip) LESSOPEN="|preview %s" less -r "$file" ;;
 				application/sc) sc-im "$file" ;;
 				*pdf|*djvu|*epub+zip|*oxps|*fictionbook) setsid -f zathura "$file" ;;
 				image/*) setsid -f nsxiv "$file" ;;
 				video/*|audio/*) ${PLAYER:- setsid -f mpv --sub-auto=fuzzy} "$file" ;;
 				*)
-					if xdg-open "$file"; then
-						[ -n "$DISPLAY" ] && notify-send "⚠️ open: unknown filetype" "$filetype"
-						echo "open: unknown filetype: $filetype" >&2
-					fi
+					xdg-open "$file" || exit
+					[ -n "$DISPLAY" ] && notify-send "⚠️ open: unknown filetype" "$filetype"
+					echo "open: unknown filetype: $filetype" >&2
 					;;
 			esac
 			;;
 
 	esac
+
+	file="$(realpath "$file")"
+	sed -i "\|^$file$|d" ~/.local/share/openhist
+	echo "$file" >> ~/.local/share/openhist
 done

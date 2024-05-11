@@ -53,8 +53,11 @@ autocmd BufWritePre  * %s/\s\+$//e
 au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
 
 autocmd BufWritePost */Documents/Notes/*.md silent !pandoc % -o "$HOME/Documents/Notes/.out/$(basename % .md).html"
+autocmd BufWritePost */Documents/latex/resume/resume.tex !cd "%:h"; pdflatex resume.tex; cp -v resume.pdf ~/Dev/csstudent41.github.io/static/dox/
 autocmd BufWritePost .Xresources silent !xrdb "%"
 autocmd BufRead,BufNewFile *.yt* set filetype=conf
+
+autocmd BufNewFile *.c :0r ~/.config/nvim/templates/default.c
 
 autocmd TermOpen * startinsert
 command! -nargs=* T  split  | terminal <args>
@@ -191,6 +194,7 @@ nnoremap c "_c
 inoremap jk <Esc>
 " map ;n /<++><Enter>c4l
 imap ;n <Esc>/<++><Enter>c4l
+nmap <leader>n /<++><Enter>c4l
 
 autocmd FileType html,markdown inoremap ;s ><Esc>bi<<Esc>ea
 autocmd FileType html,markdown inoremap ;c ><Esc>bi</<Esc>ea
@@ -203,8 +207,9 @@ autocmd FileType html,markdown inoremap ;aa <a href=""><CR><++><CR></a><CR><++><
 nnoremap <leader>fl :w<CR>:!dev lint "%"<CR>
 nnoremap <leader>fm :w<CR>:!dev format "%"<CR>
 nnoremap <leader>fc :w<CR>:!dev compile "%"<CR>
-nnoremap <leader>fr :w<CR>:!dev run "%"<CR>
+nnoremap <leader>fe :w<CR>:!dev run "%"<CR>
 nnoremap <leader>ft :w<CR>:!dev test "%"<CR>
+nnoremap <leader>fr :w<CR>:!dev clean "%"<CR>
 
 autocmd BufEnter * nmap <leader>t :w<CR>:se nornu<CR>:!dev test "%"<CR>:se rnu<CR>
 autocmd BufEnter * nmap <leader>T :w<CR>:se nornu<CR>:T dev test "%"<CR>
