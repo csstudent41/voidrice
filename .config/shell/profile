@@ -1,3 +1,5 @@
+#!/bin/sh
+
 export OPENER="open"
 export EDITOR="nvim"
 export BROWSER="w3m"
@@ -29,11 +31,11 @@ export LESSOPEN='|lessopen.sh %s'
 export SDCV_PAGER='less -R --quit-if-one-screen'
 export HTTP_HOME='www.duckduckgo.com'
 export CHROME_EXECUTABLE='chromium'
-export FZF_ALT_C_COMMAND='find -L . -type d ! -wholename "*.git*" -printf "%p/\n"'
 export FZF_DEFAULT_COMMAND="find -L . ! -wholename '*.git*' \( -type d -printf '%p/\n' , ! -type d -print \)"
 export FZF_DEFAULT_OPTS="
-	--history='${XDG_DATA_HOME:-$XDG_DATA_HOME}/fzf/history'
+	--history='$XDG_DATA_HOME/fzf/history'
 	--preview='\$PREVIEWER {}' --preview-window=hidden
+	--bind 'ctrl-s:toggle-sort'
 	--bind 'ctrl-y:execute-silent(printf \"%s\\\n\" {+} | xsel --clipboard)'
 	--bind 'ctrl-v:toggle-preview,ctrl-space:toggle-preview'
 	--bind 'alt-space:toggle-preview,alt-w:toggle-preview-wrap'
@@ -57,22 +59,12 @@ export FZF_DEFAULT_OPTS="
 	--bind 'alt-9:change-preview(printf \"%s\\\n\" {+})'
 	--bind 'alt-!:execute(less {})'
 	--bind 'alt-@:execute(\$PREVIEWER {} | less)'
-	--bind 'alt-v:execute(echo {q} >> \"$FZF_HIST\"; LESSOPEN=\"lesspreview.sh %s\" less {})'
+	--bind 'alt-v:execute(echo {q} >> \"$FZF_HIST\"; LESSOPEN=\"|preview %s\" less {})'
 	--bind 'alt-e:execute(echo {q} >> \"$FZF_HIST\"; eval \"\${EDITOR:-vi} {}\")'
 	--bind 'ctrl-o:execute(echo {q} >> \"$FZF_HIST\"; eval \"\${OPENER:-xdg-open} {}\")'
 	--bind 'alt-O:execute(echo {q} >> \"$FZF_HIST\"; mimeopen --ask {})'
 	--bind 'alt-o:execute(echo {q} >> \"$FZF_HIST\"; eval \"\${FILES:-lf} {}\")'
 	--bind 'alt-D:become(echo {q} >> \"$FZF_HIST\"; dirname {} )'
-	"
-export FZF_CTRL_T_OPTS="
-	--preview 'preview {}' --preview-window=hidden
-	"
-export FZF_CTRL_R_OPTS="
-	--preview 'echo {}' --preview-window up:50%:hidden:wrap
-	--bind 'ctrl-y:execute-silent(echo -n {2..} | xsel --clipboard)'
-	"
-export FZF_ALT_C_OPTS="
-	--preview 'tree -aCL 3 --icons --color=always {}' --preview-window=hidden
 	"
 
 ## Custom themes for GTypist
@@ -89,8 +81,9 @@ export GTYPIST_OPTS="--color 6,0 --banner-color 0,4,5,1"  # blue-cyan
 # 	done
 
 if [ "$PATH" = "${PATH#*"$HOME/.local/bin"}" ]; then
-  export PATH="$(find -L ~/.local/bin -type d ! -wholename '*/.st*' -printf '%p:')$PATH"
-  [ -d ~/bin ] && export PATH="$(find -L ~/bin -type d ! -wholename '*/.st*' -printf '%p:')$PATH"
+	_build_path() { find -L "$@" -type d ! -wholename '*/.st*' ! -wholename '*.git' -printf '%p:'; }
+  [ -d ~/bin ] && export PATH="$(_build_path ~/bin)$PATH"
+  [ -d ~/.local/bin ] && export PATH="$(_build_path ~/.local/bin)$PATH"
   export PATH="$PATH:$XDG_DATA_HOME/gem/ruby/3.0.0/bin"
   export PATH="$PATH:$HOME/Applications/flutter/bin"
 fi

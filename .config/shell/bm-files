@@ -1,24 +1,25 @@
 # These files automatically update when edited/saved in vim:
 
 # keys	filename				description
-bf	~/.config/shell/bm-files
-bd	~/.config/shell/bm-dirs
+bf	${XDG_CONFIG_HOME:-$HOME/.config}/shell/bm-files
+bd	${XDG_CONFIG_HOME:-$HOME/.config}/shell/bm-dirs
 
 pf	~/.profile
 xp	~/.xprofile
 zp	~/.zprofile
 gi	~/.gitignore
-zc	~/.config/zsh/.zshrc
-zh	~/.config/history
-za	~/.config/shell/aliasrc
-arc	~/.config/shell/aliasrc
-lc	~/.config/lf/lfrc
-lS	~/.config/lf/scope
-sx	~/.config/sxiv/exec/key-handler
-in	~/.config/nvim/init.vim
-ac	~/.config/alacritty/alacritty.yml
-mm	~/.config/mimeapps.list
+zc	${XDG_CONFIG_HOME:-$HOME/.config}/zsh/.zshrc
+zh	${XDG_CONFIG_HOME:-$HOME/.config}/history
+za	${XDG_CONFIG_HOME:-$HOME/.config}/shell/aliasrc
+arc	${XDG_CONFIG_HOME:-$HOME/.config}/shell/aliasrc
+lc	${XDG_CONFIG_HOME:-$HOME/.config}/lf/lfrc
+lS	${XDG_CONFIG_HOME:-$HOME/.config}/lf/scope
+sx	${XDG_CONFIG_HOME:-$HOME/.config}/sxiv/exec/key-handler
+in	${XDG_CONFIG_HOME:-$HOME/.config}/nvim/init.vim
+ac	${XDG_CONFIG_HOME:-$HOME/.config}/alacritty/alacritty.yml
+mm	${XDG_CONFIG_HOME:-$HOME/.config}/mimeapps.list
 ssc	~/.ssh/config
+csh	~/Dev/csstudent41.github.io/layouts/_default/home.html
 qn	~/Documents/Notes/QuickNote.md
 bm	~/Documents/Notes/bookmarks.txt
 akn	~/Documents/Notes/ak47.txt

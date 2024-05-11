@@ -33,8 +33,8 @@ set preview
 cmd open $$OPENER $f
 
 cmd on-cd &{{
-	sed -i "\|^$PWD$|d" ~/.local/share/cdhist
-	echo "$PWD" >> ~/.local/share/cdhist
+	sed -i "\|^$PWD$|d" ${XDG_DATA_HOME:-$HOME/.local/share}/cdhist
+	echo "$PWD" >> ${XDG_DATA_HOME:-$HOME/.local/share}/cdhist
 }}
 
 cmd extract ${{
@@ -83,25 +83,32 @@ map <a-s> :source ~/.config/lf/lfrc
 map <tab> :toggle; down
 map <backtab> :toggle; up
 map <c-j> select_eval "fzf --reverse --header-first --header='Jump to location'"
-map <c-k> ${{ lf -remote "send $id cd \"$(cat ~/.local/share/cdhist |
+map <backspace> ${{ lf -remote "send $id select \"$(cat ${XDG_DATA_HOME:-$HOME/.local/share}/openhist |
+	fzf --tac --reverse --header-first --header='File History')\"" }}
+map <c-k> ${{ lf -remote "send $id cd \"$(cat ${XDG_DATA_HOME:-$HOME/.local/share}/cdhist |
 	fzf --tac --reverse --header-first --header='Path History')\"" }}
 map <c-c> ${{ lf -remote "send $id cd \"$(find -mindepth 1 -type d |
 	fzf --reverse --header-first --header='Jump to directory')\"" }}
 
 map c
 map d
-map o $LESSOPEN="lesspreview.sh %s" less $f
+map I :rename; cmd-home
+map i :rename
+map a :rename; cmd-right
+map A :rename; cmd-end
+map S push A<c-u>
+map o $LESSOPEN="|preview %s" less $f
 map O $mimeopen --ask $f
 map . set hidden!
 map x cut
-map M select_eval fmd
+map M $lf -remote "send $id select \"$(fmd)\""
 map D delete
 map W $setsid -f $TERMINAL >/dev/null 2>&1
 map X !$f
 map T !dev test $f
-map B $vidir
-map b $setbg $f
+map b $vidir
 map V push :!nvim<space>""<c-b>
+map P $${PAGER:-less -r} "$f"
 
 map ge extract $f
 map gl clear
@@ -113,8 +120,9 @@ map gd !du -hd1
 map gy %{{ printf "%s" "$f" | xsel -b }}
 map gY %{{ printf "%s" "$fs" | xsel -b }}
 map gi link_index
-map zpd set previewer preview
-map zpt set previewer cat
+map gsb $setbg $f
+map zpp set previewer preview
+map zpc set previewer cat
 map zpb set previewer bat-preview
 map zph set previewer highlight-preview
 
@@ -122,7 +130,6 @@ map zph set previewer highlight-preview
 map dd  ${{ echo "$fx" | xargs -I{} trash-put "{}" }}
 map dtc $trash-empty
 map dtr $trash-restore
-
 # Dragon Mapping
 map dr %dragon-drop -a -x $fx
 map ds %dragon-drop -a $fx

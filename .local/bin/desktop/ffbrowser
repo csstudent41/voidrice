@@ -1,4 +1,4 @@
-#!/bin/sh -x
+#!/bin/sh
 
 window="Mozilla Firefox"
 running() { windows=$(wmctrl -l)

@@ -9,13 +9,10 @@ source ~/.profile
 [ -n "$SDOTDIR" ] || export SDOTDIR="${XDG_CONFIG_HOME:-$HOME/.config}/shell"
 [ -n "$ZDOTDIR" ] || export ZDOTDIR="${XDG_CONFIG_HOME:-HOME/.config}/zsh"
 
-source "$ZDOTDIR/zshnameddirrc"
 source "$ZDOTDIR/command-tools.zsh"
+source "$ZDOTDIR/plugins/fzf-completion.zsh"
 source "$ZDOTDIR/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
-source "$ZDOTDIR/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
-source "$ZDOTDIR/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh"
-source "$ZDOTDIR/plugins/fzf/key-bindings.zsh"
-source "$ZDOTDIR/plugins/fzf/completion.zsh"
+source "$ZDOTDIR/plugins/zsh-autosuggestions.zsh"
 
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 ZSH_AUTOSUGGEST_ACCEPT_WIDGETS=(end-of-line vi-end-of-line vi-add-eol)
@@ -27,18 +24,18 @@ PS1="%B%{$fg[red]%}[%{$fg[yellow]%}%n%{$fg[green]%}@%{$fg[blue]%}%M %{$fg[magent
 #PS1="%B%{$fg[red]%} %~ >%{$fg[yellow]%}%{$reset_color%}%b "
 [ -n "$LF_LEVEL" ] && PS1="$PS1(lf: $LF_LEVEL) "
 
-# # Change cursor shape for different vi modes.
-# function zle-keymap-select {
-#     case $KEYMAP in
-#         vicmd) echo -ne '\e[1 q';;      # block
-#         viins|main) echo -ne '\e[5 q';; # beam
-#     esac
-# }
-# zle -N zle-keymap-select
-# zle-line-init() { echo -ne "\e[5 q"; }
-# zle -N zle-line-init
-# # echo -ne '\e[5 q' # Use beam shape cursor on startup.
-# preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
+# Change cursor shape for different vi modes.
+function zle-keymap-select {
+    case $KEYMAP in
+        vicmd) echo -ne '\e[1 q';;      # block
+        viins|main) echo -ne '\e[5 q';; # beam
+    esac
+}
+zle -N zle-keymap-select
+zle-line-init() { echo -ne "\e[5 q"; }
+zle -N zle-line-init
+# echo -ne '\e[5 q' # Use beam shape cursor on startup.
+preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
 
 setopt correct  # Auto correct mistakes
 setopt extended_glob  # Allows using regular expressions with *
@@ -51,11 +48,11 @@ setopt append_history  # Immediately append history instead of overwriting
 setopt extended_history  # Add timestamps to history
 setopt hist_ignore_all_dups  # If a new command is a duplicate, remove the older one
 setopt auto_cd  # if only directory path is entered, cd there.
-setopt auto_pushd
-setopt pushd_ignore_dups
+setopt auto_pushd  # pushd on cd
+setopt pushd_ignore_dups  # truncate duplicate directories
 setopt pushd_minus
-setopt interactive_comments
-setopt histignorespace
+setopt interactive_comments  # enable comments on the command line
+setopt histignorespace  # ignore lines starting with a space
 
 # Completion.
 autoload -Uz compinit
@@ -77,7 +74,7 @@ zstyle ':completion:*' cache-path ~/.cache/zsh
 autoload -U +X bashcompinit && bashcompinit
 source "$ZDOTDIR/completion/arduino-cli.zsh"
 
-HISTFILE="$HOME/.local/share/zsh/history"
+HISTFILE="${XDG_DATA_HOME:=$HOME/.local/share}/zsh/history"
 HISTSIZE=100000
 SAVEHIST=50000
 
@@ -94,36 +91,21 @@ SAVEHIST=50000
 # compdef _ng_yargs_completions ng
 
 
-export BUFFER_CACHE="${ZCACHEDIR:=$HOME/.cache/zsh}/previous-command-buffer-$$.tmp"
-_exec-zsh() {
-	echo "$BUFFER" > "$BUFFER_CACHE"
-	BUFFER=' exec zsh'
-	zle accept-line
+_command_fail_hook() {
+	[ $? != 1 ] && return
+	if [ -n "$TMUX" ]; then
+		tmux send-keys C-p
+	elif [ -n "$XDOTOOL_WINDOW_ID" ]; then
+		xdotool key --window "$XDOTOOL_WINDOW_ID" ctrl+p
+	fi
 }
-zle -N exec-zsh _exec-zsh
-bindkey '^[r' exec-zsh
+add-zsh-hook precmd _command_fail_hook
 
-[ -f "$BUFFER_CACHE" ] && {
-	[ -n "$TMUX" ] || [ -z "$TERMUX_VERSION" ] && {
-		sleep 0.1
-		if [ -n "$TMUX" ]; then
-			tmux send-keys -l "$(cat "$BUFFER_CACHE")"
-		else
-			xdotool type --window "$(xdotool getactivewindow)" \
-				"$(cat "$BUFFER_CACHE")"
-		fi
-		rm -f "$BUFFER_CACHE"
-	} & disown
+_cd_history_hook() {
+	sed -i "\|^$PWD$|d" "${XDG_DATA_HOME:-$HOME/.local/share}/cdhist"
+	echo "$PWD" >> "${XDG_DATA_HOME:-$HOME/.local/share}/cdhist"
 }
-
-
-_cd_path_history() {
-	FZF_ALT_C_COMMAND="cat ~/.local/share/cdhist" \
-		FZF_ALT_C_OPTS="--tac --tiebreak=index --no-sort" \
-		zle fzf-cd-widget
-}
-zle -N cd-path-history _cd_path_history
-bindkey '^[k' cd-path-history
+add-zsh-hook -Uz chpwd _cd_history_hook
 
 
 bindkey -s '^[o' '^[q lfcd^M'
@@ -136,19 +118,13 @@ bindkey -s '^[-' '^[q cd -^M'
 bindkey -s '^[B' '^[q bindkey | less^M'
 
 bindkey jk vi-cmd-mode
-bindkey "^j" autosuggest-execute
-
-bindkey '^P' history-substring-search-up
-bindkey '^N' history-substring-search-down
+bindkey "^j"  autosuggest-execute
+bindkey '^P'  up-line-or-history
+bindkey '^N'  down-line-or-history
 bindkey '^[p' history-beginning-search-backward
 bindkey '^[n' history-beginning-search-forward
-
-autoload -U up-line-or-beginning-search
-autoload -U down-line-or-beginning-search
-zle -N up-line-or-beginning-search
-zle -N down-line-or-beginning-search
-bindkey -M vicmd 'k' up-line-or-beginning-search
-bindkey -M vicmd 'j' down-line-or-beginning-search
+bindkey -M vicmd 'k' history-beginning-search-backward
+bindkey -M vicmd 'j' history-beginning-search-forward
 
 autoload -U edit-command-line; zle -N edit-command-line
 bindkey '^[E' edit-command-line
@@ -166,21 +142,60 @@ fi
 command -V xdotool >/dev/null &&
 	export XDOTOOL_WINDOW_ID="$(xdotool getactivewindow)"
 
-_command_fail_hook() {
-	[ $? != 1 ] && return
-	if [ -n "$TMUX" ]; then
-		tmux send-keys C-p
-	elif [ -n "$XDOTOOL_WINDOW_ID" ]; then
-		xdotool key --window "$XDOTOOL_WINDOW_ID" ctrl+p
-	fi
+[ -f "$BUFFER_CACHE" ] && {
+	{
+		if [ -n "$TMUX" ]; then
+			tmux send-keys -l "$(cat "$BUFFER_CACHE")"
+		elif [ -z "$TERMUX_VERSION" ]; then
+			xdotool type --window "$XDOTOOL_WINDOW_ID" "$(cat "$BUFFER_CACHE")"
+		fi
+		rm -f "$BUFFER_CACHE"
+	} & disown
 }
-add-zsh-hook precmd _command_fail_hook
 
-_cd_history_hook() {
-	sed -i "\|^$PWD$|d" ~/.local/share/cdhist
-	echo "$PWD" >> ~/.local/share/cdhist
+export BUFFER_CACHE="${ZCACHEDIR:=$HOME/.cache/zsh}/previous-command-buffer-$$.tmp"
+_exec-zsh() {
+	echo "$BUFFER" > "$BUFFER_CACHE"
+	BUFFER=' exec zsh'
+	zle accept-line
 }
-add-zsh-hook -Uz chpwd _cd_history_hook
+zle     -N    exec-zsh _exec-zsh
+bindkey '^[r' exec-zsh
+
+_fzf-file-history() {
+  LBUFFER="${LBUFFER}$(sed "s|$HOME|~|" "${XDG_DATA_HOME:-$HOME/.local/share}/openhist" | fzf --tac --reverse --height 40% | sed "s/ /\\\ /")"
+  zle reset-prompt
+}
+zle     -N   fzf-file-history _fzf-file-history
+bindkey '^T' fzf-file-history
+
+_fzf-cd-widget() {
+	zle push-line
+  BUFFER="cd -- $( eval "${FZF_CD_COMMAND:-find -L . -type d ! -wholename '*.git*' -printf '%p/\n'}" |
+		FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --reverse --height 40% $FZF_CD_OPTS" fzf | sed "s/ /\\\ /" )"
+	zle reset-prompt
+  zle accept-line
+}
+zle     -N   fzf-cd-widget _fzf-cd-widget
+bindkey '^[c' fzf-cd-widget
+
+_cd-path-history() {
+	FZF_CD_COMMAND="< ${XDG_DATA_HOME:-$HOME/.local/share}/cdhist" \
+		FZF_CD_OPTS="--tac --tiebreak=index --no-sort" \
+			zle fzf-cd-widget
+}
+zle     -N    cd-path-history _cd-path-history
+bindkey '^[k' cd-path-history
+
+_fzf-history-widget() {
+	zle vi-fetch-history -n "$(fc -rl 1 | fzf --height 40% -n2.. --tiebreak=index \
+		--preview 'echo {2..}' --preview-window up:50%:hidden:wrap \
+		--bind 'ctrl-y:execute-silent(echo -n {2..} | xsel --clipboard)' \
+		--query="$LBUFFER")"
+	zle reset-prompt
+}
+zle     -N   fzf-history-widget _fzf-history-widget
+bindkey '^R' fzf-history-widget
 
 
 get-help() {
@@ -208,8 +223,9 @@ zle -N get-help _get-help
 bindkey '^[H' get-help
 
 
-source "$SDOTDIR/aliasrc"
-source "$SDOTDIR/shortcutrc"
+[ -f "$SDOTDIR/aliasrc" ] && source "$SDOTDIR/aliasrc"
+[ -f "$SDOTDIR/shortcutrc" ] && source "$SDOTDIR/shortcutrc"
+[ -f "$ZDOTDIR/zshnameddirrc" ] && source "$ZDOTDIR/zshnameddirrc"
 
 case "$TERM" in *256*)
 	if [ -x /bin/eza ] || [ -x /usr/bin/eza ]; then
@@ -257,3 +273,7 @@ f() {
 # alias ssudo='sudofu '
 
 stty -ixon
+
+# # Load syntax highlighter; should be last.
+# source "$ZDOTDIR/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
+
