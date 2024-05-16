@@ -1,6 +1,7 @@
 #!/bin/sh
 
 export OPENER="open"
+export PAGER="less"
 export EDITOR="nvim"
 export BROWSER="w3m"
 export FILES="lf"
