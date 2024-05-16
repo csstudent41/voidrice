@@ -9,7 +9,7 @@ press() { sleep 0.1; xdotool keyup Super
 if ! running; then
 	notify-send "Starting Firefox..."
 	start="$(date +%s.%3N)"
-	setsid -f firefox -P "${FFPROFILE:-default-release}"
+	setsid -f eatmydata firefox -P "${FFPROFILE:-default-release}"
 	for _ in $(seq 1000); do sleep 0.1; running && break; done
 	end="$(date +%s.%3N)"
 	time="$(echo "$end - $start" | bc)"

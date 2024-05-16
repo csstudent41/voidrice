@@ -3,8 +3,8 @@
 ## properties of script
 
 ## set home screen and lock screen wallpaper
-HOMEWALL="/usr/share/wallpapers/garuda-wallpapers/Harpy Eagle.png"
-LOCKWALL="/usr/share/wallpapers/garuda-wallpapers/Mühle_SGS.png"
+HOMEWALL="${XDG_DATA_HOME:-$HOME/.local/share}/wallpapers/artix-wampire.png"
+LOCKWALL="${XDG_DATA_HOME:-$HOME/.local/share}/wallpapers/artix-wampire.png"
 
 ## choose random wallpaper from a directory
 # WALLPAPERS="$HOME/.local/share/wallpapers"

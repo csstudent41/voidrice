@@ -9,6 +9,8 @@ for display in $(xrandr | grep "^\S* connected" | cut -d\  -f1); do
 	case "$display" in
 		eDP*) export PRIMARY="$display"; set -- "$@" --output "$display" --mode 1920x1080 --primary ;;
 		HDMI*) set -- "$@" --output "$display" --right-of \$PRIMARY --mode 1366x768 --scale 1.25x1.25 ;;
+		LVDS*) set -- "$@" --output "$display" --primary --scale 1.1x1.1 ;;
+		DP*) set -- "$@" --output "$display" --primary --scale 1.1x1.1 ;;
 	esac
 done
 

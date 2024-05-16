@@ -6,8 +6,8 @@ bindkey -e
 alias find="2> >(grep -v 'Permission denied' >&2) find"
 
 source ~/.profile
-[ -n "$SDOTDIR" ] || export SDOTDIR="${XDG_CONFIG_HOME:-$HOME/.config}/shell"
-[ -n "$ZDOTDIR" ] || export ZDOTDIR="${XDG_CONFIG_HOME:-HOME/.config}/zsh"
+[ -n "$SDOTDIR" ] || SDOTDIR="${XDG_CONFIG_HOME:-$HOME/.config}/shell"
+[ -n "$ZDOTDIR" ] || ZDOTDIR="${XDG_CONFIG_HOME:-HOME/.config}/zsh"
 
 source "$ZDOTDIR/command-tools.zsh"
 source "$ZDOTDIR/plugins/fzf-completion.zsh"
@@ -74,6 +74,7 @@ zstyle ':completion:*' cache-path ~/.cache/zsh
 autoload -U +X bashcompinit && bashcompinit
 source "$ZDOTDIR/completion/arduino-cli.zsh"
 
+WORDCHARS="${WORDCHARS/\//}"
 HISTFILE="${XDG_DATA_HOME:=$HOME/.local/share}/zsh/history"
 HISTSIZE=100000
 SAVEHIST=50000
@@ -140,7 +141,7 @@ fi
 
 
 command -V xdotool >/dev/null &&
-	export XDOTOOL_WINDOW_ID="$(xdotool getactivewindow)"
+	XDOTOOL_WINDOW_ID="$(xdotool getactivewindow)"
 
 [ -f "$BUFFER_CACHE" ] && {
 	{
@@ -153,7 +154,7 @@ command -V xdotool >/dev/null &&
 	} & disown
 }
 
-export BUFFER_CACHE="${ZCACHEDIR:=$HOME/.cache/zsh}/previous-command-buffer-$$.tmp"
+BUFFER_CACHE="${ZCACHEDIR:=$HOME/.cache/zsh}/previous-command-buffer-$$.tmp"
 _exec-zsh() {
 	echo "$BUFFER" > "$BUFFER_CACHE"
 	BUFFER=' exec zsh'
@@ -161,6 +162,13 @@ _exec-zsh() {
 }
 zle     -N    exec-zsh _exec-zsh
 bindkey '^[r' exec-zsh
+
+backward-delete-word-to-slash() {
+    local WORDCHARS=${WORDCHARS/\//}
+    zle backward-delete-word
+}
+zle -N backward-delete-word-to-slash
+bindkey '^W' backward-delete-word-to-slash
 
 _fzf-file-history() {
   LBUFFER="${LBUFFER}$(sed "s|$HOME|~|" "${XDG_DATA_HOME:-$HOME/.local/share}/openhist" | fzf --tac --reverse --height 40% | sed "s/ /\\\ /")"
@@ -201,8 +209,8 @@ bindkey '^R' fzf-history-widget
 get-help() {
 	cmd="$1"; cmdinfo="$(command -v "$cmd")"
 	case "${$(whence -w "$cmd")##*: }" in
-		builtin) MANPAGER="less +/'^       $cmd'" man zshbuiltins && export FOUND=1 ;;
-		reserved) MANPAGER="less +/'^reserved' +/'$cmd'" man zshall && export FOUND=1 ;;
+		builtin) MANPAGER="less +/'^       $cmd'" man zshbuiltins && HELP_FOUND=1 ;;
+		reserved) MANPAGER="less +/'^reserved' +/'$cmd'" man zshall && HELP_FOUND=1 ;;
 		alias) echo "$cmdinfo"; cmd="$(alias "$cmd" | sed "s/$cmd='\(\S*\) .*'/\1/")" ;;
 	esac
 	[ -n "$cmdinfo" ] && help "$cmd" || help "$1"

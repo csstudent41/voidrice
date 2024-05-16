@@ -31,10 +31,10 @@ stv	~/Phone/.stversions
 pw	~/Phone/Android/media/com.whatsapp/WhatsApp/Media/WhatsApp\ Documents
 
 mn	/mnt
-stg	/mnt/Storage
-lr	/mnt/Storage/Library
-med	/mnt/Storage/Media
-sts	/mnt/Storage/sites
+stg	/mnt/storage
+lr	/mnt/storage/Library
+med	/mnt/storage/Media
+sts	/mnt/storage/sites
 mp	/run/media/$USER/
 mtp	/run/user/1000/gvfs
 usr	${PREFIX:-/usr}

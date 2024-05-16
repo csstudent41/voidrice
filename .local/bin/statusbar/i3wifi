@@ -11,10 +11,11 @@ case "$BLOCK_BUTTON" in
 	# 	nmtui, $TERMINAL -e nmtui" | jgmenu --vsimple --at-pointer ;;
 esac
 
-if [ "$(cat "/sys/class/net/$1/operstate")" = 'down' ]; then
+iface="$(find /sys/class/net/ -maxdepth 1 -name "w*" -printf "%f\n")"
+if [ "$(cat "/sys/class/net/$iface/operstate")" = 'down' ]; then
 	icon="󰤭"; quality="down"; color="$BLOCK_COLOR_LEVEL5"
 else
-	quality=$(grep "$1" /proc/net/wireless | awk '{ print int($3 * 100 / 70) }')
+	quality=$(grep "$iface" /proc/net/wireless | awk '{ print int($3 * 100 / 70) }')
 	if [ "$quality" = 100 ]; then
 		icon="󰤨"; color="$BLOCK_COLOR_LEVEL1"
 	elif [ "$quality" -ge 80 ]; then

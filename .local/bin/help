@@ -12,20 +12,12 @@ OPTIONS:
 
 while getopts 'avh' o; do case "$o" in
 	a) aflag=0;;
-	h) help; return ;;
+	h) help; exit ;;
 	*) printf "help: invalid option -- '%s'" "$OPTARG" ;;
 esac done
 shift $((OPTIND - 1))
 
-[ "$#" -lt 1 ] && help >&2 && return 2
-
-show_file() {
-  file="$1"
-  filetype="$(file -L --mime-type --brief "$file")"
-  [ "${filetype#text}" != "$filetype" ] &&
-    highlight --out-format=ansi --force "$file" |
-		less -R --prompt=" $file "
-}
+[ "$#" -lt 1 ] && help >&2 && exit 2
 
 
 ##############################################################
@@ -45,7 +37,7 @@ info_query() {
 
 show_script() {
   file="$(which "$query" 2>/dev/null)" || return 2
-  show_file "$file"
+  "${PAGER:-less}" "$file"
 }
 
 cmd_help() {
@@ -56,13 +48,13 @@ cmd_help() {
 	else
 		return 2
 	fi
-	printf '\n%s\n' "$content" | less -X
+	printf '\n%s\n' "$content" | "${PAGER:-less}" -X
 	echo
 }
 
 tldr_query() {
   content="$(tldr --color=always "$query" 2>/dev/null)" || return 2
-  printf "\n$ tldr '%s'\n%s\n\n" "$query" "$content" | less -X
+  printf "\n$ tldr '%s'\n%s\n\n" "$query" "$content" | "${PAGER:-less}" -X
 }
 
 pkg_info() {
@@ -79,7 +71,7 @@ pkg_info() {
 		return
 	fi
 	[ -z "$info" ] && return 2
-  printf "\n%s\n%s\n\n" "$cmd" "$info" | less -X
+  printf "\n%s\n%s\n\n" "$cmd" "$info" | "${PAGER:-less}" -X
 }
 
 ##########################################################
@@ -97,13 +89,11 @@ main() {
 }
 
 query="$*"
-[ -f "$query" ] && show_file "$query" && return
+[ -f "$query" ] && { "${PAGER:-less}" "$query"; exit 0; }
 [ -d "$query" ] &&
-  ls -AlFh --color --group-directories-first -- "$query" && return
+	{ ls -AlFh --color --group-directories-first -- "$query"; exit 0; }
 
-cmd_info="$(command -V "$query")" && printf "%s\n\n" "$cmd_info" &&
-	FOUND=1
+command -V "$query" 2>/dev/null && { echo; export HELP_FOUND=1; }
 
-if ! main && [ "$FOUND" != 1 ]; then
-  echo "No help found for '$query'" >&2 && return 2
-fi
+main || [ "$HELP_FOUND" = 1 ] ||
+	{ echo "No help found for '$query'" >&2; exit 2; }
