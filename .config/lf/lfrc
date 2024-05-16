@@ -134,7 +134,8 @@ map gd !du -hd1
 map gy %{{ printf "%s" "$f" | xsel -b }}
 map gY %{{ printf "%s" "$fs" | xsel -b }}
 map gi link_index
-map gsb $setbg $f
+map gsh $setbg $f
+map gsl $setbg -l $f
 map zpp set previewer preview
 map zpc set previewer cat
 map zpb set previewer bat-preview

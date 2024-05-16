@@ -65,8 +65,7 @@ shortcuts.*
 
 !/.local/share
 /.local/share/*
-!/.local/share/applications
-!/.local/share/wallpapers
 !/.local/share/fzf
 /.local/share/fzf/*
+!/.local/share/applications
 

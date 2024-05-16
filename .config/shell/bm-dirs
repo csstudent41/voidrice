@@ -2,6 +2,7 @@
 cac	${XDG_CACHE_HOME:-$HOME/.cache}
 cg	${XDG_CONFIG_HOME:-$HOME/.config}
 lsh	${XDG_DATA_DIR:-$HOME/.local/share}
+lsr	${XDG_DATA_DIR:-$HOME/.local/src}
 dn	${XDG_DOWNLOAD_DIR:-$HOME/Downloads}
 dx	${XDG_DOCUMENTS_DIR:-$HOME/Documents}
 nt	${XDG_DOCUMENTS_DIR:-$HOME/Documents}/Notes
