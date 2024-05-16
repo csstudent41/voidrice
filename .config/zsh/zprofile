@@ -11,5 +11,5 @@ case "$TTY" in
 	/dev/tty1) command -V i3 >/dev/null && { pgrep i3 || startx } ;;
 	/dev/tty3) tmux new -s master ;;
 	/dev/tty[2-5]) tmux new -s "${TTY#/dev/}" ;;
-	/dev/pts/*) exec tmux new -s "${TTY#/dev/}" ;;
+	# /dev/pts/*) exec tmux new -s "${TTY#/dev/}" ;;
 esac
