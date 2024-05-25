@@ -49,6 +49,7 @@ cmd extract ${{
 				*.zip) unzip "$f" ;;
 				*.rar) unrar x "$f" ;;
 				*.7z) 7z x "$f" ;;
+				*.zst) unzstd "$f" ;;
 				*) echo "Unsupported format" >&2; exit 1 ;;
 		esac done
 }}

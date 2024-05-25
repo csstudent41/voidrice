@@ -6,7 +6,7 @@ KEYTIMEOUT=1
 # [ ! -b /dev/mapper/storage ] && udisksctl mount
 # [ ! -b /dev/mapper/media ]
 
-[ -n "$TMUX_VERSION" ] && return
+[ -z "$TMUX_VERSION" ] || return
 case "$TTY" in
 	/dev/tty1) command -V i3 >/dev/null && { pgrep i3 || startx } ;;
 	/dev/tty3) tmux new -s master ;;

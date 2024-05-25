@@ -74,7 +74,6 @@ zstyle ':completion:*' cache-path ~/.cache/zsh
 autoload -U +X bashcompinit && bashcompinit
 source "$ZDOTDIR/completion/arduino-cli.zsh"
 
-WORDCHARS="${WORDCHARS/\//}"
 HISTFILE="${XDG_DATA_HOME:=$HOME/.local/share}/zsh/history"
 HISTSIZE=100000
 SAVEHIST=50000
@@ -124,6 +123,7 @@ bindkey '^P'  up-line-or-history
 bindkey '^N'  down-line-or-history
 bindkey '^[p' history-beginning-search-backward
 bindkey '^[n' history-beginning-search-forward
+bindkey '^[w' backward-kill-word
 bindkey -M vicmd 'k' history-beginning-search-backward
 bindkey -M vicmd 'j' history-beginning-search-forward
 
@@ -140,7 +140,7 @@ if (( ${+terminfo[smkx]} && ${+terminfo[rmkx]} )); then
 fi
 
 
-command -V xdotool >/dev/null &&
+[ -n "$DISPLAY" ] && command -V xdotool >/dev/null &&
 	XDOTOOL_WINDOW_ID="$(xdotool getactivewindow)"
 
 [ -f "$BUFFER_CACHE" ] && {

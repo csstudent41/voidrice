@@ -3,7 +3,7 @@
 # If the wifi interface exists but no connection is active, "down" shall be displayed.
 
 case "$BLOCK_BUTTON" in
-	1) $TERMINAL -e nethogs ;;
+	1) $TERMINAL -e nmtui ;;
 	2) $TERMINAL -e nvim "$0" ;;
 	3) $TERMINAL -e nethogs ;;
 	# 3) echo "nethogs,$TERMINAL -e nethogs

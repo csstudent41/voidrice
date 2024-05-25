@@ -17,6 +17,7 @@ lS	${XDG_CONFIG_HOME:-$HOME/.config}/lf/scope
 sx	${XDG_CONFIG_HOME:-$HOME/.config}/sxiv/exec/key-handler
 in	${XDG_CONFIG_HOME:-$HOME/.config}/nvim/init.vim
 ac	${XDG_CONFIG_HOME:-$HOME/.config}/alacritty/alacritty.toml
+xr	${XDG_CONFIG_HOME:-$HOME/.config}/X11/Xresources
 mm	${XDG_CONFIG_HOME:-$HOME/.config}/mimeapps.list
 ssc	~/.ssh/config
 csh	~/Dev/csstudent41.github.io/layouts/_default/home.html
