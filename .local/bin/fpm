@@ -31,13 +31,12 @@ Following package managers are supported:
 
 QUERY is mandatory when using an AUR Helper" ;}
 
-while getopts 's:gliuvha:p' o; do case "$o" in
+while getopts 's:gliuha:p' o; do case "$o" in
   s) sflag=0; pkg="$OPTARG" ;;
   g) operation=""; opmsg=""; list_all=0 ;;
   l) operation=""; opmsg=""; list_all=1 ;;
   i) operation="install_pkgs"; opmsg="to Install"; list_all=0 ;;
   u) operation="uninstall_pkgs"; opmsg="to Uninstall"; list_all=1 ;;
-	v) vflag=0 ;;
   h) help; exit ;;
   a) export AUR_HELPER="$OPTARG" ;;
 	p) pflag=0 ;;
@@ -45,9 +44,6 @@ while getopts 's:gliuvha:p' o; do case "$o" in
 esac done
 shift $((OPTIND - 1))
 
-msg() { [ "$vflag" = 0 ] && printf ':: %s\n' "$@" >&2; true; }
-
-msg "Determining package manager..."
 if command -v apt-get >> /dev/null; then
 	alias pkg_sort='sed -e "s/ - / => /"'
 
@@ -69,7 +65,7 @@ if command -v apt-get >> /dev/null; then
 		alias uninstall_pkgs='pkg uninstall'
 	else
 		export PKGMAN="apt"
-		alias install_pkgs='sudo apt-get update && sudo apt-get install'
+		alias install_pkgs='sudo apt-get install'
 		alias uninstall_pkgs='sudo apt-get remove'
 	fi
 
@@ -79,7 +75,7 @@ elif command -v pacman >> /dev/null; then
   if [ -n "$AUR_HELPER" ]; then
     export PKGMAN="$AUR_HELPER"
     if command -v "$PKGMAN" >/dev/null; then
-      alias install_pkgs='$PKGMAN -Syu'
+      alias install_pkgs='$PKGMAN -S'
       alias uninstall_pkgs='$PKGMAN -Rns'
     else
       echo "fzf-pkgs: AUR Helper '$PKGMAN' command not found" >&2 &&
@@ -106,14 +102,10 @@ else
 	exit 1
 fi
 
-msg "Using '$PKGMAN'"
-
 if [ "$pflag" = 0 ]; then
-	msg "Printing package manager"
 	printf "%s\n" "$PKGMAN"
 	exit
 elif [ "$sflag" = 0 ]; then
-	msg "Printing package info for $pkg"
 	printf "$ %s '%s'\n" "$pkg_info" "$pkg"
 	$pkg_info $pkg
 	exit
@@ -129,14 +121,13 @@ fi
 
 if [ -n "$query" ]; then
 	prompt="searching '$query' "
-	get_pkgs() { msg "Searching packages"; search_pkg "$query"; }
+	get_pkgs() { search_pkg "$query"; }
 else
-	get_pkgs() { msg "Listing packages"; list_pkgs; }
+	get_pkgs() { list_pkgs; }
 fi
 
 [ -z "$FZF_HIST_DIR" ] && export FZF_HIST_DIR="$HOME/.local/share/fzf"
 fzff() {
-	msg "Starting fzf"
 	preview='
 		echo "selected packages:";
 		printf "\t%s\n" {+1} | tr " " "\n"
@@ -152,7 +143,7 @@ fzff() {
 }
 
 pkgs="$(get_pkgs | pkg_sort | fzff | cut -d' ' -f1 | tr '\n' ' ')"
-[ -z "$pkgs" ] && msg "No package selected, exiting..." >&2 && exit 2
+[ -n "$pkgs" ] || exit 2
 echo "$pkgs"
 [ -n "$operation" ] && eval $operation $pkgs
 

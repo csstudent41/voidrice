@@ -27,6 +27,7 @@ tex_compile() { pdflatex "$file"; }
 html_lint() { tidy -q "$file" >/dev/null; }
 html_run() { w3m "$file"; }
 js_test() { node "$file"; }
+json_format() { jq . "$file"; }
 php_run() { php "$file" "$@"; }
 
 c_compile() { make "${file%.c}"; }

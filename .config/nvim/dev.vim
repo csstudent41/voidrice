@@ -1,3 +1,5 @@
+source ~/.config/nvim/init.vim
+
 packadd! onedark.vim
 
 " --> Zeal docs

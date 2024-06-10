@@ -35,14 +35,14 @@ set title showmatch nowrap
 set mouse=a
 set tabstop=2 shiftwidth=0
 set number relativenumber
-set cursorline
-set cc=80
-set scrolloff=5
+set cursorline cc=80 scrolloff=5
 set splitbelow splitright
 set updatetime=1000
+set notermguicolors
 
 syntax on
 filetype plugin indent on
+colorscheme vim
 autocmd FileType text setlocal tabstop=8 shiftwidth=4
 autocmd FileType html setlocal tabstop=2 shiftwidth=2
 autocmd FileType sql  setlocal commentstring=--\ %s
@@ -57,7 +57,14 @@ autocmd BufWritePost */Documents/latex/resume/resume.tex !cd "%:h"; pdflatex res
 autocmd BufWritePost *Xresources silent !xrdb "%"
 autocmd BufRead,BufNewFile *.yt* set filetype=conf
 
-autocmd BufNewFile *.c :0r ~/.config/nvim/templates/default.c
+function SourceTemplate()
+	let b:template = glob("${XDG_CONFIG_HOME:-$HOME/.config}/nvim/templates/default." . expand('%:e'))
+	if !empty(b:template)
+		execute('0r' . b:template)
+	endif
+endfunction
+
+autocmd BufNewFile * call SourceTemplate()
 
 autocmd TermOpen * startinsert
 command! -nargs=* T  split  | terminal <args>
@@ -125,6 +132,8 @@ nnoremap <leader>fr :w<CR>:!dev clean "%"<CR>
 autocmd BufEnter * nmap <leader>t :w<CR>:se nornu<CR>:!dev test "%"<CR>:se rnu<CR>
 autocmd BufEnter * nmap <leader>T :w<CR>:se nornu<CR>:T dev test "%"<CR>
 autocmd BufEnter * imap <F5> <Esc>:w<CR>:se nornu<CR>:T dev test "%"<CR>
+
+autocmd BufEnter vartak-results-data.pl nmap <leader>t :w<CR>:se nornu<CR>:!vartak-results-data.pl ~/GDrive/vartak/results/university/1S002557.pdf<CR>:se rnu<CR>
 
 nnoremap <leader>w :set wrap!<CR>
 nnoremap <leader>fo :!opout "%:p"<CR>

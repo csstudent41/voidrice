@@ -132,6 +132,7 @@ map gX ${{ chmod -x $fx; lf -remote "send $id reload"; }}
 map gm push $chmod<space>--<space>$fx<c-a><a-f><space>
 map gL %lf -remote "send ${id} select '$(readlink $f)'"
 map gd !du -hd1
+map gf !file $f
 map gy %{{ printf "%s" "$f" | xsel -b }}
 map gY %{{ printf "%s" "$fs" | xsel -b }}
 map gi link_index

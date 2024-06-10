@@ -119,10 +119,10 @@ bindkey -s '^[B' '^[q bindkey | less^M'
 
 bindkey jk vi-cmd-mode
 bindkey "^j"  autosuggest-execute
-bindkey '^P'  up-line-or-history
-bindkey '^N'  down-line-or-history
-bindkey '^[p' history-beginning-search-backward
-bindkey '^[n' history-beginning-search-forward
+bindkey '^P'  history-beginning-search-backward
+bindkey '^N'  history-beginning-search-forward
+bindkey '^[p' up-line-or-history
+bindkey '^[n' down-line-or-history
 bindkey '^[w' backward-kill-word
 bindkey -M vicmd 'k' history-beginning-search-backward
 bindkey -M vicmd 'j' history-beginning-search-forward

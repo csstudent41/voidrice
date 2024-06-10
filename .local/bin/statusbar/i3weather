@@ -4,16 +4,17 @@
 case "$BLOCK_BUTTON" in
 	'') ;;
 	1)
-		$TERMINAL -e less -r ~/.cache/wttr.txt & sleep 0.3
+		$TERMINAL -e less -r ~/.cache/weather.txt & sleep 0.3
 		i3-msg 'move to workspace "12: Weather"; workspace "12: Weather"' >/dev/null 2>&1
 		;;
 	2) $TERMINAL -e nvim "$0" ;;
 	*) notify-send "⛅ Refreshing weather info..." ;;
 esac
 
-# weather="$(curl -s wttr.in?format="%c%C++❄️+%t++☀️+%f++🌬️+%w")"
-weather="$(curl -Ss 'https://wttr.in?0&T&Q' | cut -c 16- | head -2 |
-	xargs echo "$(curl -s wttr.in?format="%c")")"
+HTTP_WEATHER="https://wttr.in/Bhilai"
+# weather="$(curl -s "$HTTP_WEATHER?format=%c%C++❄️+%t++☀️+%f++🌬️+%w")"
+weather="$(curl -Ss "$HTTP_WEATHER?0&T&Q" | cut -c 16- | head -2 |
+	xargs echo "$(curl -s "$HTTP_WEATHER?format=%c")")"
 
 if [ "$(echo "$weather" | grep -Ec "(Unknown|curl|HTML)")" -gt 0 ]; then
     echo "WEATHER UNAVAILABLE"
@@ -21,5 +22,5 @@ else
     echo "${weather:-⛅ -- }"
 fi
 
-curl -s https://wttr.in > ~/.cache/wttr.txt
+curl -s "$HTTP_WEATHER" > ~/.cache/weather.txt
 

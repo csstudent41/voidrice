@@ -3,7 +3,7 @@
 help() { echo "htmldoc - create an html document
 
 USAGE:
-	htmldoc [OPTION]... <FILE>
+	htmldoc [OPTION]... <TITLE>
 
 OPTIONS:
 	-h  show this help message

@@ -153,8 +153,6 @@ bindsym XF86AudioMicMute      exec --no-startup-id $muteInput
 #bindsym XF86AudioRaiseVolume exec pulseaudio-ctl up
 #bindsym XF86AudioLowerVolume exec pulseaudio-ctl down
 #bindsym XF86AudioMute exec pulseaudio-ctl mute
-#
-# TODO: send notification for changing audio status
 
 bindsym XF86AudioNext exec $nextAudio
 bindsym XF86AudioPrev exec $prevAudio
@@ -176,8 +174,9 @@ bindsym $super+Ctrl+Home   exec $playAudio
 bindsym $super+Ctrl+End    exec $stopAudio
 
 
-# Touchpad controls
 # bindsym XF86TouchpadToggle exec ~/bin/toggletouchpad.sh
+bindsym XF86PowerOff exec --no-startup-id notify-send "Power Off"
+bindsym XF86PowerDown exec --no-startup-id notify-send "Power Down"
 
 # Print screen
 bindsym $super+Print --release exec --no-startup-id i3-scrot -w
@@ -643,4 +642,3 @@ mode "$mode_system" {
 bindsym $super+Escape exec i3lock -t -i $lockScreenWallpaper
 
 # exec_always xrandr --output eDP-1-1-1 --auto --primary
-

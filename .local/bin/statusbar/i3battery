@@ -27,7 +27,7 @@ for battery in /sys/class/power_supply/BAT?*; do
 				4[0-9]) icon="󰁽" ;;
 				3[0-9]) icon="󰁼" ;;
 				2[0-9]) icon="󰁻" ;;
-				1[0-9]) icon="󰁺" ;;
+				1[0-9]|[0-9]) icon="󰁺" ;;
 				100) icon="󰁹" ;;
 			esac ;;
 		"Charging") case "$capacity" in
@@ -39,7 +39,7 @@ for battery in /sys/class/power_supply/BAT?*; do
 				4[0-9]) icon="󰂈" ;;
 				3[0-9]) icon="󰂇" ;;
 				2[0-9]) icon="󰂆" ;;
-				1[0-9]) icon="󰢜" ;;
+				1[0-9]|[0-9]) icon="󰢜" ;;
 				100) icon="󰂅" ;;
 			esac ;;
 		"Not charging") icon="󱉝" ;;
