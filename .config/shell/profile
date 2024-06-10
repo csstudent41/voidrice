@@ -91,8 +91,8 @@ if [ "$PATH" = "${PATH#*"$HOME/.local/bin"}" ]; then
   export PATH="$PATH:$HOME/Applications/flutter/bin"
 fi
 
-[ -n "$TERMUX" ] && {
-	export STORAGE="/sdcard"
+[ -n "$TERMUX_VERSION" ] && {
+	export STORAGE="$HOME/storage"
 }
 
 export BLOCK_COLOR_LEVEL1="#66FF99"
