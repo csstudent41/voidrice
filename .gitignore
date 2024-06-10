@@ -4,8 +4,8 @@
 !/.profile
 !/.xprofile
 !/.zprofile
-
 !/gtkrc-2.0
+!/.termux
 
 !/.ssh
 /.ssh/*
