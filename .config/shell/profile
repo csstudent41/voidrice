@@ -12,6 +12,7 @@ export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_CACHE_HOME="$HOME/.cache"
 
+export MOUNTPATH="/run/media/$USER"
 export IPYTHONDIR="$XDG_CONFIG_HOME/ipython"
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 export INPUTRC="$XDG_CONFIG_HOME/shell/inputrc"
@@ -90,7 +91,9 @@ if [ "$PATH" = "${PATH#*"$HOME/.local/bin"}" ]; then
   export PATH="$PATH:$HOME/Applications/flutter/bin"
 fi
 
-export USER_MOUNT_DIR="/run/media/$USER"
+[ -n "$TERMUX" ] && {
+	export STORAGE="/sdcard"
+}
 
 export BLOCK_COLOR_LEVEL1="#66FF99"
 export BLOCK_COLOR_LEVEL2="#AAEE66"
