@@ -36,6 +36,7 @@ stg	${STORAGE:-/mnt/storage}
 lr	${STORAGE:-/mnt/storage}/Library
 med	${STORAGE:-/mnt/storage}/Media
 sts	${STORAGE:-/mnt/storage}/sites
+sd	/sdcard
 mp	/run/media/$USER/
 mtp	/run/user/1000/gvfs
 usr	${PREFIX:-/usr}
