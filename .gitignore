@@ -43,6 +43,7 @@ shortcuts.*
 !/.config/lf
 !/.config/sc-im
 !/.config/yt-dlp
+!/.config/python
 !/.config/ipython
 
 !/.config/gtk-2.0

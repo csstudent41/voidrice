@@ -39,6 +39,6 @@ for file in "$@"; do
 	esac
 
 	file="$(realpath "$file")"
-	sed -i "\|^$file$|d" ~/.local/share/openhist
-	echo "$file" >> ~/.local/share/openhist
+	sed -i "\|^$file$|d" "${XDG_DATA_HOME:-$HOME/.local/share}/openhist"
+	echo "$file" >> "${XDG_DATA_HOME:-$HOME/.local/share}/openhist"
 done

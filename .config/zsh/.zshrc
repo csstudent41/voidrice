@@ -207,7 +207,8 @@ bindkey '^R' fzf-history-widget
 
 
 get-help() {
-	cmd="$1"; cmdinfo="$(command -v "$cmd")"
+	[ "$1" != sudo ] && cmd="$1" || cmd="$2"
+	cmdinfo="$(command -v "$cmd")"
 	case "${$(whence -w "$cmd")##*: }" in
 		builtin) MANPAGER="less +/'^       $cmd'" man zshbuiltins && HELP_FOUND=1 ;;
 		reserved) MANPAGER="less +/'^reserved' +/'$cmd'" man zshall && HELP_FOUND=1 ;;
@@ -255,7 +256,6 @@ esac
 alias p='pacman'
 alias sp='sudo pacman'
 alias mmv='noglob zmv -W'
-alias loop='loop '
 alias s='sudo '
 alias mirror='sudo reflector -f 30 -l 30 --number 10 --verbose --save /etc/pacman.d/mirrorlist'
 alias mirrord='sudo reflector --latest 50 --number 20 --sort delay --save /etc/pacman.d/mirrorlist'
@@ -264,7 +264,6 @@ alias fixpacman='sudo rm /var/lib/pacman/db.lck'
 alias gtypist="gtypist $GTYPIST_OPTS"
 alias typ='launch-gtypist -l "$(sed "/^gtypist lesson - \(.*\)$/!d; s//\1/" ~/Documents/Notes/QuickNote.md)"'
 alias typa='launch-gtypist -e 5 -l "$(sed "/^gtypist lesson - \(.*\)$/!d; s//\1/" ~/Documents/Notes/ak47.txt)"'
-alias uc='cd ~ && gitpush'  # update configs
 
 f() {
 	ret=$?
