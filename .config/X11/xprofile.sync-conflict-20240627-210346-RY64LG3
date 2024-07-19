@@ -1,0 +1,22 @@
+#!/bin/sh
+
+gui -e
+
+# pidof -q syncthing || syncthing --no-restart --no-browser \
+# 	--logfile=~/.cache/syncthing/logs --log-max-size=0 \
+# 	--log-max-old-files=0 >/dev/null &
+
+if ! pidof -q copyq; then
+	numlockx on &
+	dunst &
+	copyq &
+	{ remap -x; remap; } &
+fi
+
+if [ "$(cat /sys/class/power_supply/ACAD/online)" = 0 ]; then
+	brightnessctl set 5%
+else
+	brightnessctl set 20%
+fi
+
+setdp

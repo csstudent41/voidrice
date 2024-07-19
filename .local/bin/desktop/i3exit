@@ -5,7 +5,7 @@
 
 command="$1"
 system_control() {
-	if [ "$(loginctl show-session --property=NCurrentSessions --value)" -gt 1 ]; then
+	if [ "$(loginctl show-session --property=NCurrentSessions --value)" -gt 2 ]; then
 		notify-send --replace-id=4252 \
 			"i3exit" "Multiple users are logged in\nCant't $command"
 		exit

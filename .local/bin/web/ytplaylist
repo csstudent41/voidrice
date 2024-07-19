@@ -1,0 +1,34 @@
+#!/bin/sh
+
+# Useful when creating a directory of videos sequenced as per a youtube
+# playlist.
+# Run this script from from the root of a directory that contains all the media
+# and metadata files.
+# The playlist file is expected to be in 'playlist' directory within the root
+# with .pl.txt extension. (playlist/PLAYLIST_NAME.pl.txt)
+# The new playlist directory will be created in the current directory i.e. the
+# root if no other destination is passed as the second argument.
+
+case "$1" in
+	'') echo "ytplaylist - build a directory of sequenced videos using a playlist file\n
+USAGE:\n\tytplaylist <PLAYLIST_FILE> [DESTINATION_DIR] " >&2; exit ;;
+	playlist/*.pl.txt) ;;
+	*)
+		printf "%s" "Unconventional file path, contniue? [y/N] "
+		read -r ans
+		case "$ans" in y) ;; *) exit 1 ;; esac
+		;;
+esac
+
+playlist="$(readlink -f $1)"
+i=1
+fpl "$playlist" | while read -r file; do
+	if [ -z "$file" ]; then
+		i=$(( $i + 1 ))
+		continue
+	fi
+	dir="$(dirname "$file")"
+	base="$(basename "$file")"
+	rsync -Pru --mkpath "$file" \
+		"${2:-$(basename "${playlist%.pl.txt}")}/${dir#$(readlink -f "$PWD")}/$(printf "%02d" "$i") $base"
+done

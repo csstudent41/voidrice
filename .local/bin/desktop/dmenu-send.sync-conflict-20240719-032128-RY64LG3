@@ -1,0 +1,24 @@
+#!/bin/sh
+
+content="$(xprint | dmenu)" || exit
+host="$(sed '/^Host \(.*\)/!d; s//\1/' ~/.ssh/config | dmenu -p "Send to?")" || exit
+
+transfer() {
+	notify-send "Transfering files to $2" "$1"
+	rsync -L "$1" "$2"
+}
+
+case "$content" in
+	http*) notify-send "Opening link in $host" "$content"
+		ssh "$host" xdg-open "$content" ;;
+
+	*.txt|*.pdf) transfer "$content" "$host:Documents/" ;;
+	*/*) transfer "$content" "$host:Downloads/" ;;
+
+	*) notify-send "Copied in $host's clipboard" "$content"
+		ssh "$host" termux-clipboard-copy "$content" ;;
+esac
+
+[ $? = 0 ] &&
+	notify-send "dmenu-send" "Done" ||
+	notify-send "dmenu-send" "Errors Occured"

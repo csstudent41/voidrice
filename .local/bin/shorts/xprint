@@ -1,6 +1,6 @@
 #!/bin/sh
 
-xclip -out -selection primary 2>/dev/null ||
-xclip -out -selection secondry 2>/dev/null ||
 xclip -out -selection clipboard 2>/dev/null ||
+xclip -out -selection secondry 2>/dev/null ||
+xclip -out -selection primary 2>/dev/null ||
 notify-send "Selection and clipboard is empty"

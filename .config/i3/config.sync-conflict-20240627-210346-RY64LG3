@@ -60,18 +60,17 @@ set $alt Mod1
 ###########################################
 
 bindsym $super+F2 exec --no-startup-id dmenu-unicode
-bindsym $super+F3 exec --no-startup-id dmenu-send
-bindsym $super+F5 exec --no-startup-id dmenu-zeal
+bindsym $super+F3 exec --no-startup-id dmenu-zeal
 bindsym $super+F7 exec --no-startup-id sh -c 'find ~/.mozilla/firefox -maxdepth 1 -type d -name "*.*" -printf "%f\n" | cut -d. -f2 | dmenu | xargs -I{} setsid -f firefox -P "{}"'
 bindsym $super+b exec --no-startup-id ffbrowser
 bindsym $super+c exec --no-startup-id edit-graphical-buffer
 bindsym $super+x exec --no-startup-id toggle-xeyes
-bindsym $super+i exec --no-startup-id sh -c 'xdotool type "$(grep -v "^#\|^\s*$" ~/Documents/Notes/bookmarks.txt | tac | dmenu -i -l 50 | cut -d\  -f1)"'
+bindsym $super+i exec --no-startup-id sh -c 'xdotool type "$(grep -v "^#\|^\s*$" ~/Documents/Notes/bookmarks.txt| dmenu -i -l 50 | cut -d\  -f1)"'
 bindsym $super+Shift+z exec --no-startup-id dmenu-zeal
 bindsym $super+Shift+b exec --no-startup-id open-xsel ffbrowser
 bindsym $super+comma exec --no-startup-id torbrowser open
 bindsym $super+Shift+comma --no-startup-id exec open-xsel torbrowser open
-bindsym $super+$alt+s exec --no-startup-id sh -c 'bm="$(xprint)" && echo "$bm" >> ~/Documents/Notes/bookmarks.txt && notify-send " Bookmark added" "$bm"' || notify-send "❌ Failed to add bookmark" "$bm"'
+bindsym $super+$alt+s exec --no-startup-id sh -c 'bm="$(xprint)" && echo "$bm" >> ~/Documents/Notes/bookmarks.txt && notify-send "Bookmark added" "$bm"'
 
 bindsym $super+$alt+F1 exec --no-startup-id _macro_F1
 bindsym $super+$alt+F2 exec --no-startup-id _macro_F2
@@ -154,6 +153,8 @@ bindsym XF86AudioMicMute      exec --no-startup-id $muteInput
 #bindsym XF86AudioRaiseVolume exec pulseaudio-ctl up
 #bindsym XF86AudioLowerVolume exec pulseaudio-ctl down
 #bindsym XF86AudioMute exec pulseaudio-ctl mute
+#
+# TODO: send notification for changing audio status
 
 bindsym XF86AudioNext exec $nextAudio
 bindsym XF86AudioPrev exec $prevAudio
@@ -175,9 +176,8 @@ bindsym $super+Ctrl+Home   exec $playAudio
 bindsym $super+Ctrl+End    exec $stopAudio
 
 
+# Touchpad controls
 # bindsym XF86TouchpadToggle exec ~/bin/toggletouchpad.sh
-bindsym XF86PowerOff exec --no-startup-id notify-send "Power Off"
-bindsym XF86PowerDown exec --no-startup-id notify-send "Power Down"
 
 # Print screen
 bindsym $super+Print --release exec --no-startup-id i3-scrot -w
@@ -643,3 +643,4 @@ mode "$mode_system" {
 bindsym $super+Escape exec i3lock -t -i $lockScreenWallpaper
 
 # exec_always xrandr --output eDP-1-1-1 --auto --primary
+

@@ -65,7 +65,7 @@ echo "<!DOCTYPE html>
 
 <head>
 	<title>Index</title>
-	<link href=\"${DOC_STYLES:-/styles.css}\" rel=\"stylesheet\">
+	<link href=\"${DOC_STYLES:-/style.css}\" rel=\"stylesheet\">
 </head>
 
 <body>

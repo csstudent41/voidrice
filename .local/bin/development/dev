@@ -14,7 +14,10 @@ shift 2
 [ -e "$file" ] || err "$file: No such file or directory"
 
 
+
+### #################################################################
 ### BEGIN TASKS
+### #################################################################
 
 sh_lint() { shellcheck -x "$file"; }
 sh_run() { $(sed -n '1s|^#!/.*/\(.*\)|\1|p' "$file") "$file" "$@"; }
@@ -38,6 +41,7 @@ go_format() { gofmt -w "$file"; }
 go_lint() { gofmt -d "$file"; }
 go_compile() { go build "$file"; }
 go_run() { "$(realpath "${file%.go}")" "$@"; }
+go_test() { go run "$file" "$@"; }
 
 c_test() {
 	out="${file%.c}"
@@ -104,14 +108,17 @@ py_lint() {
 }
 
 py_run() {
-	if [ -x "$HOME/Applications/virtualenvs/main/bin/python" ]; then
-		~/Applications/virtualenvs/main/bin/python "$file" "$@"
+	if [ -x "$HOME/.virtualenvs/main/bin/python" ]; then
+		~/.virtualenvs/main/bin/python "$file" "$@"
 	else
 		python "$file" "$@"
 	fi
 }
 
+### #################################################################
 ### END TASKS
+### #################################################################
+
 
 
 filetype=$(file --brief --mime-type "$file")

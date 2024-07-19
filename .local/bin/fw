@@ -1,0 +1,11 @@
+#!/bin/sh
+
+export FZF_HIST="$HOME/.local/share/fzf/wiki_history"
+export FZF_HEADER="Search local wiki files"
+export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --delimiter='/' --with-nth=-1"
+fmd \
+	/mnt/storage/Media/Tech/ \
+	/mnt/storage/Library \
+	/usr/share/doc/arch-wiki/html/en \
+	/usr/share/doc/arduino \
+	"$@" ! -name '*.css'

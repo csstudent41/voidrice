@@ -1,0 +1,10 @@
+#!/bin/sh
+
+case "$1" in
+	'')     echo "ytf - download media using youtube config file\nUSAGE: ytf <FILE> [OPTION]..." >&2; exit 1 ;;
+	*.ytd)  yt-dlp --config "$@" --config ~/.config/yt-dlp/videos.conf ;;
+	*.ytp)  yt-dlp --config "$@" --config ~/.config/yt-dlp/playlist.conf ;;
+	*.ytps) yt-dlp --config "$@" --config ~/.config/yt-dlp/sequenced-playlist.conf ;;
+	*.ytc)  yt-dlp --config "$@" --config ~/.config/yt-dlp/channel.conf ;;
+	*)      echo "ytf: $1: config file not understood"; exit 1 ;;
+esac

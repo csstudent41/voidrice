@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# upload site
+
+cd "${SITE_BASE_DIR:-$HOME/Dev/csstudent41.github.io}/public" || exit
+# cd ~/Dev/bits24
+
+gitpush

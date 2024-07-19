@@ -1,0 +1,16 @@
+#!/bin/sh
+
+mkdir -pv "${DATA_DIR:=${XDG_DATA_HOME:-$HOME/.local/share}/prices}"
+
+sed '/^\s*$/d; s/ #.*//' ~/Documents/Notes/products.txt | while read -r id url; do
+	[ -z "$url" ] && continue
+	outfile="$DATA_DIR/$id"
+	case "$url" in
+		*www.amazon.in*)
+			printf "%s\t" "$(date +%s)" >> "$outfile"
+			curl -s "$url" -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:124.0) Gecko/20100101 Firefox/124.0' |
+				pup "div#corePriceDisplay_desktop_feature_div span.a-price-whole text{}" | tr -d ',\n' >> "$outfile"
+			printf "\tamazon.in\n" >> "$outfile"
+			;;
+	esac
+done

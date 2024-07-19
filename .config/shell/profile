@@ -13,11 +13,12 @@ export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_CACHE_HOME="$HOME/.cache"
 
 export MOUNTPATH="/run/media/$USER"
-export IPYTHONDIR="$XDG_CONFIG_HOME/ipython"
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 export INPUTRC="$XDG_CONFIG_HOME/shell/inputrc"
 export WGETRC="$XDG_CONFIG_HOME/wget/wgetrc"
 export PYTHONSTARTUP="$XDG_CONFIG_HOME/python/pythonrc"
+export IPYTHONDIR="$XDG_CONFIG_HOME/ipython"
+export JUPYTER_CONFIG_DIR="$XDG_CONFIG_HOME/jupyter"
 
 export LESSHISTFILE="$XDG_DATA_HOME/less/history"
 export SDCV_HISTFILE="$XDG_DATA_HOME/sdcv"
@@ -31,6 +32,10 @@ export SQLITE_HISTORY="$XDG_DATA_HOME/sqlite_history"
 export LESS='-Rf --mouse --use-color -Dd+r$Du+b$'
 export LESSOPEN='|lessopen.sh %s'
 export GORFF_NO_SGR=
+export GTK_IM_MODULE='fcitx'
+export QT_IM_MODULE='fcitx'
+export SDL_IM_MODULE='fcitx'
+export XMODIFIERS='@im=fcitx'
 export SDCV_PAGER='less -R --quit-if-one-screen'
 export HTTP_HOME='https://www.duckduckgo.com'
 export CHROME_EXECUTABLE='chromium'
@@ -54,7 +59,7 @@ export FZF_DEFAULT_OPTS="
 	--bind 'alt-l:preview-page-down,alt-h:preview-page-up'
 	--bind 'alt-H:preview-top,alt-L:preview-bottom'
 	--bind 'alt-g:preview-top,alt-G:preview-bottom'
-	--bind 'alt-s:change-preview(printf \"%s\\\n\" {+})'
+	--bind 'alt-s:execute(dmenu-send {})'
 	--bind 'alt-0:change-preview(echo {})'
 	--bind 'alt-1:change-preview(highlight --out-format=ansi -- {} 2>/dev/null ||
 		ls -Als --group-directories-first --color=always --classify=always -- {})'

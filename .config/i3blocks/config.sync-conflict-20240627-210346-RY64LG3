@@ -1,0 +1,71 @@
+# i3blocks configuration file
+#
+# The i3blocks man page describes the usage of the binary,
+# and its website describes the configuration:
+# https://vivien.github.io/i3blocks
+#
+#     List of valid properties:
+# align
+# color
+# command
+# full_text
+# instance
+# interval
+# label
+# min_width
+# name
+# separator
+# separator_block_width
+# short_text
+# signal
+# urgent
+
+
+# Global properties
+separator=false
+separator_block_width=35
+
+# Guess the weather hourly
+[weather]
+separator=true
+separator_block_width=50
+command=i3weather
+interval=1800
+color=#A4C2F4
+
+[badwidth]
+seprator=false
+command=echo "$(i3bandwidth)"
+interval=1
+
+[wifi]
+# command=echo "📡 $(i3wifi wlp0s20f3)"
+command=i3wifi wlp0s20f3
+interval=1
+
+[battery]
+command=i3battery
+interval=1
+
+[cpu]
+command=echo " $(i3cpu)"
+interval=3
+
+[memory]
+separator=true
+separator_block_width=50
+command=echo " $(i3memory)"
+interval=1
+
+[datetime]
+separator=false
+separator_block_width=25
+# command=case "$BLOCK_BUTTON" in 1) TERM=256colors clearx -n 'cal -y --color=always | less' ;; 2) $TERMINAL -e nvim ~/.config/i3blocks/config ;; esac;  date +'🕒 %H:%M:%S  🗓️ %a %d.%m.%Y  '
+command=case "$BLOCK_BUTTON" in 1) $TERMINAL -e sh -c 'cal -y --color=always | less' ;; 2) $TERMINAL -e nvim ~/.config/i3blocks/config ;; esac;  date +' %H:%M:%S  󰃭 %a %d.%m.%Y  '
+color=#CCFFFF
+interval=1
+
+# [ip]
+# command=hostname -i  # | awk '{ print "IP:" $1 }'
+# interval=once
+# color=#91E78B
